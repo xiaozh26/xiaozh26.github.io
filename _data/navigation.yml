@@ -12,16 +12,16 @@ main:
     url: /publications/
 
   - title: "Research"
-    url: /research/    
+    url: /talks/    
 
   - title: "Work Experience"
-    url: /work/    
+    url: /teaching/    
     
   - title: "Project"
-    url: /project/
+    url: /portfolio/
 
   - title: "Coursework"
-    url: /coursework/
+    url: /markdown/
         
   - title: "Blog Posts"
     url: /year-archive/
@@ -32,4 +32,3 @@ main:
   # - title: "CV"
   #   url: /cv-json/
     
-
