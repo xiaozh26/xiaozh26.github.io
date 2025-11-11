@@ -26,11 +26,11 @@ author:
   avatar           : "IMG_9371.png"
   name             : "Xiao Zhang"
   pronouns         : "He/Him"  
-  bio              : "Electrical Engineering and Computer Sciences undergraduate at UC Berkeley, passionate about robotics and embedded systems."
+  bio              : "xiao_zhang[at]berkeley[dot]edu"
   location         : "Berkeley, California"
   employer         : "University of California, Berkeley"
   uri              : # URL
-  email            : "xiao_zhang[at]berkeley.edu" 
+  email            : #
 
   # Academic websites
   academia         : # URL
