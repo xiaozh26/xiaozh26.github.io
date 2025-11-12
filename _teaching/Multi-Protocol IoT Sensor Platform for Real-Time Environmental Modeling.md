@@ -2,6 +2,7 @@
 title: "Real-time Evaporation Modeling with an IoT Sensor Platform"
 collection: teaching
 link: "https://github.com/xiaozh26/Urban-Water-Monitoring-RPi"
+date: 2024
 ---
 This project is the technical implementation of a prototype IoT system designed for complex environmental data acquisition and real-time analysis. The primary engineering challenge was to successfully integrate multiple, disparate hardware protocols on a single Raspberry Pi, creating a stable platform capable of continuous field operation.
 
