@@ -11,51 +11,58 @@ redirect_from:
 
 Education
 ======
-* B.S. in Electrical Engineering and Computer Sciences, University of California, Berkeley, 2025-2028
-* B.A. in Economics, University of California, Berkeley, 2025-2028
+* B.S. in Electrical Engineering and Computer Sciences, University of California, Berkeley
+  * 2025-2028
+  * Grade: 4.0
+* B.A. in Economics, University of California, Berkeley
+  * 2025-2028
+  * Grade: 4.0
 
 Relevant Courses
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Calculus I [A]
+* Calculus II [A]
+* Multivariable Calculus [A]
+* Linear Algebra and Differential Equations [A]
+* Physics for Scientists and Engineers(7A,B,C) [A]
+* Data Structures [A]
+* Machine Structures [A]
+* Introduction to Circuits and Devices [A]
+* General Chemistry [A]
+* Structure and Interpretation of Computer Programs [IP]
+* Foundations of Signals, Dynamical Systems, and Information Processing [IP]
+* Discrete Mathematics and Probability Theory [IP]
+* Bioeng 10: Introduction to Biomedicine for Engineers [IP]
+
 
 
 Skills
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Software Development & Programming
+  *Python
+  *C/C++
+  *SQL
+* Hardware & Embedded Systems
+  * Platforms: Microcontrollers (e.g., Arduino, ESP-family) and Single-Board Computers (e.g., Raspberry Pi)
+  * Hardware Protocols: I2C, GPIO, Modbus-RTU (RS485), Serial (UART)
+  * Sensor Integration: Real-time data acquisition from diverse sensors
+  * Applications: Circuit Design, Embedded Systems Programming, Robotics Control, Navigation Algorithms, Stepper Motor Control
 
 Work experience
 ======
-* Spring 2024: Academic Pages Collaborator
-  * GitHub University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
 
-* Fall 2015: Research Assistant
-  * GitHub University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
-
-* Summer 2015: Research Assistant
-  * GitHub University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
   
 
 Involvement
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Honor Societies:
+  * Tau Beta Pi – Engineering Honor Society (Top 12.5% of junior standing class)
+  * Eta Kappa Nu – Electrical and Computer Engineering Honor Society
+* Volunteering:
+  * SPLASH instructor
+    * 2025 - Present
+    * Teaching high school student about circuit at UC Berkeley
+  * Community Education Partnerships: STEM Tutor
+    * 2024 - Present
+    * Delivered weekly math and science tutoring sessions for homeless youth (ages 6–12) at the Iron Triangle shelter, improving students’ academic performance and confidence.
+  
