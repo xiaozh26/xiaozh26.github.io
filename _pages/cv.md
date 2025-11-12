@@ -29,6 +29,7 @@ Relevant Courses
 * Machine Structures [A]
 * Introduction to Circuits and Devices [A]
 * General Chemistry [A]
+* Introduction to Probability and Statistics [A]
 * Structure and Interpretation of Computer Programs [IP]
 * Foundations of Signals, Dynamical Systems, and Information Processing [IP]
 * Discrete Mathematics and Probability Theory [IP]
