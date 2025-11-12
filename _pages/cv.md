@@ -39,9 +39,9 @@ Relevant Courses
 Skills
 ======
 * Software Development & Programming
-  *Python
-  *C/C++
-  *SQL
+  * Python
+  * C/C++
+  * SQL
 * Hardware & Embedded Systems
   * Platforms: Microcontrollers (e.g., Arduino, ESP-family) and Single-Board Computers (e.g., Raspberry Pi)
   * Hardware Protocols: I2C, GPIO, Modbus-RTU (RS485), Serial (UART)
