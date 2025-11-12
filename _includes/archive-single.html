@@ -82,5 +82,14 @@
       <p><a href="{{ post.bibtexurl }}">Download Bibtex</a></p>
     {% endif %}
 
+    {% if post.collection == 'research' %}
+  {% if post.date %}
+    <p class="archive__item-meta">Updated: {{ post.date | strftime: '%B %d, %Y' }}</p>
+  {% endif %}
+  {% if post.github_url %}
+    <p><a href="{{ post.github_url }}" class="btn btn--info">View on GitHub</a></p>
+  {% endif %}
+{% endif %}
+
   </article>
 </div>
