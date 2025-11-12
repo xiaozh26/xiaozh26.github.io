@@ -20,5 +20,24 @@ layout: default
       <h1 class="page__title">{{ page.title }}</h1>
     {% endunless %}
     {{ content }}
+  {% endcomment %}
+  {% if page.permalink == '/publications/' %}
+    {% assign posts = site.publications | reverse %}
+  {% elsif page.permalink == '/talks/' %}
+    {% assign posts = site.talks | reverse %}
+  {% elsif page.permalink == '/teaching/' %}
+    {% assign posts = site.teaching | reverse %}
+  {% elsif page.permalink == '/portfolio/' %}
+    {% assign posts = site.portfolio | reverse %}
+  {% elsif page.permalink == '/research/' %}
+    {% assign posts = site.research | reverse %}
+  {% else %}
+    {% assign posts = site.posts | reverse %}
+  {% endif %}
+  
+  {% endcomment %}
+  {% for post in posts %}
+    {% include archive-single.html %}
+  {% endfor %}
   </div>
 </div>
