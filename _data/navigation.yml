@@ -17,8 +17,8 @@ main:
   - title: "Work Experience"
     url: /teaching/    
     
-  - title: "Coursework"
-    url: /portfolio/
+  #- title: "Coursework"
+   # url: /portfolio/
         
   #- title: "Blog Posts"
     #url: /year-archive/
