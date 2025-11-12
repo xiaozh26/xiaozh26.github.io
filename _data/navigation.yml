@@ -11,10 +11,10 @@ main:
   - title: "Publications"
     url: /publications/
 
-  - title: "Research"
-    url: /talk/    
+  #- title: "Research"
+   # url: /talk/    
 
-  - title: "Work Experience"
+  - title: "Research"
     url: /teaching/    
     
   #- title: "Coursework"
