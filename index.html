@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Technical Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .mono { font-family: var(--font-mono); }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-fixed {
+            position: sticky;
+            top: 2rem;
+            height: calc(100vh - 4rem);
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .skill-tag {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            font-family: var(--font-mono);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div class="flex flex-col lg:flex-row gap-12">
+            
+            <!-- LEFT COLUMN: Persistent Identity -->
+            <aside class="w-full lg:w-1/3">
+                <div class="sidebar-fixed flex flex-col justify-between">
+                    <div>
+                        <!-- Profile Image Placeholder -->
+                        <div class="w-32 h-32 rounded-2xl bg-slate-200 mb-8 overflow-hidden border-2 border-white shadow-sm">
+                            <svg viewBox="0 0 100 100" class="w-full h-full text-slate-400 p-4">
+                                <circle cx="50" cy="35" r="20" fill="currentColor"/>
+                                <path d="M20 85c0-15 10-25 30-25s30 10 30 25" fill="currentColor"/>
+                            </svg>
+                        </div>
+
+                        <h1 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Alex Rivera</h1>
+                        <p class="text-blue-600 font-medium mb-6 mono text-sm tracking-wide">Robotics Engineer & CS Researcher</p>
+                        
+                        <div class="space-y-4 text-slate-600 leading-relaxed max-w-sm">
+                            <p>Developing robust perception pipelines and motion planning algorithms for autonomous systems.</p>
+                            <p class="text-sm">Specializing in <span class="text-slate-900 font-semibold">ROS2, Computer Vision, and Nonlinear Optimization</span>.</p>
+                        </div>
+
+                        <div class="mt-8 flex gap-4">
+                            <a href="#" class="p-2 text-slate-500 hover:text-blue-600 transition-colors" title="LinkedIn">
+                                <i data-lucide="linkedin"></i>
+                            </a>
+                            <a href="#" class="p-2 text-slate-500 hover:text-slate-900 transition-colors" title="GitHub">
+                                <i data-lucide="github"></i>
+                            </a>
+                            <a href="#" class="p-2 text-slate-500 hover:text-blue-400 transition-colors" title="Email">
+                                <i data-lucide="mail"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mt-12">
+                        <button onclick="showSection('home')" class="flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-blue-600 transition-colors">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            Back to Overview
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT COLUMN: Content Space -->
+            <main class="w-full lg:w-2/3">
+                
+                <!-- HOME VIEW: Navigation Tiles -->
+                <section id="home" class="view-section active">
+                    <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Technical Overview</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div onclick="showSection('experience')" class="glass-card p-8 rounded-2xl cursor-pointer group">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <i data-lucide="briefcase"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Work Experience</h3>
+                            <p class="text-slate-500 text-sm">Industry roles focused on systems engineering and deployment.</p>
+                        </div>
+
+                        <div onclick="showSection('research')" class="glass-card p-8 rounded-2xl cursor-pointer group">
+                            <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-all">
+                                <i data-lucide="microscope"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Research</h3>
+                            <p class="text-slate-500 text-sm">Academic publications and lab-based explorations in robotics.</p>
+                        </div>
+
+                        <div onclick="showSection('projects')" class="glass-card p-8 rounded-2xl cursor-pointer group">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                                <i data-lucide="cpu"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Technical Projects</h3>
+                            <p class="text-slate-500 text-sm">Software implementations, open source, and hardware builds.</p>
+                        </div>
+
+                        <div onclick="showSection('coursework')" class="glass-card p-8 rounded-2xl cursor-pointer group">
+                            <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Coursework</h3>
+                            <p class="text-slate-500 text-sm">Graduate-level study and core computational foundations.</p>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- EXPERIENCE VIEW -->
+                <section id="experience" class="view-section">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-2xl font-bold text-slate-900">Work Experience</h2>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- Experience Card 1 -->
+                        <div class="glass-card p-6 rounded-2xl flex gap-6">
+                            <div class="hidden sm:block w-14 h-14 rounded-lg bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-400">
+                                <i data-lucide="terminal"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-900 leading-tight">Senior Robotics Software Engineer</h3>
+                                        <p class="text-slate-600 font-medium">AutoNav Dynamics</p>
+                                    </div>
+                                    <span class="text-sm mono text-slate-400 mt-1 sm:mt-0">2022 — Present</span>
+                                </div>
+                                <p class="text-slate-600 text-sm mb-4 leading-relaxed">
+                                    Led the development of a real-time trajectory optimization module for urban delivery robots. Reduced compute latency by 40% through custom C++/Eigen kernels.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="skill-tag">ROS2</span>
+                                    <span class="skill-tag">C++</span>
+                                    <span class="skill-tag">CUDA</span>
+                                    <span class="skill-tag">Optimization</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 2 -->
+                        <div class="glass-card p-6 rounded-2xl flex gap-6">
+                            <div class="hidden sm:block w-14 h-14 rounded-lg bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-400">
+                                <i data-lucide="activity"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-900 leading-tight">Software Engineering Intern</h3>
+                                        <p class="text-slate-600 font-medium">Neural Systems Inc.</p>
+                                    </div>
+                                    <span class="text-sm mono text-slate-400 mt-1 sm:mt-0">Summer 2021</span>
+                                </div>
+                                <p class="text-slate-600 text-sm mb-4 leading-relaxed">
+                                    Implemented synthetic data generation pipelines for training edge-case obstacle detection models using Blender and Python.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="skill-tag">Python</span>
+                                    <span class="skill-tag">PyTorch</span>
+                                    <span class="skill-tag">Simulation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RESEARCH VIEW -->
+                <section id="research" class="view-section">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Research Experience</h2>
+                    <div class="space-y-8">
+                        <div class="border-l-2 border-slate-200 pl-8 relative">
+                            <div class="absolute w-4 h-4 bg-blue-600 rounded-full -left-[9px] top-0 border-4 border-white"></div>
+                            <h3 class="text-lg font-bold">Safe Reinforcement Learning for Legged Locomotion</h3>
+                            <p class="text-blue-600 text-sm font-medium mb-2">Stanford Multi-Robot Systems Lab</p>
+                            <p class="text-slate-600 text-sm mb-4">
+                                Investigated formal verification techniques applied to neural network policies. Developed a Lyapunov-based safety shield for quadruped controllers in uncertain terrains.
+                            </p>
+                            <div class="flex gap-4">
+                                <a href="#" class="text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest flex items-center gap-1">
+                                    <i data-lucide="file-text" class="w-3 h-3"></i> Paper
+                                </a>
+                                <a href="#" class="text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest flex items-center gap-1">
+                                    <i data-lucide="video" class="w-3 h-3"></i> Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PROJECTS VIEW -->
+                <section id="projects" class="view-section">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Technical Projects</h2>
+                    <div class="grid grid-cols-1 gap-8">
+                        
+                        <!-- Project 1 -->
+                        <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
+                            <div class="md:w-1/2 bg-slate-900 p-8 flex items-center justify-center min-h-[240px]">
+                                <!-- Motion Graphic Placeholder (SVG Animation) -->
+                                <svg width="200" height="120" viewBox="0 0 200 120">
+                                    <rect x="20" y="80" width="160" height="2" fill="#334155" />
+                                    <circle cx="40" cy="80" r="5" fill="#3b82f6">
+                                        <animate attributeName="cx" values="40;160;40" dur="4s" repeatCount="indefinite" />
+                                        <animate attributeName="cy" values="80;40;80" dur="4s" repeatCount="indefinite" />
+                                    </circle>
+                                    <path d="M40 80 Q 100 0 160 80" stroke="#3b82f6" stroke-width="1" fill="none" stroke-dasharray="4" />
+                                </svg>
+                            </div>
+                            <div class="md:w-1/2 p-8 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">Path-Finder Pro</h3>
+                                    <p class="text-slate-600 text-sm mb-6">
+                                        A high-performance implementation of A* and RRT* in Rust with a React-based visualizer. Designed for large-scale grid maps and dynamic obstacle avoidance.
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-2">
+                                        <span class="skill-tag">Rust</span>
+                                        <span class="skill-tag">Wasm</span>
+                                    </div>
+                                    <a href="#" class="text-slate-900 hover:text-blue-600">
+                                        <i data-lucide="github"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- COURSEWORK VIEW -->
+                <section id="coursework" class="view-section">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Selected Coursework</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 border border-slate-200 rounded-xl hover:bg-white transition-colors">
+                            <h4 class="font-bold text-slate-800 text-sm">CS231N</h4>
+                            <p class="text-xs text-slate-500">Deep Learning for Computer Vision</p>
+                        </div>
+                        <div class="p-4 border border-slate-200 rounded-xl hover:bg-white transition-colors">
+                            <h4 class="font-bold text-slate-800 text-sm">ME320</h4>
+                            <p class="text-xs text-slate-500">Linear Control Systems</p>
+                        </div>
+                        <div class="p-4 border border-slate-200 rounded-xl hover:bg-white transition-colors">
+                            <h4 class="font-bold text-slate-800 text-sm">CS221</h4>
+                            <p class="text-xs text-slate-500">Artificial Intelligence: Principles & Techniques</p>
+                        </div>
+                        <div class="p-4 border border-slate-200 rounded-xl hover:bg-white transition-colors">
+                            <h4 class="font-bold text-slate-800 text-sm">EE263</h4>
+                            <p class="text-xs text-slate-500">Linear Dynamical Systems</p>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Navigation Logic
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show requested section
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.add('active');
+                
+                // Scroll to top on mobile when switching
+                if (window.innerWidth < 1024) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        }
+
+        // Logic to handle browser back button if desired could be added here
+        // for now simple JS state is used as requested.
+    </script>
+</body>
+</html>
