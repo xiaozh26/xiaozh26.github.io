@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Technical Portfolio</title>
+    <title>Xiao Zhang's Personal Website</title>
+    
+    <!-- Berkeley EECS Favicon -->
+    <link rel="icon" type="image/png" href="https://brand.berkeley.edu/sites/default/files/styles/default_color_swatch/public/2022-03/seal-blue.png?itok=z_m0_E-E">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -100,8 +104,8 @@
                             </div>
                         </div>
 
-                        <h1 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Alex Rivera</h1>
-                        <p class="text-blue-600 font-medium mb-6 mono text-sm tracking-wide">Robotics Engineer & CS Researcher</p>
+                        <h1 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Xiao Zhang</h1>
+                        <p class="text-blue-600 font-medium mb-6 mono text-sm tracking-wide">EECS @ UC Berkeley</p>
                         
                         <div class="space-y-4 text-slate-600 leading-relaxed max-w-sm">
                             <p>Developing robust perception pipelines and motion planning algorithms for autonomous systems.</p>
@@ -175,10 +179,7 @@
 
                 <!-- EXPERIENCE VIEW -->
                 <section id="experience" class="view-section">
-                    <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-2xl font-bold text-slate-900">Work Experience</h2>
-                    </div>
-                    
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Work Experience</h2>
                     <div class="space-y-6">
                         <div class="glass-card p-6 rounded-2xl flex gap-6">
                             <div class="hidden sm:block w-14 h-14 rounded-lg bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-400">
@@ -187,19 +188,18 @@
                             <div class="flex-grow">
                                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                                     <div>
-                                        <h3 class="text-lg font-bold text-slate-900 leading-tight">Senior Robotics Software Engineer</h3>
-                                        <p class="text-slate-600 font-medium">AutoNav Dynamics</p>
+                                        <h3 class="text-lg font-bold text-slate-900 leading-tight">Robotics Software Engineer</h3>
+                                        <p class="text-slate-600 font-medium">Research Institution</p>
                                     </div>
-                                    <span class="text-sm mono text-slate-400 mt-1 sm:mt-0">2022 — Present</span>
+                                    <span class="text-sm mono text-slate-400 mt-1 sm:mt-0">2023 — Present</span>
                                 </div>
                                 <p class="text-slate-600 text-sm mb-4 leading-relaxed">
-                                    Led the development of a real-time trajectory optimization module for urban delivery robots. Reduced compute latency by 40% through custom C++/Eigen kernels.
+                                    Focused on real-time systems and control logic implementation.
                                 </p>
                                 <div class="flex flex-wrap gap-2">
                                     <span class="skill-tag">ROS2</span>
                                     <span class="skill-tag">C++</span>
-                                    <span class="skill-tag">CUDA</span>
-                                    <span class="skill-tag">Optimization</span>
+                                    <span class="skill-tag">Python</span>
                                 </div>
                             </div>
                         </div>
@@ -208,58 +208,31 @@
 
                 <!-- RESEARCH VIEW -->
                 <section id="research" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Research Experience</h2>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Research</h2>
                     <div class="space-y-8">
                         <div class="border-l-2 border-slate-200 pl-8 relative">
                             <div class="absolute w-4 h-4 bg-blue-600 rounded-full -left-[9px] top-0 border-4 border-white"></div>
-                            <h3 class="text-lg font-bold">Safe Reinforcement Learning for Legged Locomotion</h3>
-                            <p class="text-blue-600 text-sm font-medium mb-2">Stanford Multi-Robot Systems Lab</p>
-                            <p class="text-slate-600 text-sm mb-4">
-                                Investigated formal verification techniques applied to neural network policies. Developed a Lyapunov-based safety shield for quadruped controllers in uncertain terrains.
-                            </p>
-                            <div class="flex gap-4">
-                                <a href="#" class="text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest flex items-center gap-1">
-                                    <i data-lucide="file-text" class="w-3 h-3"></i> Paper
-                                </a>
-                                <a href="#" class="text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest flex items-center gap-1">
-                                    <i data-lucide="video" class="w-3 h-3"></i> Demo
-                                </a>
-                            </div>
+                            <h3 class="text-lg font-bold">Autonomous Perception Research</h3>
+                            <p class="text-blue-600 text-sm font-medium mb-2">Berkeley Lab</p>
+                            <p class="text-slate-600 text-sm">Investigating computer vision algorithms for robot navigation.</p>
                         </div>
                     </div>
                 </section>
 
                 <!-- PROJECTS VIEW -->
                 <section id="projects" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Technical Projects</h2>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Projects</h2>
                     <div class="grid grid-cols-1 gap-8">
                         <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
                             <div class="md:w-1/2 bg-slate-900 p-8 flex items-center justify-center min-h-[240px]">
-                                <svg width="200" height="120" viewBox="0 0 200 120">
-                                    <rect x="20" y="80" width="160" height="2" fill="#334155" />
-                                    <circle cx="40" cy="80" r="5" fill="#3b82f6">
-                                        <animate attributeName="cx" values="40;160;40" dur="4s" repeatCount="indefinite" />
-                                        <animate attributeName="cy" values="80;40;80" dur="4s" repeatCount="indefinite" />
-                                    </circle>
-                                    <path d="M40 80 Q 100 0 160 80" stroke="#3b82f6" stroke-width="1" fill="none" stroke-dasharray="4" />
-                                </svg>
+                                <i data-lucide="layout" class="text-slate-700 w-16 h-16"></i>
                             </div>
                             <div class="md:w-1/2 p-8 flex flex-col justify-between">
                                 <div>
-                                    <h3 class="text-xl font-bold mb-3">Path-Finder Pro</h3>
-                                    <p class="text-slate-600 text-sm mb-6">
-                                        A high-performance implementation of A* and RRT* in Rust with a React-based visualizer. Designed for large-scale grid maps and dynamic obstacle avoidance.
-                                    </p>
+                                    <h3 class="text-xl font-bold mb-3">System Architecture Project</h3>
+                                    <p class="text-slate-600 text-sm mb-6">Description of your technical project goes here.</p>
                                 </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex gap-2">
-                                        <span class="skill-tag">Rust</span>
-                                        <span class="skill-tag">Wasm</span>
-                                    </div>
-                                    <a href="#" class="text-slate-900 hover:text-blue-600">
-                                        <i data-lucide="github"></i>
-                                    </a>
-                                </div>
+                                <a href="#" class="text-slate-900 hover:text-blue-600"><i data-lucide="github"></i></a>
                             </div>
                         </div>
                     </div>
@@ -267,11 +240,11 @@
 
                 <!-- COURSEWORK VIEW -->
                 <section id="coursework" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Selected Coursework</h2>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Coursework</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 border border-slate-200 rounded-xl hover:bg-white transition-colors">
-                            <h4 class="font-bold text-slate-800 text-sm">CS231N</h4>
-                            <p class="text-xs text-slate-500">Deep Learning for Computer Vision</p>
+                        <div class="p-4 border border-slate-200 rounded-xl">
+                            <h4 class="font-bold text-slate-800 text-sm">CS61B</h4>
+                            <p class="text-xs text-slate-500">Data Structures</p>
                         </div>
                     </div>
                 </section>
@@ -289,9 +262,7 @@
             const target = document.getElementById(sectionId);
             if (target) {
                 target.classList.add('active');
-                if (window.innerWidth < 1024) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
+                if (window.innerWidth < 1024) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
             }
         }
     </script>
