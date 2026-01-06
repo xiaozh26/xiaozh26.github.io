@@ -145,7 +145,6 @@
                                 <i data-lucide="briefcase"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-2">Work Experience</h3>
-                            <p class="text-slate-500 text-sm">Industry roles focused on systems engineering and deployment.</p>
                         </div>
 
                         <div onclick="showSection('research')" class="glass-card p-8 rounded-2xl cursor-pointer group">
@@ -153,7 +152,6 @@
                                 <i data-lucide="microscope"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-2">Research</h3>
-                            <p class="text-slate-500 text-sm">Academic publications and lab-based explorations in robotics.</p>
                         </div>
 
                         <div onclick="showSection('projects')" class="glass-card p-8 rounded-2xl cursor-pointer group">
@@ -161,7 +159,6 @@
                                 <i data-lucide="cpu"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-2">Technical Projects</h3>
-                            <p class="text-slate-500 text-sm">Software implementations, open source, and hardware builds.</p>
                         </div>
 
                         <div onclick="showSection('coursework')" class="glass-card p-8 rounded-2xl cursor-pointer group">
@@ -169,7 +166,6 @@
                                 <i data-lucide="book-open"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-2">Coursework</h3>
-                            <p class="text-slate-500 text-sm">Graduate-level study and core computational foundations.</p>
                         </div>
 
                     </div>
@@ -237,13 +233,107 @@
                 </section>
 
                 <!-- COURSEWORK VIEW -->
+                <!-- COURSEWORK VIEW -->
                 <section id="coursework" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Coursework</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 border border-slate-200 rounded-xl">
-                            <h4 class="font-bold text-slate-800 text-sm">CS61B</h4>
-                            <p class="text-xs text-slate-500">Data Structures</p>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-6">Coursework</h2>
+                    
+                    <!-- GPA Stats Display -->
+                    <div class="mb-10 flex items-center gap-6 p-6 glass-card rounded-2xl border-blue-500/30">
+                        <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
+                            <i data-lucide="graduation-cap" class="w-8 h-8"></i>
                         </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Cumulative GPA</p>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-4xl font-bold text-slate-100">4.0</span>
+                                <span class="text-lg text-slate-500 font-medium">/ 4.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coursework Columns -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        
+                        <!-- Column 1: EECS -->
+                        <div class="space-y-8">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-1 h-6 bg-blue-500 rounded-full"></div>
+                                <h3 class="text-lg font-bold text-slate-100 tracking-tight">EECS</h3>
+                            </div>
+                            
+                            <!-- Lower Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Lower Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 61A</p>
+                                        <p class="text-[11px] text-slate-500">Structure & Interpretation of Computer Programs</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 61B</p>
+                                        <p class="text-[11px] text-slate-500">Data Structures & Algorithms</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">EECS 16A</p>
+                                        <p class="text-[11px] text-slate-500">Designing Information Devices & Systems I</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upper Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Upper Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 188</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Artificial Intelligence</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 189</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Machine Learning</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2: Economics -->
+                        <div class="space-y-8">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-1 h-6 bg-emerald-500 rounded-full"></div>
+                                <h3 class="text-lg font-bold text-slate-100 tracking-tight">Economics</h3>
+                            </div>
+
+                            <!-- Lower Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Lower Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">ECON 1</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Economics</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">STAT 20</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Probability & Statistics</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upper Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Upper Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">ECON 100A</p>
+                                        <p class="text-[11px] text-slate-500">Economic Analysis - Micro</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">ECON 100B</p>
+                                        <p class="text-[11px] text-slate-500">Economic Analysis - Macro</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
