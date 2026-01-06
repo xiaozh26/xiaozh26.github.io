@@ -71,7 +71,7 @@
             font-family: var(--font-mono);
         }
 
-        /* Custom Scrollbar */
+        /* Custom Scrollbar for Dark Mode */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
@@ -223,13 +223,48 @@
 
                 <!-- PROJECTS VIEW -->
                 <section id="projects" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-100 mb-8">Projects</h2>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-8">Technical Projects</h2>
                     <div class="grid grid-cols-1 gap-8">
+                        <!-- PROJECT: REAL-TIME URBAN RESERVOIR MONITORING -->
                         <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
-                            <div class="md:w-1/2 bg-slate-900 p-8 flex items-center justify-center min-h-[240px]">
+                            <div class="md:w-1/3 bg-slate-900 p-8 flex items-center justify-center min-h-[200px]">
+                                <i data-lucide="droplets" class="text-blue-500 w-16 h-16"></i>
+                            </div>
+                            <div class="md:w-2/3 p-8 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-slate-100">Real-Time Urban Reservoir Monitoring System</h3>
+                                        </div>
+                                    </div>
+                                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                                        Designed and implemented an end-to-end hardware–software system for real-time environmental and hydrological monitoring as part of a public welfare initiative for Beijing. 
+                                        Developed a Raspberry Pi–based sensor platform integrating temperature, humidity, air pressure, wind speed, and ultrasonic sensors for high-precision water-level data acquisition.
+                                        Implemented low-latency embedded firmware in C/C++ to enable reliable data transmission to a Python-based backend, supporting real-time visualization and automated alerting.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="skill-tag">Embedded C/C++</span>
+                                        <span class="skill-tag">Raspberry Pi</span>
+                                        <span class="skill-tag">Python</span>
+                                        <span class="skill-tag">Sensor Integrations</span>
+                                        <span class="skill-tag">Communication Protocols: I2C / SPI / UART</span>
+                                        <span class="skill-tag">System Visualization</span>
+                                    </div>
+                                </div>
+                                <div class="pt-6 border-t border-slate-800 flex justify-end">
+                                    <a href="https://github.com/xiaozh26/Urban-Water-Monitoring-RPi" target="_blank" class="text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                                        <i data-lucide="github" class="w-4 h-4"></i> Repository
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OTHER PROJECTS -->
+                        <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
+                            <div class="md:w-1/3 bg-slate-900 p-8 flex items-center justify-center min-h-[200px]">
                                 <i data-lucide="cpu" class="text-slate-700 w-16 h-16"></i>
                             </div>
-                            <div class="md:w-1/2 p-8 flex flex-col justify-between">
+                            <div class="md:w-2/3 p-8 flex flex-col justify-between">
                                 <div>
                                     <h3 class="text-xl font-bold mb-3 text-slate-100">Robotics Perception Pipeline</h3>
                                     <p class="text-slate-400 text-sm mb-6">Designed and implemented a simplified computer vision system for real-time obstacle identification.</p>
@@ -245,7 +280,7 @@
                     <h2 class="text-2xl font-bold text-slate-100 mb-6">Related Coursework</h2>
                     
                     <div class="mb-10 flex items-center gap-6 p-6 glass-card rounded-2xl border-blue-500/30">
-                        <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600">
+                        <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
                             <i data-lucide="graduation-cap" class="w-8 h-8"></i>
                         </div>
                         <div>
@@ -265,6 +300,7 @@
                                 <h3 class="text-xl font-bold text-slate-100 tracking-tight">Completed Courses</h3>
                             </div>
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                <!-- EECS Column -->
                                 <div class="space-y-6">
                                     <div class="text-[11px] font-black text-blue-400 uppercase tracking-[0.2em]">EECS</div>
                                     <div class="space-y-4">
@@ -283,7 +319,7 @@
                                         <p class="text-[10px] text-slate-500 uppercase font-black">Lower Division</p>
                                         <div class="space-y-2">
                                             <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">ECON 1</p><p class="text-[11px] text-slate-500">Introduction to Economics</p></div>
-                                            <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">STAT 20</p><p class="text-[11px] text-slate-500">Probability and Statistics</p></div>
+                                            <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">STAT 20</p><p class="text-[11px] text-slate-500">Introduction to Probability and Statistics</p></div>
                                         </div>
                                         <p class="text-[10px] text-slate-500 uppercase font-black">Upper Division</p>
                                         <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">ECON 101B</p><p class="text-[11px] text-slate-500">Macroeconomics (Math Intensive)</p></div>
@@ -309,7 +345,9 @@
                                             <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">ENGIN 26</p><p class="text-[11px] text-slate-500">3D Modeling for Design</p></div>
                                         </div>
                                         <p class="text-[10px] text-slate-500 uppercase font-black">Upper Division</p>
-                                        <div class="px-4 py-3 bg-slate-900/40 border border-blue-500/30 rounded-xl"><p class="text-xs font-bold">EE 120</p><p class="text-[11px] text-slate-500 italic">Signals and Systems</p></div>
+                                        <div class="space-y-2">
+                                            <div class="px-4 py-3 bg-slate-900/40 border border-blue-500/30 rounded-xl"><p class="text-xs font-bold">EE 120</p><p class="text-[11px] text-slate-500 italic">Signals and Systems</p></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="space-y-6">
@@ -333,7 +371,7 @@
     <script>
         // --- CONFIGURATION ---
         const hasWorkExperience = true; 
-        const hasResearchExperience = false;
+        const hasResearchExperience = false; // Reset to false as requested
 
         // --- RENDER LOGIC ---
         function initializeContent() {
@@ -355,9 +393,9 @@
                                 <span class="text-sm mono text-slate-500 mt-1 sm:mt-0">Sept 2025 — Present</span>
                             </div>
                             <div class="space-y-2 text-slate-400 text-sm mb-4 leading-relaxed">
-                                <p>• Organize and run community outreach and service events, promoting EECS education and engagement within the local student community.</p>
-                                <p>• Develop electrical engineering and computer science related workshops for local high school students.</p>
-                                <p>• Lead weekly tutoring sessions for EECS coursework, supporting undergraduate students in core computer science and engineering classes.</p>
+                                <p>• Organize, coordinate, and run community outreach and service events, promoting EECS education and engagement within the local student community.</p>
+                                <p>• Develop and coordinate electrical engineering and computer science related workshops for local high school students.</p>
+                                <p>• Lead and run weekly tutoring sessions for EECS coursework at UC Berkeley, supporting undergraduate students in core computer science and electrical engineering classes.</p>
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <span class="skill-tag">Outreach</span>
@@ -375,7 +413,7 @@
             }
 
             if (hasResearchExperience) {
-                resContainer.innerHTML = `<div class="border-l-2 border-slate-800 pl-8 relative">...</div>`;
+                resContainer.innerHTML = `<!-- Research content placeholder -->`;
             } else {
                 resContainer.innerHTML = `
                     <div class="glass-card p-12 rounded-2xl text-center border-dashed border-slate-700">
