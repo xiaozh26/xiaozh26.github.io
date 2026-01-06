@@ -76,6 +76,19 @@
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Custom Tooltip Styles */
+        .tooltip-content {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+        }
+        .group:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -108,23 +121,40 @@
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Honor Societies</p>
                             <div class="flex gap-4">
                                 <!-- Tau Beta Pi -->
-                                <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/50 border border-slate-800 group/item hover:border-blue-500/50 transition-colors cursor-default">
+                                <div class="group relative flex items-center gap-3 p-2 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-blue-500/50 transition-colors cursor-help">
                                     <div class="w-8 h-8 rounded-lg overflow-hidden bg-white p-1">
-                                        <img src="tbp.png"Tau Beta Pi" class="w-full h-full object-contain">
+                                        <img src="tbp.png" alt="Tau Beta Pi" class="w-full h-full object-contain">
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="text-[10px] font-bold text-slate-100 leading-none">Tau Beta Pi</span>
                                         <span class="text-[9px] text-slate-500 uppercase tracking-tighter">CA Alpha</span>
                                     </div>
+                                    <!-- Tooltip -->
+                                    <div class="tooltip-content absolute bottom-full left-0 mb-3 w-64 p-3 rounded-xl bg-slate-900/95 border border-blue-500/30 backdrop-blur-md shadow-2xl z-50 pointer-events-none text-left">
+                                        <p class="text-[11px] leading-relaxed text-slate-300">
+                                            <span class="text-blue-400 font-bold block mb-1">Engineering Honor Society</span>
+                                            Inducted 2025; top 12.5% of junior standing engineering class at UC Berkeley.
+                                        </p>
+                                        <div class="absolute top-full left-6 w-2 h-2 bg-slate-900 border-r border-b border-blue-500/30 transform rotate-45 -translate-y-1"></div>
+                                    </div>
                                 </div>
+
                                 <!-- IEEE-HKN -->
-                                <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/50 border border-slate-800 group/item hover:border-blue-500/50 transition-colors cursor-default">
+                                <div class="group relative flex items-center gap-3 p-2 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-blue-500/50 transition-colors cursor-help">
                                     <div class="w-8 h-8 rounded-lg overflow-hidden bg-white p-1">
                                         <img src="hkn.png" alt="IEEE-HKN" class="w-full h-full object-contain">
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="text-[10px] font-bold text-slate-100 leading-none">IEEE-HKN</span>
                                         <span class="text-[9px] text-slate-500 uppercase tracking-tighter">Mu Chapter</span>
+                                    </div>
+                                    <!-- Tooltip -->
+                                    <div class="tooltip-content absolute bottom-full left-0 mb-3 w-64 p-3 rounded-xl bg-slate-900/95 border border-blue-500/30 backdrop-blur-md shadow-2xl z-50 pointer-events-none text-left">
+                                        <p class="text-[11px] leading-relaxed text-slate-300">
+                                            <span class="text-blue-400 font-bold block mb-1">Electrical & Computer Engineering Honor Society</span>
+                                            Inducted 2025; top students in EECS selected for scholarship, leadership & character.
+                                        </p>
+                                        <div class="absolute top-full left-6 w-2 h-2 bg-slate-900 border-r border-b border-blue-500/30 transform rotate-45 -translate-y-1"></div>
                                     </div>
                                 </div>
                             </div>
@@ -155,22 +185,22 @@
                         <div onclick="showSection('experience')" class="glass-card p-8 rounded-2xl cursor-pointer group">
                             <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all"><i data-lucide="briefcase"></i></div>
                             <h3 class="text-xl font-bold mb-2 text-slate-100">Work Experience</h3>
-                            <p class="text-slate-400 text-sm">Undergraduate internships and professional roles in industry.</p>
+                            <p class="text-slate-400 text-sm">Professional leadership and industry roles.</p>
                         </div>
                         <div onclick="showSection('research')" class="glass-card p-8 rounded-2xl cursor-pointer group">
                             <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-all"><i data-lucide="microscope"></i></div>
                             <h3 class="text-xl font-bold mb-2 text-slate-100">Research</h3>
-                            <p class="text-slate-400 text-sm">Undergraduate research positions and lab collaborations at Berkeley.</p>
+                            <p class="text-slate-400 text-sm">Undergraduate research initiatives at Berkeley.</p>
                         </div>
                         <div onclick="showSection('projects')" class="glass-card p-8 rounded-2xl cursor-pointer group">
                             <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all"><i data-lucide="cpu"></i></div>
                             <h3 class="text-xl font-bold mb-2 text-slate-100">Technical Projects</h3>
-                            <p class="text-slate-400 text-sm">Academic engineering projects showcasing system-level design.</p>
+                            <p class="text-slate-400 text-sm">Academic engineering builds and system designs.</p>
                         </div>
                         <div onclick="showSection('coursework')" class="glass-card p-8 rounded-2xl cursor-pointer group">
                             <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all"><i data-lucide="book-open"></i></div>
                             <h3 class="text-xl font-bold mb-2 text-slate-100">Related Coursework</h3>
-                            <p class="text-slate-400 text-sm">Academic record and progress in EECS and Quantitative Economics.</p>
+                            <p class="text-slate-400 text-sm">Academic record and progress in EECS and Economics.</p>
                         </div>
                     </div>
                 </section>
@@ -179,7 +209,7 @@
                 <section id="experience" class="view-section">
                     <h2 class="text-2xl font-bold text-slate-100 mb-8">Work Experience</h2>
                     <div id="experience-container" class="space-y-6">
-                        <!-- Content injected via JS Configuration -->
+                        <!-- Content injected via JS -->
                     </div>
                 </section>
 
@@ -187,7 +217,7 @@
                 <section id="research" class="view-section">
                     <h2 class="text-2xl font-bold text-slate-100 mb-8">Research</h2>
                     <div id="research-container" class="space-y-8">
-                        <!-- Content injected via JS Configuration -->
+                        <!-- Content injected via JS -->
                     </div>
                 </section>
 
@@ -202,7 +232,7 @@
                             <div class="md:w-1/2 p-8 flex flex-col justify-between">
                                 <div>
                                     <h3 class="text-xl font-bold mb-3 text-slate-100">Robotics Perception Pipeline</h3>
-                                    <p class="text-slate-400 text-sm mb-6">Designed and implemented a simplified computer vision system for real-time obstacle identification as an undergraduate technical project.</p>
+                                    <p class="text-slate-400 text-sm mb-6">Designed and implemented a simplified computer vision system for real-time obstacle identification.</p>
                                 </div>
                                 <a href="https://github.com/xiaozh26" class="text-slate-300 hover:text-blue-400 transition-colors"><i data-lucide="github"></i></a>
                             </div>
@@ -215,7 +245,7 @@
                     <h2 class="text-2xl font-bold text-slate-100 mb-6">Related Coursework</h2>
                     
                     <div class="mb-10 flex items-center gap-6 p-6 glass-card rounded-2xl border-blue-500/30">
-                        <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
+                        <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600">
                             <i data-lucide="graduation-cap" class="w-8 h-8"></i>
                         </div>
                         <div>
@@ -302,7 +332,7 @@
 
     <script>
         // --- CONFIGURATION ---
-        const hasWorkExperience = false; 
+        const hasWorkExperience = true; 
         const hasResearchExperience = false;
 
         // --- RENDER LOGIC ---
@@ -313,24 +343,27 @@
             if (hasWorkExperience) {
                 expContainer.innerHTML = `
                     <div class="glass-card p-6 rounded-2xl flex gap-6">
-                        <div class="hidden sm:block w-14 h-14 rounded-lg bg-slate-800 flex-shrink-0 flex items-center justify-center text-slate-400">
-                            <i data-lucide="terminal"></i>
+                        <div class="hidden sm:block w-14 h-14 rounded-lg bg-white p-2 flex-shrink-0 flex items-center justify-center">
+                            <img src="hkn.png" alt="HKN Logo" class="w-full h-full object-contain">
                         </div>
                         <div class="flex-grow">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                                 <div>
-                                    <h3 class="text-lg font-bold text-slate-100 leading-tight">Software Engineering Intern</h3>
-                                    <p class="text-blue-400 font-medium">Summer Intern @ [Industry Partner]</p>
+                                    <h3 class="text-lg font-bold text-slate-100 leading-tight">Service Officer</h3>
+                                    <p class="text-blue-400 font-medium">Eta Kappa Nu (HKN), UC Berkeley</p>
                                 </div>
-                                <span class="text-sm mono text-slate-500 mt-1 sm:mt-0">May — Aug 2024</span>
+                                <span class="text-sm mono text-slate-500 mt-1 sm:mt-0">Sept 2025 — Present</span>
                             </div>
-                            <p class="text-slate-400 text-sm mb-4 leading-relaxed">
-                                Collaborated with an engineering team to develop software modules. Focused on implementing clean, scalable code and contributing to technical stand-ups.
-                            </p>
+                            <div class="space-y-2 text-slate-400 text-sm mb-4 leading-relaxed">
+                                <p>• Organize and run community outreach and service events, promoting EECS education and engagement within the local student community.</p>
+                                <p>• Develop electrical engineering and computer science related workshops for local high school students.</p>
+                                <p>• Lead weekly tutoring sessions for EECS coursework, supporting undergraduate students in core computer science and engineering classes.</p>
+                            </div>
                             <div class="flex flex-wrap gap-2">
-                                <span class="skill-tag">Python</span>
-                                <span class="skill-tag">Git</span>
-                                <span class="skill-tag">Agile Workflow</span>
+                                <span class="skill-tag">Outreach</span>
+                                <span class="skill-tag">Teaching Techniques for EECS</span>
+                                <span class="skill-tag">Professional Development</span>
+                                <span class="skill-tag">Leadership</span>
                             </div>
                         </div>
                     </div>`;
@@ -342,13 +375,7 @@
             }
 
             if (hasResearchExperience) {
-                resContainer.innerHTML = `
-                    <div class="border-l-2 border-slate-800 pl-8 relative">
-                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-[9px] top-0 border-4 border-[#020617]"></div>
-                        <h3 class="text-lg font-bold text-slate-100">Undergraduate Research Assistant</h3>
-                        <p class="text-blue-400 text-sm font-medium mb-2">Berkeley AI Research (BAIR) / Lab Group</p>
-                        <p class="text-slate-400 text-sm">Assisting PhD candidates in evaluating computer vision models for robotic perception. Supporting data processing and experimental implementation for autonomous systems.</p>
-                    </div>`;
+                resContainer.innerHTML = `<div class="border-l-2 border-slate-800 pl-8 relative">...</div>`;
             } else {
                 resContainer.innerHTML = `
                     <div class="glass-card p-12 rounded-2xl text-center border-dashed border-slate-700">
