@@ -98,12 +98,39 @@
                         <h1 class="text-3xl font-bold tracking-tight text-slate-50 mb-2">Xiao Zhang</h1>
                         <p class="text-blue-400 font-medium mb-6 mono text-sm tracking-wide uppercase">EECS and Economics @ UC Berkeley</p>
                         
-                        <div class="space-y-4 text-slate-400 leading-relaxed max-w-sm">
+                        <div class="space-y-4 text-slate-400 leading-relaxed max-w-sm mb-8">
                             <p>I'm an 18-year-old EECS and Economics undergraduate at UC Berkeley, passionate about robotics and fascinated by the intersection of perception and autonomy.</p>
                             <p>I'm eager to explore how intelligent systems can perceive, learn, and act in the world, and to contribute to advancing autonomous technologies.</p>
                         </div>
 
-                        <div class="mt-8 flex gap-4">
+                        <!-- AFFILIATIONS / HONOR SOCIETIES -->
+                        <div class="mb-8">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Honor Societies</p>
+                            <div class="flex gap-4">
+                                <!-- Tau Beta Pi -->
+                                <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/50 border border-slate-800 group/item hover:border-blue-500/50 transition-colors cursor-default">
+                                    <div class="w-8 h-8 rounded-lg overflow-hidden bg-white p-1">
+                                        <img src="tbp.png"Tau Beta Pi" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-[10px] font-bold text-slate-100 leading-none">Tau Beta Pi</span>
+                                        <span class="text-[9px] text-slate-500 uppercase tracking-tighter">CA Alpha</span>
+                                    </div>
+                                </div>
+                                <!-- IEEE-HKN -->
+                                <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/50 border border-slate-800 group/item hover:border-blue-500/50 transition-colors cursor-default">
+                                    <div class="w-8 h-8 rounded-lg overflow-hidden bg-white p-1">
+                                        <img src="hkn.png" alt="IEEE-HKN" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-[10px] font-bold text-slate-100 leading-none">IEEE-HKN</span>
+                                        <span class="text-[9px] text-slate-500 uppercase tracking-tighter">Mu Chapter</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
                             <a href="https://linkedin.com/in/xiaozhang07" target="_blank" class="p-2 text-slate-500 hover:text-blue-400 transition-colors" title="LinkedIn"><i data-lucide="linkedin"></i></a>
                             <a href="https://github.com/xiaozh26" target="_blank" class="p-2 text-slate-500 hover:text-slate-100 transition-colors" title="GitHub"><i data-lucide="github"></i></a>
                             <a href="#" onclick="window.location='mailto:'+ 'xiao_zhang' + '@' + 'berkeley.edu'" class="p-2 text-slate-500 hover:text-orange-400 transition-colors" title="Email"><i data-lucide="mail"></i></a>
@@ -208,7 +235,6 @@
                                 <h3 class="text-xl font-bold text-slate-100 tracking-tight">Completed Courses</h3>
                             </div>
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                                <!-- EECS Column -->
                                 <div class="space-y-6">
                                     <div class="text-[11px] font-black text-blue-400 uppercase tracking-[0.2em]">EECS</div>
                                     <div class="space-y-4">
@@ -219,11 +245,8 @@
                                             <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">CS 70</p><p class="text-[11px] text-slate-500">Discrete Math & Probability</p></div>
                                             <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">EECS 16A</p><p class="text-[11px] text-slate-500">Designing Information Systems I</p></div>
                                         </div>
-                                        <p class="text-[10px] text-slate-500 uppercase font-black">Upper Division</p>
-                                        <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl opacity-50"><p class="text-xs font-bold">TBD</p></div>
                                     </div>
                                 </div>
-                                <!-- Economics Column -->
                                 <div class="space-y-6">
                                     <div class="text-[11px] font-black text-emerald-400 uppercase tracking-[0.2em]">Economics (Quantitative)</div>
                                     <div class="space-y-4">
@@ -279,7 +302,6 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Toggle these to true to show actual content, false to show "Stay Tuned"
         const hasWorkExperience = false; 
         const hasResearchExperience = false;
 
@@ -288,7 +310,6 @@
             const expContainer = document.getElementById('experience-container');
             const resContainer = document.getElementById('research-container');
 
-            // Render Work Experience
             if (hasWorkExperience) {
                 expContainer.innerHTML = `
                     <div class="glass-card p-6 rounded-2xl flex gap-6">
@@ -320,7 +341,6 @@
                     </div>`;
             }
 
-            // Render Research Experience
             if (hasResearchExperience) {
                 resContainer.innerHTML = `
                     <div class="border-l-2 border-slate-800 pl-8 relative">
@@ -336,17 +356,15 @@
                     </div>`;
             }
             
-            lucide.createIcons(); // Re-initialize icons for dynamic content
+            lucide.createIcons();
         }
 
-        // --- NAVIGATION ---
         function showSection(sectionId) {
             document.querySelectorAll('.view-section').forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             if (window.innerWidth < 1024) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         }
 
-        // Run on load
         window.onload = initializeContent;
     </script>
 </body>
