@@ -21,23 +21,24 @@
 
         body {
             font-family: var(--font-main);
-            background-color: #f8fafc; /* Professional Light Background */
-            color: #1e293b; /* Dark Slate text */
+            background-color: #020617; /* Darkest Slate Background */
+            color: #f1f5f9; /* Light Slate text */
         }
 
         .mono { font-family: var(--font-mono); }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(15, 23, 42, 0.6); /* Semi-transparent dark slate */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5); /* Subtle border */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-card:hover {
             transform: translateY(-4px);
             border-color: #3b82f6;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
         .sidebar-fixed {
@@ -48,7 +49,7 @@
 
         .view-section {
             display: none;
-            animation: fadeIn 0.4s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .view-section.active {
@@ -62,19 +63,19 @@
 
         .skill-tag {
             font-size: 0.75rem;
-            padding: 0.125rem 0.5rem;
+            padding: 0.125rem 0.6rem;
             border-radius: 4px;
-            background: #f1f5f9;
-            color: #475569;
-            border: 1px solid #e2e8f0;
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
             font-family: var(--font-mono);
         }
 
-        /* Custom Scrollbar */
+        /* Custom Scrollbar for Dark Mode */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
 <body class="antialiased">
@@ -87,45 +88,48 @@
                 <div class="sidebar-fixed flex flex-col justify-between">
                     <div>
                         <!-- Profile Image Container with Hover Effect -->
-                        <div class="group relative w-32 h-32 rounded-2xl bg-slate-200 mb-8 overflow-hidden border-2 border-white shadow-sm cursor-pointer">
+                        <div class="group relative w-32 h-32 rounded-2xl bg-slate-800 mb-8 overflow-hidden border-2 border-slate-700 shadow-xl cursor-pointer">
+                            <!-- Default Image (Image 1) -->
                             <img src="pfp2.png" 
                                  alt="Profile" 
                                  onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=300&h=300'"
                                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out group-hover:opacity-0">
                             
+                            <!-- Hover Image (Image 2) -->
                             <img src="pfp_1.png" 
                                  alt="Profile Hover" 
                                  onerror="this.src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=crop&w=300&h=300'"
                                  class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
                             
-                            <div class="absolute inset-0 -z-10 flex items-center justify-center text-slate-400">
+                            <div class="absolute inset-0 -z-10 flex items-center justify-center text-slate-600">
                                 <i data-lucide="user" class="w-12 h-12"></i>
                             </div>
                         </div>
 
-                        <h1 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Xiao Zhang</h1>
-                        <p class="text-blue-600 font-medium mb-6 mono text-sm tracking-wide">EECS and Economics @ UC Berkeley</p>
+                        <h1 class="text-3xl font-bold tracking-tight text-slate-50 mb-2">Xiao Zhang</h1>
+                        <p class="text-blue-400 font-medium mb-6 mono text-sm tracking-wide uppercase">EECS and Economics @ UC Berkeley</p>
                         
-                        <div class="space-y-4 text-slate-600 leading-relaxed max-w-sm">
+                        <div class="space-y-4 text-slate-400 leading-relaxed max-w-sm">
                             <p>I'm an 18-year-old EECS and Economics undergraduate at UC Berkeley, passionate about robotics and fascinated by the intersection of perception and autonomy.</p>
                             <p>I'm eager to explore how intelligent systems can perceive, learn, and act in the world, and to contribute to advancing autonomous technologies.</p>
                         </div>
 
+                        <!-- UPDATED SOCIAL LINKS -->
                         <div class="mt-8 flex gap-4">
-                            <a href="https://linkedin.com/in/xiaozhang07" target="_blank" class="p-2 text-slate-500 hover:text-blue-600 transition-colors" title="LinkedIn">
+                            <a href="https://linkedin.com/in/xiaozhang07" target="_blank" class="p-2 text-slate-500 hover:text-blue-400 transition-colors" title="LinkedIn">
                                 <i data-lucide="linkedin"></i>
                             </a>
-                            <a href="https://github.com/xiaozh26" target="_blank" class="p-2 text-slate-500 hover:text-slate-900 transition-colors" title="GitHub">
+                            <a href="https://github.com/xiaozh26" target="_blank" class="p-2 text-slate-500 hover:text-slate-100 transition-colors" title="GitHub">
                                 <i data-lucide="github"></i>
                             </a>
-                            <a href="#" onclick="window.location='mailto:'+ 'xiao_zhang' + '@' + 'berkeley.edu'" class="p-2 text-slate-500 hover:text-orange-600 transition-colors" title="Email">
+                            <a href="#" onclick="window.location='mailto:'+ 'xiao_zhang' + '@' + 'berkeley.edu'" class="p-2 text-slate-500 hover:text-orange-400 transition-colors" title="Email">
                                 <i data-lucide="mail"></i>
                             </a>
                         </div>
                     </div>
 
                     <div class="mt-12">
-                        <button onclick="showSection('home')" class="flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-blue-600 transition-colors">
+                        <button onclick="showSection('home')" class="flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-blue-400 transition-colors">
                             <i data-lucide="arrow-left" class="w-4 h-4"></i>
                             Back to Overview
                         </button>
@@ -136,41 +140,41 @@
             <!-- RIGHT COLUMN: Content Space -->
             <main class="w-full lg:w-2/3">
                 
-                <!-- HOME VIEW -->
+                <!-- HOME VIEW: Navigation Tiles -->
                 <section id="home" class="view-section active">
-                    <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Technical Overview</h2>
+                    <h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-8">Technical Overview</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
                         <div onclick="showSection('experience')" class="glass-card p-8 rounded-2xl cursor-pointer group">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
                                 <i data-lucide="briefcase"></i>
                             </div>
-                            <h3 class="text-xl font-bold mb-2">Work Experience</h3>
-                            <p class="text-slate-500 text-sm">Undergraduate internships and professional roles in industry.</p>
+                            <h3 class="text-xl font-bold mb-2 text-slate-100">Work Experience</h3>
+                            <p class="text-slate-400 text-sm">Internships and professional roles applying engineering principles in industry.</p>
                         </div>
 
                         <div onclick="showSection('research')" class="glass-card p-8 rounded-2xl cursor-pointer group">
-                            <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-all">
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-all">
                                 <i data-lucide="microscope"></i>
                             </div>
-                            <h3 class="text-xl font-bold mb-2">Research</h3>
-                            <p class="text-slate-500 text-sm">Undergraduate research positions and lab collaborations at Berkeley.</p>
+                            <h3 class="text-xl font-bold mb-2 text-slate-100">Research</h3>
+                            <p class="text-slate-400 text-sm">Undergraduate research positions and laboratory collaborations at UC Berkeley.</p>
                         </div>
 
                         <div onclick="showSection('projects')" class="glass-card p-8 rounded-2xl cursor-pointer group">
-                            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all">
                                 <i data-lucide="cpu"></i>
                             </div>
-                            <h3 class="text-xl font-bold mb-2">Technical Projects</h3>
-                            <p class="text-slate-500 text-sm">Course projects and personal engineering builds.</p>
+                            <h3 class="text-xl font-bold mb-2 text-slate-100">Technical Projects</h3>
+                            <p class="text-slate-400 text-sm">Academic and personal engineering projects showcasing system-level design.</p>
                         </div>
 
                         <div onclick="showSection('coursework')" class="glass-card p-8 rounded-2xl cursor-pointer group">
-                            <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                            <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all">
                                 <i data-lucide="book-open"></i>
                             </div>
-                            <h3 class="text-xl font-bold mb-2">Coursework</h3>
-                            <p class="text-slate-500 text-sm">Academic record and foundations in EECS and Economics.</p>
+                            <h3 class="text-xl font-bold mb-2 text-slate-100">Coursework</h3>
+                            <p class="text-slate-400 text-sm">Academic record and technical foundations in EECS and Economics.</p>
                         </div>
 
                     </div>
@@ -178,27 +182,27 @@
 
                 <!-- EXPERIENCE VIEW -->
                 <section id="experience" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Work Experience</h2>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-8">Work Experience</h2>
                     <div class="space-y-6">
                         <div class="glass-card p-6 rounded-2xl flex gap-6">
-                            <div class="hidden sm:block w-14 h-14 rounded-lg bg-slate-50 flex-shrink-0 flex items-center justify-center text-slate-400">
+                            <div class="hidden sm:block w-14 h-14 rounded-lg bg-slate-800 flex-shrink-0 flex items-center justify-center text-slate-400">
                                 <i data-lucide="terminal"></i>
                             </div>
                             <div class="flex-grow">
                                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                                     <div>
-                                        <h3 class="text-lg font-bold text-slate-900 leading-tight">Software Engineering Intern</h3>
-                                        <p class="text-blue-600 font-medium">Summer Internship 2024</p>
+                                        <h3 class="text-lg font-bold text-slate-100 leading-tight">Software Engineering Intern</h3>
+                                        <p class="text-blue-400 font-medium">Tech Startup / Company</p>
                                     </div>
-                                    <span class="text-sm mono text-slate-400 mt-1 sm:mt-0">May — Aug 2024</span>
+                                    <span class="text-sm mono text-slate-500 mt-1 sm:mt-0">Summer 2024</span>
                                 </div>
-                                <p class="text-slate-600 text-sm mb-4 leading-relaxed">
-                                    Developed scalable features and supported system integration within an agile development team. Focused on improving codebase efficiency and documentation.
+                                <p class="text-slate-400 text-sm mb-4 leading-relaxed">
+                                    Contributed to full-stack development and system prototyping during a summer internship, focusing on scalable software solutions.
                                 </p>
                                 <div class="flex flex-wrap gap-2">
                                     <span class="skill-tag">Python</span>
                                     <span class="skill-tag">Git</span>
-                                    <span class="skill-tag">Agile</span>
+                                    <span class="skill-tag">Full Stack</span>
                                 </div>
                             </div>
                         </div>
@@ -207,31 +211,31 @@
 
                 <!-- RESEARCH VIEW -->
                 <section id="research" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Research</h2>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-8">Research</h2>
                     <div class="space-y-8">
-                        <div class="border-l-2 border-slate-200 pl-8 relative">
-                            <div class="absolute w-4 h-4 bg-blue-600 rounded-full -left-[9px] top-0 border-4 border-white"></div>
-                            <h3 class="text-lg font-bold">Undergraduate Research Assistant</h3>
-                            <p class="text-blue-600 text-sm font-medium mb-2">Berkeley Lab Collaboration</p>
-                            <p class="text-slate-600 text-sm">Assisting with data collection and preliminary model testing for autonomous system perception. Collaborating with graduate mentors on experimental design.</p>
+                        <div class="border-l-2 border-slate-800 pl-8 relative">
+                            <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-[9px] top-0 border-4 border-[#020617]"></div>
+                            <h3 class="text-lg font-bold text-slate-100">Undergraduate Research Assistant</h3>
+                            <p class="text-blue-400 text-sm font-medium mb-2">Berkeley AI Research (BAIR) / Lab</p>
+                            <p class="text-slate-400 text-sm">Assisting in the development of computer vision pipelines for autonomous agents, focusing on data processing and model evaluation.</p>
                         </div>
                     </div>
                 </section>
 
                 <!-- PROJECTS VIEW -->
                 <section id="projects" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Projects</h2>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-8">Projects</h2>
                     <div class="grid grid-cols-1 gap-8">
                         <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
-                            <div class="md:w-1/2 bg-slate-50 p-8 flex items-center justify-center min-h-[240px]">
-                                <i data-lucide="layout" class="text-slate-300 w-16 h-16"></i>
+                            <div class="md:w-1/2 bg-slate-900 p-8 flex items-center justify-center min-h-[240px]">
+                                <i data-lucide="layout" class="text-slate-700 w-16 h-16"></i>
                             </div>
                             <div class="md:w-1/2 p-8 flex flex-col justify-between">
                                 <div>
-                                    <h3 class="text-xl font-bold mb-3 text-slate-900">Academic Project: Robotics Perception</h3>
-                                    <p class="text-slate-600 text-sm mb-6">Designed and implemented a basic computer vision pipeline as part of a course project to identify and track objects in real-time.</p>
+                                    <h3 class="text-xl font-bold mb-3 text-slate-100">Autonomous Navigation Simulation</h3>
+                                    <p class="text-slate-400 text-sm mb-6">Built a simplified 2D pathfinding simulation demonstrating obstacle avoidance and sensor fusion concepts.</p>
                                 </div>
-                                <a href="https://github.com/xiaozh26" class="text-slate-900 hover:text-blue-600 transition-colors"><i data-lucide="github"></i></a>
+                                <a href="https://github.com/xiaozh26" class="text-slate-300 hover:text-blue-400 transition-colors"><i data-lucide="github"></i></a>
                             </div>
                         </div>
                     </div>
@@ -239,18 +243,18 @@
 
                 <!-- COURSEWORK VIEW -->
                 <section id="coursework" class="view-section">
-                    <h2 class="text-2xl font-bold text-slate-900 mb-6">Coursework</h2>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-6">Coursework</h2>
                     
                     <!-- GPA Stats Display -->
-                    <div class="mb-10 flex items-center gap-6 p-6 glass-card rounded-2xl border-blue-100">
-                        <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                    <div class="mb-10 flex items-center gap-6 p-6 glass-card rounded-2xl border-blue-500/30">
+                        <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
                             <i data-lucide="graduation-cap" class="w-8 h-8"></i>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Cumulative GPA</p>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Cumulative GPA</p>
                             <div class="flex items-baseline gap-2">
-                                <span class="text-4xl font-bold text-slate-900">4.0</span>
-                                <span class="text-lg text-slate-400 font-medium">/ 4.0</span>
+                                <span class="text-4xl font-bold text-slate-100">4.0</span>
+                                <span class="text-lg text-slate-500 font-medium">/ 4.0</span>
                             </div>
                         </div>
                     </div>
@@ -261,31 +265,40 @@
                         <!-- Column 1: EECS -->
                         <div class="space-y-8">
                             <div class="flex items-center gap-3 mb-2">
-                                <div class="w-1 h-6 bg-blue-600 rounded-full"></div>
-                                <h3 class="text-lg font-bold text-slate-900 tracking-tight">EECS</h3>
+                                <div class="w-1 h-6 bg-blue-500 rounded-full"></div>
+                                <h3 class="text-lg font-bold text-slate-100 tracking-tight">EECS</h3>
                             </div>
                             
-                            <div class="space-y-4">
-                                <div>
-                                    <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Lower Division</h4>
-                                    <div class="space-y-2">
-                                        <div class="px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-blue-300 transition-colors">
-                                            <p class="text-xs font-bold text-slate-900">CS 61A</p>
-                                            <p class="text-[11px] text-slate-500">Structure & Interpretation of Programs</p>
-                                        </div>
-                                        <div class="px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-blue-300 transition-colors">
-                                            <p class="text-xs font-bold text-slate-900">CS 61B</p>
-                                            <p class="text-[11px] text-slate-500">Data Structures & Algorithms</p>
-                                        </div>
+                            <!-- Lower Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Lower Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 61A</p>
+                                        <p class="text-[11px] text-slate-500">Structure & Interpretation of Computer Programs</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 61B</p>
+                                        <p class="text-[11px] text-slate-500">Data Structures & Algorithms</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">EECS 16A</p>
+                                        <p class="text-[11px] text-slate-500">Designing Information Devices & Systems I</p>
                                     </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Upper Division</h4>
-                                    <div class="space-y-2">
-                                        <div class="px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-blue-300 transition-colors">
-                                            <p class="text-xs font-bold text-slate-900">CS 188</p>
-                                            <p class="text-[11px] text-slate-500">Intro to Artificial Intelligence</p>
-                                        </div>
+                            </div>
+
+                            <!-- Upper Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Upper Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 188</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Artificial Intelligence</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">CS 189</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Machine Learning</p>
                                     </div>
                                 </div>
                             </div>
@@ -295,26 +308,35 @@
                         <div class="space-y-8">
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="w-1 h-6 bg-emerald-500 rounded-full"></div>
-                                <h3 class="text-lg font-bold text-slate-900 tracking-tight">Economics</h3>
+                                <h3 class="text-lg font-bold text-slate-100 tracking-tight">Economics</h3>
                             </div>
 
-                            <div class="space-y-4">
-                                <div>
-                                    <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Lower Division</h4>
-                                    <div class="space-y-2">
-                                        <div class="px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 transition-colors">
-                                            <p class="text-xs font-bold text-slate-900">ECON 1</p>
-                                            <p class="text-[11px] text-slate-500">Introduction to Economics</p>
-                                        </div>
+                            <!-- Lower Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Lower Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">ECON 1</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Economics</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">STAT 20</p>
+                                        <p class="text-[11px] text-slate-500">Introduction to Probability & Statistics</p>
                                     </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Upper Division</h4>
-                                    <div class="space-y-2">
-                                        <div class="px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 transition-colors">
-                                            <p class="text-xs font-bold text-slate-900">ECON 100A</p>
-                                            <p class="text-[11px] text-slate-500">Economic Analysis - Micro</p>
-                                        </div>
+                            </div>
+
+                            <!-- Upper Division Row -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Upper Division</h4>
+                                <div class="space-y-2">
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">ECON 100A</p>
+                                        <p class="text-[11px] text-slate-500">Economic Analysis - Micro</p>
+                                    </div>
+                                    <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+                                        <p class="text-xs font-bold text-slate-100">ECON 100B</p>
+                                        <p class="text-[11px] text-slate-500">Economic Analysis - Macro</p>
                                     </div>
                                 </div>
                             </div>
