@@ -9,6 +9,8 @@
     <link rel="icon" type="image/png" href="https://brand.berkeley.edu/sites/default/files/styles/default_color_swatch/public/2022-03/seal-blue.png?itok=z_m0_E-E">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D Simulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -88,6 +90,11 @@
             visibility: visible;
             opacity: 1;
             transform: translateY(0);
+        }
+
+        #vessel-canvas-container canvas {
+            border-radius: 1rem;
+            cursor: crosshair;
         }
     </style>
 </head>
@@ -224,13 +231,85 @@
                 <!-- PROJECTS VIEW -->
                 <section id="projects" class="view-section">
                     <h2 class="text-2xl font-bold text-slate-100 mb-8">Technical Projects</h2>
-                    <div class="grid grid-cols-1 gap-8">
-                        <!-- PROJECT: REAL-TIME URBAN RESERVOIR MONITORING -->
-                        <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
-                            <div class="md:w-1/3 bg-slate-900 p-8 flex items-center justify-center min-h-[200px]">
-                                <i data-lucide="droplets" class="text-blue-500 w-16 h-16"></i>
+                    <div class="grid grid-cols-1 gap-12">
+                        
+                        <!-- FLAGSHIP PROJECT: AUTONOMOUS RESEARCH VESSEL -->
+                        <div class="glass-card rounded-2xl overflow-hidden flex flex-col">
+                            <div class="w-full bg-[#020617] relative min-h-[500px] border-b border-slate-800" id="vessel-canvas-container">
+                                <!-- Telemetry HUD -->
+                                <div class="absolute top-6 left-6 z-10 space-y-4 pointer-events-none">
+                                    <div class="glass-card bg-slate-900/90 border-slate-700/50 p-4 rounded-xl w-48 shadow-2xl">
+                                        <p class="text-[10px] mono text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Pose Telemetry
+                                        </p>
+                                        <div class="space-y-1.5 mono text-xs">
+                                            <p class="flex justify-between"><span class="text-slate-500">X:</span> <span id="tel-x" class="text-blue-400">0.00</span></p>
+                                            <p class="flex justify-between"><span class="text-slate-500">Y:</span> <span id="tel-y" class="text-blue-400">0.00</span></p>
+                                            <p class="flex justify-between"><span class="text-slate-500">θ:</span> <span id="tel-th" class="text-blue-400">0.00°</span></p>
+                                            <p class="flex justify-between border-t border-slate-800 pt-1 mt-1"><span class="text-slate-500">STATUS:</span> <span id="tel-stat" class="text-emerald-400">IDLE</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="glass-card bg-slate-900/90 border-slate-700/50 p-4 rounded-xl w-48">
+                                        <p class="text-[10px] mono text-slate-500 uppercase tracking-widest mb-2">Distance Sensors (mm)</p>
+                                        <div class="grid grid-cols-2 gap-2 mono text-[10px]">
+                                            <div class="p-1.5 bg-slate-950 rounded border border-slate-800 text-center"><span class="block text-slate-600">Front</span><span id="s1-val">---</span></div>
+                                            <div class="p-1.5 bg-slate-950 rounded border border-slate-800 text-center"><span class="block text-slate-600">Right</span><span id="s2-val">---</span></div>
+                                            <div class="p-1.5 bg-slate-950 rounded border border-slate-800 text-center"><span class="block text-slate-600">Back</span><span id="s3-val">---</span></div>
+                                            <div class="p-1.5 bg-slate-950 rounded border border-slate-800 text-center"><span class="block text-slate-600">Left</span><span id="s4-val">---</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="px-2 py-1 bg-blue-500/10 rounded border border-blue-500/20">
+                                        <p class="text-[9px] mono text-blue-400">INFO: Click water to set mission point</p>
+                                    </div>
+                                </div>
+
+                                <!-- Interaction Overlay -->
+                                <div class="absolute bottom-6 right-6 z-10 flex gap-3 pointer-events-auto">
+                                    <button onclick="triggerRTH()" id="rth-btn" class="px-6 py-2 bg-orange-600/20 border border-orange-500/50 hover:bg-orange-600 hover:text-white rounded-lg text-xs font-bold text-orange-400 transition-all flex items-center gap-2">
+                                        <i data-lucide="home" class="w-3 h-3"></i> RTH
+                                    </button>
+                                </div>
                             </div>
-                            <div class="md:w-2/3 p-8 flex flex-col justify-between">
+
+                            <!-- Content Section -->
+                            <div class="p-10">
+                                <div class="flex flex-col lg:flex-row gap-10">
+                                    <div class="lg:w-2/3">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <span class="p-2 rounded-xl bg-blue-500/10 text-blue-400"><i data-lucide="navigation-2"></i></span>
+                                            <h3 class="text-2xl font-bold text-slate-50">Autonomous Research Vessel Navigation Stack</h3>
+                                        </div>
+                                        <p class="text-slate-400 leading-relaxed mb-6">
+                                            Engineered the localization and navigation stack for an autonomous waterfowl research vessel used in ecological field studies. Designed and integrated hardware systems for precise GPS/IMU positioning and ultrasonic ranging. Developed custom navigation algorithms including vector field histograms for real-time obstacle avoidance and a Return-to-Home (RTH) sequence.
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="skill-tag">Localization Stack</span>
+                                            <span class="skill-tag">Obstacle Avoidance</span>
+                                            <span class="skill-tag">VFH Algorithm</span>
+                                            <span class="skill-tag">Fail-safe RTH</span>
+                                            <span class="skill-tag">Kinematic Modeling</span>
+                                        </div>
+                                    </div>
+                                    <div class="lg:w-1/3 pt-4">
+                                        <div class="space-y-4">
+                                            <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+                                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">The demo is a minimal working demonstration of the algorithms</p>
+                                            </div>
+                                            <a href="" target="_blank" class="block w-full text-center py-3 bg-slate-100 hover:bg-white text-slate-900 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2">
+                                                <i data-lucide="github" class="w-4 h-4"></i> ACCESS REPOSITORY
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PROJECT: REAL-TIME URBAN RESERVOIR MONITORING -->
+                       <div class="glass-card rounded-2xl overflow-hidden flex flex-col">
+                            <div class="w-full bg-slate-900 p-8 flex items-center justify-center min-h-[300px] border-b border-slate-800">
+                                <i data-lucide="droplets" class="text-blue-500 w-24 h-24"></i>
+                            </div>
+                            <div class="w-full p-8 flex flex-col justify-between">
                                 <div>
                                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
                                         <div>
@@ -246,30 +325,15 @@
                                         <span class="skill-tag">Embedded C/C++</span>
                                         <span class="skill-tag">Raspberry Pi</span>
                                         <span class="skill-tag">Python</span>
-                                        <span class="skill-tag">Sensor Integrations</span>
-                                        <span class="skill-tag">Communication Protocols: I2C / SPI / UART</span>
+                                        <span class="skill-tag">I2C / SPI / UART</span>
                                         <span class="skill-tag">System Visualization</span>
                                     </div>
                                 </div>
-                                <div class="pt-6 border-t border-slate-800 flex justify-end">
-                                    <a href="https://github.com/xiaozh26/Urban-Water-Monitoring-RPi" target="_blank" class="text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
-                                        <i data-lucide="github" class="w-4 h-4"></i> Repository
+                                <div class="pt-6 border-t border-slate-800">
+                                    <a href="https://github.com/xiaozh26/Urban-Water-Monitoring-RPi" target="_blank" class="block w-full text-center py-3 bg-slate-100 hover:bg-white text-slate-900 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2">
+                                        <i data-lucide="github" class="w-4 h-4"></i> ACCESS REPOSITORY
                                     </a>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- OTHER PROJECTS -->
-                        <div class="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
-                            <div class="md:w-1/3 bg-slate-900 p-8 flex items-center justify-center min-h-[200px]">
-                                <i data-lucide="cpu" class="text-slate-700 w-16 h-16"></i>
-                            </div>
-                            <div class="md:w-2/3 p-8 flex flex-col justify-between">
-                                <div>
-                                    <h3 class="text-xl font-bold mb-3 text-slate-100">Robotics Perception Pipeline</h3>
-                                    <p class="text-slate-400 text-sm mb-6">Designed and implemented a simplified computer vision system for real-time obstacle identification.</p>
-                                </div>
-                                <a href="https://github.com/xiaozh26" class="text-slate-300 hover:text-blue-400 transition-colors"><i data-lucide="github"></i></a>
                             </div>
                         </div>
                     </div>
@@ -319,7 +383,7 @@
                                         <p class="text-[10px] text-slate-500 uppercase font-black">Lower Division</p>
                                         <div class="space-y-2">
                                             <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">ECON 1</p><p class="text-[11px] text-slate-500">Introduction to Economics</p></div>
-                                            <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">STAT 20</p><p class="text-[11px] text-slate-500">Introduction to Probability and Statistics</p></div>
+                                            <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">STAT 20</p><p class="text-[11px] text-slate-500">Probability and Statistics</p></div>
                                         </div>
                                         <p class="text-[10px] text-slate-500 uppercase font-black">Upper Division</p>
                                         <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">ECON 101B</p><p class="text-[11px] text-slate-500">Macroeconomics (Math Intensive)</p></div>
@@ -345,9 +409,7 @@
                                             <div class="px-4 py-3 bg-slate-900/40 border border-slate-800 rounded-xl"><p class="text-xs font-bold">ENGIN 26</p><p class="text-[11px] text-slate-500">3D Modeling for Design</p></div>
                                         </div>
                                         <p class="text-[10px] text-slate-500 uppercase font-black">Upper Division</p>
-                                        <div class="space-y-2">
-                                            <div class="px-4 py-3 bg-slate-900/40 border border-blue-500/30 rounded-xl"><p class="text-xs font-bold">EE 120</p><p class="text-[11px] text-slate-500 italic">Signals and Systems</p></div>
-                                        </div>
+                                        <div class="px-4 py-3 bg-slate-900/40 border border-blue-500/30 rounded-xl"><p class="text-xs font-bold">EE 120</p><p class="text-[11px] text-slate-500 italic">Signals and Systems</p></div>
                                     </div>
                                 </div>
                                 <div class="space-y-6">
@@ -371,7 +433,283 @@
     <script>
         // --- CONFIGURATION ---
         const hasWorkExperience = true; 
-        const hasResearchExperience = false; // Reset to false as requested
+        const hasResearchExperience = false;
+
+        // --- 3D VESSEL SIMULATION ---
+        let scene, camera, renderer, raycaster, mouse, vessel, waterPlane, waypointMarker;
+        let obstacles = [], rays = [], sensorRaycaster, ducks = [];
+        let state = "IDLE";
+        let boatPose = { x: -8, z: 8, th: 0, v: 0 };
+        let target = { x: -8, z: 8 };
+
+        function initVesselDemo() {
+            const container = document.getElementById('vessel-canvas-container');
+            const rect = container.getBoundingClientRect();
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(40, rect.width / rect.height, 0.1, 1000);
+            camera.position.set(0, 18, 22);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(rect.width, rect.height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            raycaster = new THREE.Raycaster();
+            sensorRaycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Lighting
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+            const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+            sun.position.set(10, 20, 10);
+            scene.add(sun);
+
+            // Water Plane (Click Detector)
+            const waterGeo = new THREE.PlaneGeometry(30, 30);
+            const waterMat = new THREE.MeshPhongMaterial({ color: 0x0f172a, transparent: true, opacity: 0.8 });
+            waterPlane = new THREE.Mesh(waterGeo, waterMat);
+            waterPlane.rotation.x = -Math.PI / 2;
+            scene.add(waterPlane);
+
+            const grid = new THREE.GridHelper(30, 30, 0x1e293b, 0x1e293b);
+            scene.add(grid);
+
+            // Waypoint Marker
+            const wayGeo = new THREE.RingGeometry(0.4, 0.5, 32);
+            const wayMat = new THREE.MeshBasicMaterial({color: 0x3b82f6, side: THREE.DoubleSide});
+            waypointMarker = new THREE.Mesh(wayGeo, wayMat);
+            waypointMarker.rotation.x = -Math.PI/2;
+            waypointMarker.visible = false;
+            scene.add(waypointMarker);
+
+            // Vessel Model
+            const boatGroup = new THREE.Group();
+            const hullGeo = new THREE.BoxGeometry(1.2, 0.4, 2.5);
+            const hullMat = new THREE.MeshPhongMaterial({ color: 0xf1f5f9 });
+            const hull = new THREE.Mesh(hullGeo, hullMat);
+            boatGroup.add(hull);
+
+            const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.4, 0.8), new THREE.MeshPhongMaterial({color: 0x3b82f6}));
+            cabin.position.set(0, 0.4, 0);
+            boatGroup.add(cabin);
+
+            vessel = boatGroup;
+            scene.add(vessel);
+
+            // Confidence Radius
+            const conf = new THREE.Mesh(new THREE.RingGeometry(1.2, 1.3, 32), new THREE.MeshBasicMaterial({color: 0x3b82f6, transparent: true, opacity: 0.2, side: THREE.DoubleSide}));
+            conf.rotation.x = -Math.PI/2;
+            vessel.add(conf);
+
+            // Stationary Obstacles (Rocks)
+            const rockMat = new THREE.MeshPhongMaterial({color: 0x64748b, flatShading: true});
+            const positions = [[5, 5], [-5, -5], [8, -2], [-2, 4], [0, -8], [3, -4], [-6, 2]];
+            
+            positions.forEach(pos => {
+                const geo = new THREE.IcosahedronGeometry(0.6 + Math.random()*0.4, 0);
+                const rock = new THREE.Mesh(geo, rockMat);
+                rock.position.set(pos[0], 0.3, pos[1]);
+                rock.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+                scene.add(rock);
+                obstacles.push(rock);
+            });
+
+            // Moving Obstacles (Ducks)
+            const duckGroup = new THREE.Group();
+            const bodyGeo = new THREE.SphereGeometry(0.4, 8, 8);
+            const bodyMat = new THREE.MeshPhongMaterial({color: 0xfacc15}); // Yellow
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            
+            const headGeo = new THREE.SphereGeometry(0.25, 8, 8);
+            const head = new THREE.Mesh(headGeo, bodyMat);
+            head.position.set(0.3, 0.3, 0);
+            
+            const beakGeo = new THREE.ConeGeometry(0.1, 0.2, 8);
+            const beakMat = new THREE.MeshPhongMaterial({color: 0xf97316}); // Orange
+            const beak = new THREE.Mesh(beakGeo, beakMat);
+            beak.rotation.z = -Math.PI/2;
+            beak.position.set(0.5, 0.3, 0);
+
+            duckGroup.add(body, head, beak);
+            
+            // Create a few ducks
+            for(let i=0; i<3; i++) {
+                const duck = duckGroup.clone();
+                duck.position.set((Math.random()-0.5)*15, 0.3, (Math.random()-0.5)*15);
+                duck.userData = { 
+                    velocity: new THREE.Vector3((Math.random()-0.5)*0.05, 0, (Math.random()-0.5)*0.05),
+                    phase: Math.random() * Math.PI * 2 
+                };
+                scene.add(duck);
+                obstacles.push(duck); // Add to obstacles for avoidance/sensing
+                ducks.push(duck); // Keep track for animation
+            }
+
+            // Visual Rays (Always Visible)
+            for(let i=0; i<4; i++) {
+                // Line geometry for ray visual (length 1, will scale)
+                const rayGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,1)]);
+                const rayMat = new THREE.LineBasicMaterial({color: 0xef4444, transparent: true, opacity: 0.4});
+                const ray = new THREE.Line(rayGeo, rayMat);
+                vessel.add(ray);
+                rays.push(ray);
+            }
+
+            container.addEventListener('click', onWaterClick);
+            animate();
+        }
+
+        function onWaterClick(event) {
+            // Ensure clicks on UI buttons don't trigger movement
+            if (event.target !== renderer.domElement) return;
+
+            const container = document.getElementById('vessel-canvas-container');
+            const rect = container.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(waterPlane);
+
+            if (intersects.length > 0) {
+                target.x = intersects[0].point.x;
+                target.z = intersects[0].point.z;
+                
+                waypointMarker.position.set(target.x, 0.05, target.z);
+                waypointMarker.visible = true;
+                
+                state = "MISSION";
+                document.getElementById('tel-stat').textContent = "MISSION";
+                document.getElementById('tel-stat').className = "text-blue-400";
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Update Ducks
+            ducks.forEach(duck => {
+                duck.position.add(duck.userData.velocity);
+                // Simple bounds check/bounce
+                if(Math.abs(duck.position.x) > 14) duck.userData.velocity.x *= -1;
+                if(Math.abs(duck.position.z) > 14) duck.userData.velocity.z *= -1;
+                
+                // Bobbing
+                duck.position.y = 0.3 + Math.sin(Date.now() * 0.005 + duck.userData.phase) * 0.05;
+                
+                // Face direction
+                const angle = Math.atan2(duck.userData.velocity.z, duck.userData.velocity.x); 
+                // Model is oriented towards +X? No, default sphere. Let's just rotate.
+                // Actually rotation doesn't matter much for a sphere body, but head position does.
+                // Group rotation y.
+                duck.rotation.y = -angle; 
+            });
+
+            if (state !== "IDLE") {
+                // POTENTIAL FIELD NAVIGATION
+                let attractiveX = target.x - boatPose.x;
+                let attractiveZ = target.z - boatPose.z;
+                let distToTarget = Math.sqrt(attractiveX**2 + attractiveZ**2);
+                
+                if (distToTarget > 0) {
+                    attractiveX /= distToTarget;
+                    attractiveZ /= distToTarget;
+                }
+
+                let repulsiveX = 0, repulsiveZ = 0;
+                obstacles.forEach(obs => {
+                    let dx = boatPose.x - obs.position.x;
+                    let dz = boatPose.z - obs.position.z;
+                    let dist = Math.sqrt(dx*dx + dz*dz);
+                    if (dist < 3) {
+                        let force = (1.0 / dist) - (1.0 / 3.0);
+                        repulsiveX += (dx / dist) * force * 5;
+                        repulsiveZ += (dz / dist) * force * 5;
+                    }
+                });
+
+                let resX = attractiveX + repulsiveX;
+                let resZ = attractiveZ + repulsiveZ;
+
+                if (distToTarget > 0.3) {
+                    const desiredHeading = Math.atan2(resX, resZ);
+                    let angleDiff = desiredHeading - boatPose.th;
+                    while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+                    while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+
+                    boatPose.th += angleDiff * 0.08;
+                    boatPose.v = 0.07;
+                } else {
+                    boatPose.v = 0;
+                    if (state === "RTH") {
+                        state = "IDLE";
+                        document.getElementById('tel-stat').textContent = "IDLE";
+                        document.getElementById('tel-stat').className = "text-emerald-400";
+                        waypointMarker.visible = false;
+                    }
+                }
+
+                boatPose.x += Math.sin(boatPose.th) * boatPose.v;
+                boatPose.z += Math.cos(boatPose.th) * boatPose.v;
+            }
+
+            vessel.position.set(boatPose.x, 0.25, boatPose.z);
+            vessel.rotation.y = boatPose.th;
+
+            // UI & Sensor Raycasting Updates
+            document.getElementById('tel-x').textContent = boatPose.x.toFixed(2);
+            document.getElementById('tel-y').textContent = boatPose.z.toFixed(2);
+            document.getElementById('tel-th').textContent = (boatPose.th * 180 / Math.PI).toFixed(1) + "°";
+
+            // Raycasting logic
+            const sensorOffsets = [0, -Math.PI/2, Math.PI, Math.PI/2]; // Front, Right, Back, Left relative to heading
+            const maxRange = 5; // meters
+
+            sensorOffsets.forEach((offset, i) => {
+                const angle = boatPose.th + offset;
+                const dir = new THREE.Vector3(Math.sin(angle), 0, Math.cos(angle)).normalize();
+                const origin = new THREE.Vector3(boatPose.x, 0.5, boatPose.z);
+                
+                sensorRaycaster.set(origin, dir);
+                const intersects = sensorRaycaster.intersectObjects(obstacles);
+                
+                let dist = maxRange * 1000; // mm
+                if (intersects.length > 0) {
+                    const d = intersects[0].distance;
+                    if(d < maxRange) dist = Math.floor(d * 1000);
+                }
+                
+                // Update UI Text
+                document.getElementById(`s${i+1}-val`).textContent = dist;
+
+                // Update Visual Ray
+                const rayLine = rays[i];
+                rayLine.material.opacity = 0.4; // Always visible
+                
+                // Align ray line to sensor direction locally
+                if(i===0) rayLine.rotation.set(0,0,0);
+                if(i===1) rayLine.rotation.set(0, -Math.PI/2, 0);
+                if(i===2) rayLine.rotation.set(0, Math.PI, 0);
+                if(i===3) rayLine.rotation.set(0, Math.PI/2, 0);
+
+                const scaleLen = (dist / 1000) / 1; // Base length is 1 unit
+                rayLine.scale.z = dist/1000; 
+                rayLine.position.y = 0.1;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        function triggerRTH() {
+            state = "RTH";
+            target = { x: -8, z: 8 };
+            waypointMarker.position.set(target.x, 0.05, target.z);
+            waypointMarker.visible = true;
+            document.getElementById('tel-stat').textContent = "RTH";
+            document.getElementById('tel-stat').className = "text-orange-400";
+        }
 
         // --- RENDER LOGIC ---
         function initializeContent() {
@@ -399,35 +737,38 @@
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <span class="skill-tag">Outreach</span>
-                                <span class="skill-tag">Teaching Techniques for EECS</span>
-                                <span class="skill-tag">Professional Development</span>
+                                <span class="skill-tag">Tutoring</span>
+                                <span class="skill-tag">EECS Education</span>
                                 <span class="skill-tag">Leadership</span>
                             </div>
                         </div>
                     </div>`;
             } else {
-                expContainer.innerHTML = `
-                    <div class="glass-card p-12 rounded-2xl text-center border-dashed border-slate-700">
-                        <p class="text-slate-500 mono text-sm tracking-widest uppercase">Stay Tuned — Professional roles in progress</p>
-                    </div>`;
+                expContainer.innerHTML = `<div class="glass-card p-12 rounded-2xl text-center border-dashed border-slate-700"><p class="text-slate-500 mono text-sm tracking-widest uppercase">Stay Tuned — Professional roles in progress</p></div>`;
             }
 
             if (hasResearchExperience) {
-                resContainer.innerHTML = `<!-- Research content placeholder -->`;
+                resContainer.innerHTML = `<!-- Research placeholder -->`;
             } else {
-                resContainer.innerHTML = `
-                    <div class="glass-card p-12 rounded-2xl text-center border-dashed border-slate-700">
-                        <p class="text-slate-500 mono text-sm tracking-widest uppercase">Stay Tuned — Research initiatives coming soon</p>
-                    </div>`;
+                resContainer.innerHTML = `<div class="glass-card p-12 rounded-2xl text-center border-dashed border-slate-700"><p class="text-slate-500 mono text-sm tracking-widest uppercase">Stay Tuned — Research initiatives coming soon</p></div>`;
             }
             
             lucide.createIcons();
+            setTimeout(initVesselDemo, 100);
         }
 
         function showSection(sectionId) {
             document.querySelectorAll('.view-section').forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             if (window.innerWidth < 1024) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            
+            if(sectionId === 'projects' && renderer) {
+                const container = document.getElementById('vessel-canvas-container');
+                const rect = container.getBoundingClientRect();
+                renderer.setSize(rect.width, rect.height);
+                camera.aspect = rect.width / rect.height;
+                camera.updateProjectionMatrix();
+            }
         }
 
         window.onload = initializeContent;
