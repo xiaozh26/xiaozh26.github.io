@@ -96,6 +96,14 @@
             border-radius: 1rem;
             cursor: crosshair;
         }
+        
+        /* Thermal Demo Animations */
+        @keyframes flow {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .pipe-flow { stroke-dasharray: 6; animation: flow 1s linear infinite; }
+        .hidden-flow { opacity: 0.1; animation: none; }
     </style>
 </head>
 <body class="antialiased">
@@ -233,7 +241,7 @@
                     <h2 class="text-2xl font-bold text-slate-100 mb-8">Technical Projects</h2>
                     <div class="grid grid-cols-1 gap-12">
                         
-                        <!-- FLAGSHIP PROJECT: AUTONOMOUS RESEARCH VESSEL -->
+                        <!-- FLAGSHIP PROJECT: AUTONOMOUS RESEARCH VESSEL (Vertical Layout) -->
                         <div class="glass-card rounded-2xl overflow-hidden flex flex-col">
                             <div class="w-full bg-[#020617] relative min-h-[500px] border-b border-slate-800" id="vessel-canvas-container">
                                 <!-- Telemetry HUD -->
@@ -332,6 +340,108 @@
                                 <div class="pt-6 border-t border-slate-800">
                                     <a href="https://github.com/xiaozh26/Urban-Water-Monitoring-RPi" target="_blank" class="block w-full text-center py-3 bg-slate-100 hover:bg-white text-slate-900 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2">
                                         <i data-lucide="github" class="w-4 h-4"></i> ACCESS REPOSITORY
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- PROJECT 3: SUSTAINABLE DATA CENTER THERMAL MANAGEMENT -->
+                        <div class="glass-card rounded-2xl overflow-hidden flex flex-col">
+                            <!-- Visual Demo: Heat Recovery Dashboard -->
+                            <div class="w-full bg-slate-900 relative min-h-[350px] border-b border-slate-800 p-8 flex items-center justify-center">
+                                <svg width="600" height="350" viewBox="0 0 600 350" class="w-full h-full max-w-[600px]">
+                                    <!-- Styles -->
+                                    <defs>
+                                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    
+                                    <!-- Server Tank (Oil) -->
+                                    <rect x="40" y="180" width="100" height="140" rx="4" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                                    <text x="90" y="250" fill="#94a3b8" font-size="12" text-anchor="middle">OIL BATH</text>
+                                    <text x="90" y="270" fill="#cbd5e1" font-size="10" text-anchor="middle">SERVERS</text>
+                                    
+                                    <!-- Radiator -->
+                                    <rect x="220" y="20" width="100" height="60" rx="4" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                                    <path d="M220 20 L320 80 M320 20 L220 80" stroke="#334155" stroke-width="1" opacity="0.3"/>
+                                    <text x="270" y="55" fill="#94a3b8" font-size="12" text-anchor="middle">RADIATOR</text>
+                                    
+                                    <!-- Water Tank -->
+                                    <rect x="440" y="100" width="120" height="220" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="500" y="200" fill="#3b82f6" font-size="14" text-anchor="middle" font-weight="bold">WATER TANK</text>
+                                    
+                                    <!-- Pipes (Static Background) -->
+                                    <path d="M90 180 V 160 H 250" stroke="#334155" stroke-width="4" fill="none"/> 
+                                    <path d="M250 160 V 80" stroke="#334155" stroke-width="4" fill="none"/>
+                                    <path d="M250 160 H 440" stroke="#334155" stroke-width="4" fill="none"/>
+                                    <path d="M290 80 V 160" stroke="#334155" stroke-width="4" fill="none"/>
+                                    <path d="M440 280 H 290 V 160" stroke="#334155" stroke-width="4" fill="none"/>
+                                    <path d="M290 160 H 140 V 180" stroke="#334155" stroke-width="4" fill="none"/>
+
+                                    <!-- Active Flow Paths (Animated via Class) -->
+                                    <path id="pipe-server-out" d="M90 180 V 160 H 250" stroke="#ef4444" stroke-width="2" class="pipe-flow" fill="none" opacity="0.8"/>
+                                    <path id="pipe-rad-in" d="M250 160 V 80" stroke="#ef4444" stroke-width="2" class="pipe-flow hidden-flow" fill="none"/>
+                                    <path id="pipe-rad-out" d="M290 80 V 160" stroke="#3b82f6" stroke-width="2" class="pipe-flow hidden-flow" fill="none"/>
+                                    <path id="pipe-tank-in" d="M250 160 H 440" stroke="#ef4444" stroke-width="2" class="pipe-flow" fill="none"/>
+                                    <path id="pipe-tank-coil" d="M440 160 Q 500 160 500 220 T 440 280" stroke="#ef4444" stroke-width="2" class="pipe-flow" fill="none"/>
+                                    <path id="pipe-tank-out" d="M440 280 H 290" stroke="#3b82f6" stroke-width="2" class="pipe-flow" fill="none"/>
+                                    <path id="pipe-return" d="M290 160 H 130 V 180" stroke="#3b82f6" stroke-width="2" class="pipe-flow" fill="none"/>
+
+                                    <!-- Sensors & Labels -->
+                                    <g transform="translate(450, 120)">
+                                        <rect width="40" height="20" rx="2" fill="#0f172a" stroke="#64748b"/>
+                                        <text x="20" y="14" fill="#ef4444" font-size="10" text-anchor="middle" id="val-t1">42°C</text>
+                                        <text x="50" y="14" fill="#64748b" font-size="8">T1 (Water)</text>
+                                    </g>
+                                    
+                                    <g transform="translate(50, 140)">
+                                        <rect width="40" height="20" rx="2" fill="#0f172a" stroke="#64748b"/>
+                                        <text x="20" y="14" fill="#fbbf24" font-size="10" text-anchor="middle" id="val-t3">65°C</text>
+                                        <text x="50" y="14" fill="#64748b" font-size="8">T3 (Server)</text>
+                                    </g>
+
+                                    <!-- Valves -->
+                                    <circle cx="250" cy="160" r="6" fill="#cbd5e1" stroke="#475569"/>
+                                    <text x="250" y="150" fill="#94a3b8" font-size="8" text-anchor="middle">V1</text>
+                                    
+                                    <circle cx="290" cy="160" r="6" fill="#cbd5e1" stroke="#475569"/>
+                                    <text x="290" y="150" fill="#94a3b8" font-size="8" text-anchor="middle">V2</text>
+                                    
+                                    <!-- Status Box -->
+                                    <g transform="translate(20, 20)">
+                                        <rect width="160" height="60" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-opacity="0.5"/>
+                                        <text x="10" y="20" fill="#94a3b8" font-size="10">MODE:</text>
+                                        <text x="50" y="20" font-size="10" font-weight="bold" id="sys-mode" fill="#34d399">HEAT RECOVERY</text>
+                                        <text x="10" y="40" fill="#94a3b8" font-size="10">PUMP:</text>
+                                        <text x="50" y="40" fill="#3b82f6" font-size="10" font-weight="bold">ACTIVE</text>
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <div class="w-full p-8 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-slate-100">Sustainable Data Center Thermal Management System</h3>
+                                            <p class="text-blue-400 font-medium mono text-xs uppercase mt-1">Independent Research Initiative</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                                        Conducted independent research on sustainable data center infrastructure with a focus on thermal management. Motivated by the energy costs of server cooling, I designed a dual-purpose heat recovery system that repurposes waste heat from servers to provide domestic hot water, simultaneously reducing server cooling costs and household energy demand. I built a functional hardware prototype using heat exchangers, sensors, and microcontrollers, and developed a dynamic thermal management algorithm to optimize heat transfer efficiency under varying workloads and water usage patterns.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="skill-tag">Thermodynamics</span>
+                                        <span class="skill-tag">Sensors Integration</span>
+                                        <span class="skill-tag">Microcontrollers</span>
+                                        <span class="skill-tag">Control Algorithms</span>
+                                        <span class="skill-tag">Sustainable Energy</span>
+                                        <span class="skill-tag">Hardware Prototyping</span>
+                                    </div>
+                                </div>
+                                <div class="pt-6 border-t border-slate-800">
+                                    <a href="#" class="block w-full text-center py-3 bg-slate-100 hover:bg-white text-slate-900 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2">
+                                        <i data-lucide="file-text" class="w-4 h-4"></i> VIEW RESEARCH PAPER
                                     </a>
                                 </div>
                             </div>
@@ -711,6 +821,90 @@
             document.getElementById('tel-stat').className = "text-orange-400";
         }
 
+        // --- THERMAL DEMO LOGIC ---
+        let thState = {
+            tServer: 60,
+            tWater: 30,
+            mode: 'RECOVERY'
+        };
+
+        function updateThermalDemo() {
+            // Physics Constants
+            const HEAT_RATE = 0.05;
+            const WATER_HEAT_RATE = 0.03;
+            const WATER_COOL_RATE = 0.01;
+            const TARGET_COOL_TEMP = 65;
+            const COOLING_STRENGTH = 0.1;
+
+            // Logic
+            if (thState.mode === 'RECOVERY') {
+                // Server heats up
+                thState.tServer += HEAT_RATE;
+                // Water heats up (absorbing server heat)
+                thState.tWater += WATER_HEAT_RATE;
+
+                // Trigger switch to Cooling if Water gets too hot
+                if (thState.tWater >= 45) {
+                    thState.mode = 'COOLING';
+                }
+            } else {
+                // COOLING (Radiator Active)
+                // Server moves towards target temp (65)
+                // If it's hotter than 65, it cools down fast.
+                if (thState.tServer > TARGET_COOL_TEMP) {
+                    thState.tServer -= COOLING_STRENGTH;
+                } else {
+                    // Small fluctuation around target
+                    thState.tServer += (Math.random() - 0.5) * 0.1; 
+                }
+
+                // Water cools down slowly
+                thState.tWater -= WATER_COOL_RATE;
+
+                // Trigger switch back to Recovery if Water is cool enough
+                if (thState.tWater <= 35) { // Hysteresis
+                    thState.mode = 'RECOVERY';
+                }
+            }
+
+            // Update DOM
+            document.getElementById('val-t3').textContent = thState.tServer.toFixed(1) + '°C';
+            document.getElementById('val-t1').textContent = thState.tWater.toFixed(1) + '°C';
+            
+            const modeText = document.getElementById('sys-mode');
+            const pipeRadIn = document.getElementById('pipe-rad-in');
+            const pipeRadOut = document.getElementById('pipe-rad-out');
+            const pipeTankIn = document.getElementById('pipe-tank-in');
+            const pipeTankCoil = document.getElementById('pipe-tank-coil');
+            const pipeTankOut = document.getElementById('pipe-tank-out');
+
+            if (thState.mode === 'RECOVERY') {
+                modeText.textContent = "HEAT RECOVERY";
+                modeText.style.fill = "#34d399"; 
+                
+                // Show Tank path
+                pipeTankIn.classList.remove('hidden-flow');
+                pipeTankCoil.classList.remove('hidden-flow');
+                pipeTankOut.classList.remove('hidden-flow');
+                // Hide Radiator path
+                pipeRadIn.classList.add('hidden-flow');
+                pipeRadOut.classList.add('hidden-flow');
+            } else {
+                modeText.textContent = "RADIATOR COOLING";
+                modeText.style.fill = "#60a5fa"; 
+                
+                // Hide Tank path
+                pipeTankIn.classList.add('hidden-flow');
+                pipeTankCoil.classList.add('hidden-flow');
+                pipeTankOut.classList.add('hidden-flow');
+                // Show Radiator path
+                pipeRadIn.classList.remove('hidden-flow');
+                pipeRadOut.classList.remove('hidden-flow');
+            }
+
+            requestAnimationFrame(updateThermalDemo);
+        }
+
         // --- RENDER LOGIC ---
         function initializeContent() {
             const expContainer = document.getElementById('experience-container');
@@ -720,7 +914,7 @@
                 expContainer.innerHTML = `
                     <div class="glass-card p-6 rounded-2xl flex gap-6">
                         <div class="hidden sm:block w-14 h-14 rounded-lg bg-white p-2 flex-shrink-0 flex items-center justify-center">
-                            <img src="hkn.png" alt="HKN Logo" class="w-full h-full object-contain">
+                            <img src="hkn.png" alt="HKN Logo" class="w-full h-full object-contain" onerror="this.src='https://hkn.org/wp-content/uploads/2019/03/HKN-Seal-Color.png'">
                         </div>
                         <div class="flex-grow">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
@@ -755,6 +949,7 @@
             
             lucide.createIcons();
             setTimeout(initVesselDemo, 100);
+            updateThermalDemo(); // Start thermal demo loop
         }
 
         function showSection(sectionId) {
