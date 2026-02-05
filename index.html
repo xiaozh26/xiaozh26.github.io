@@ -633,6 +633,17 @@
 
     <!-- MAIN LOGIC SCRIPT -->
     <script src="main.js"></script>
-    <script type='text/javascript' id='mapmyvisitors' src='https://mapmyvisitors.com/map.js?cl=ffffff&w=a&t=n&d=lFpR2qedkclht1UMbWZIWO5tfB0SK0SP-noRBjg56Ww'></script>
+    <!-- Visitor Map Widget (Small & Styled) -->
+    <section class="mt-12 py-8 border-t border-slate-800/50 flex flex-col items-center justify-center">
+        <!-- Container: 
+            - w-48 h-48: Sets fixed size (small)
+            - rounded-full: Makes it a circle
+            - grayscale: Keeps it subtle until hovered
+            - overflow-hidden: Ensures the map stays inside the circle 
+        -->
+        <div class="w-48 h-48 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 border border-slate-700/50 shadow-2xl bg-slate-900">
+            <script type='text/javascript' id='mapmyvisitors' src='https://mapmyvisitors.com/map.js?cl=ffffff&w=a&t=n&d=lFpR2qedkclht1UMbWZIWO5tfB0SK0SP-noRBjg56Ww'></script>
+        </div>
+    </section>
 </body>
 </html>
