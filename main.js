@@ -1,6 +1,6 @@
 // --- CONFIGURATION ---
 const hasWorkExperience = true; 
-const hasResearchExperience = false;
+const hasResearchExperience = true;
 
 // --- TERM TRACKER LOGIC ---
 function renderTerms() {
@@ -430,7 +430,35 @@ function initializeContent() {
     }
 
     if (hasResearchExperience) {
-        resContainer.innerHTML = `<!-- Research placeholder -->`;
+        resContainer.innerHTML = `
+        <div class="glass-card p-6 rounded-2xl flex gap-6">
+                <div class="hidden sm:block w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
+                    <img src="bair.png" alt="BAIR Logo" class="w-full h-full object-contain">
+                </div>
+                <div class="flex-grow">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-100 leading-tight">Undergraduate Researcher</h3>
+                            <p class="text-blue-400 font-medium">Berkeley Artificial Intelligence Research (BAIR) Lab</p>
+                        </div>
+                        <span class="text-sm mono text-slate-500 mt-1 sm:mt-0">January 2026 — Present</span>
+                    </div>
+                    <div class="space-y-2 text-slate-400 text-sm mb-4 leading-relaxed">
+                        <p>• Conduct research on diffusion-based generative models for robotic learning and planning, investigating scalable approaches to policy generation in high-dimensional action spaces.</p>
+                        <p>• Improve training efficiency and stability of diffusion policies, with a focus on robust denoising behavior under high-noise regimes.</p>
+                        <p>• Explore generative modeling techniques for long-horizon planning and autonomous decision-making in robotics.</p>
+                        <p>• Advised by Prof. Masayoshi Tomizuka. Work closely with PhD candidates Yiheng Li and Yuxin Chen.</p>
+                        <p>• Collaborate with researchers from NVIDIA Robotics, Waymo, and faculty at UT Austin. </p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">Robotics</span>
+                        <span class="skill-tag">Diffusion Models</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Autonomous Planning</span>
+                        <span class="skill-tag">Neural Networks</span>
+                    </div>
+                </div>
+            </div>`;
     } else {
         resContainer.innerHTML = `<div class="glass-card p-12 rounded-2xl text-center border-dashed border-slate-700"><p class="text-slate-500 mono text-sm tracking-widest uppercase">Stay Tuned — Research initiatives coming soon</p></div>`;
     }
@@ -441,17 +469,51 @@ function initializeContent() {
     renderTerms(); // Initialize term tracker
 }
 
+// Find your showSection function and update it with the visibility logic
 function showSection(sectionId) {
+    // 1. Handle Section Visibility
     document.querySelectorAll('.view-section').forEach(section => section.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    if (window.innerWidth < 1024) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) targetSection.classList.add('active');
+
+    // 2. Smooth Scroll to Top (Important for Mobile)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 3. Manage home icon button next to section heading (insert/remove)
+    document.querySelectorAll('.view-section').forEach(sec => {
+        const existing = sec.querySelector('.home-nav-btn');
+        if (sec.id === 'home') {
+            if (existing) existing.remove();
+        } else {
+            if (!existing) {
+                const btn = document.createElement('button');
+                btn.className = 'home-nav-btn';
+                btn.title = 'Back to Overview';
+                btn.onclick = () => showSection('home');
+                btn.innerHTML = '<i data-lucide="home" class="w-5 h-5"></i>';
+
+                // Try to place it immediately after the section heading
+                const heading = sec.querySelector('h2, h1, h3');
+                if (heading && heading.parentNode) {
+                    heading.insertAdjacentElement('afterend', btn);
+                } else {
+                    sec.insertBefore(btn, sec.firstChild);
+                }
+
+                if (window.lucide && lucide.createIcons) lucide.createIcons();
+            }
+        }
+    });
+
+    // 4. Handle Canvas Resize if moving to Projects
     if(sectionId === 'projects' && renderer) {
-        const container = document.getElementById('vessel-canvas-container');
-        const rect = container.getBoundingClientRect();
-        renderer.setSize(rect.width, rect.height);
-        camera.aspect = rect.width / rect.height;
-        camera.updateProjectionMatrix();
+        setTimeout(() => {
+            const container = document.getElementById('vessel-canvas-container');
+            const rect = container.getBoundingClientRect();
+            renderer.setSize(rect.width, rect.height);
+            camera.aspect = rect.width / rect.height;
+            camera.updateProjectionMatrix();
+        }, 100);
     }
 }
 
