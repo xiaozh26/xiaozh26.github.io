@@ -143,9 +143,36 @@
             background: white;
             border-bottom: 1px solid var(--border);
             padding: 90px 1.5rem 1.5rem 11rem;
+            position: relative;
         }
         @media (max-width: 640px) {
             .bio-section { padding: 72px 1.25rem 1.25rem 1.25rem; }
+        }
+
+        /* ── INLINE IDENTITY (shows when name-bar scrolled away) ── */
+        #bio-identity {
+            position: absolute;
+            top: 0.55rem;
+            left: 13rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        #bio-identity.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #bio-identity .bio-id-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            white-space: nowrap;
+        }
+        @media (max-width: 640px) {
+            #bio-identity { left: calc(1rem + 110px + 0.75rem); top: 0.4rem; }
         }
         .bio-section p {
             font-size: 0.94rem;
@@ -587,6 +614,21 @@
 
 <!-- ══ BIO ══════════════════════════════════════════════ -->
 <div class="bio-section">
+
+    <!-- Inline identity: visible only when name-bar is scrolled out of view -->
+    <div id="bio-identity">
+        <span class="bio-id-name">Xiao Zhang</span>
+        <a href="https://linkedin.com/in/xiaozhang07" target="_blank" class="icon-btn" title="LinkedIn">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="javascript:void(0)" onclick="window.location.href='mailto:'+atob('eGlhb196aGFuZ0BiZXJrZWxleS5lZHU=')" class="icon-btn" title="Email">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </a>
+        <a href="https://github.com/xiaozh26" target="_blank" class="icon-btn" title="GitHub">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+    </div>
+
     <p>
         I'm an Electrical Engineering & Computer Sciences and Economics undergraduate at UC Berkeley, working on Robotic Planning, Learning and Manipulation, as well as Diffusion Models and Policies. I'm advised by
         <a href="https://me.berkeley.edu/people/masayoshi-tomizuka/" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Prof. Masayoshi Tomizuka</a>
@@ -958,6 +1000,15 @@ window.onload = function() {
     if (badge) badge.textContent = `Spring 2026 · ${count} course${count !== 1 ? 's' : ''}`;
 };
 window.addEventListener('resize', drawTimeline);
+
+// ── INLINE IDENTITY: show when name-bar scrolls out of view ──
+const nameBar = document.querySelector('.name-bar');
+const bioIdentity = document.getElementById('bio-identity');
+if (nameBar && bioIdentity) {
+    new IntersectionObserver(entries => {
+        bioIdentity.classList.toggle('visible', !entries[0].isIntersecting);
+    }, { threshold: 0 }).observe(nameBar);
+}
 </script>
 </body>
 </html>
