@@ -921,14 +921,10 @@ function drawTimeline() {
     const W = wrapRect.width;
     const H = wrapRect.height;
 
-    // Build smooth S-curve through dot centers
-    // Extend line above first dot and below last dot
-    const topY    = pts[0].y - 80;
-    const bottomY = pts[pts.length - 1].y + 80;
-    const cx      = W / 2; // horizontal center
+    // Build smooth S-curve through dot centers, starting and ending exactly at the dots
+    const cx = W / 2; // horizontal center
 
-    let d = `M ${cx} ${topY}`;
-    d += ` L ${cx} ${pts[0].y}`;
+    let d = `M ${cx} ${pts[0].y}`;
 
     for (let i = 0; i < pts.length - 1; i++) {
         const p1 = pts[i];
@@ -938,7 +934,7 @@ function drawTimeline() {
         d += ` C ${p1.x} ${mid}, ${p2.x} ${mid}, ${p2.x} ${p2.y}`;
     }
 
-    d += ` L ${cx} ${bottomY}`;
+    d += ` L ${cx} ${pts[pts.length - 1].y}`;
 
     svg.setAttribute('width',  W);
     svg.setAttribute('height', H);
