@@ -394,45 +394,236 @@
         }
         @media (max-width: 640px) { .cw-section { padding: 2rem 1.25rem 3rem; } }
 
-        /* GPA hero row */
-        .gpa-row {
+        /* Semester tracker card */
+        .term-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.65rem 2.5rem 1.55rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .term-card-label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.13em;
+            color: var(--text-soft);
+            margin-bottom: 1.15rem;
+            position: relative;
+            z-index: 4;
+        }
+        .term-track {
             display: flex;
             align-items: center;
-            gap: 2.5rem;
-            margin-bottom: 2.5rem;
-            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
         }
-        .gpa-num {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--blue);
-            line-height: 1;
-        }
-        .gpa-denom {
-            font-size: 1.1rem;
-            color: var(--text-soft);
-            font-weight: 500;
-        }
-
-        /* Semester tracker */
-        .term-track { display: flex; align-items: center; }
-        .term-node  { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .term-node  { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .term-dot {
-            width: 10px; height: 10px;
+            width: 14px; height: 14px;
             border-radius: 50%; background: var(--border);
             position: relative; z-index: 2;
+            transition: transform 0.2s;
         }
         .term-dot.done    { background: var(--blue-border); }
-        .term-dot.current { background: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+        .term-dot.current {
+            width: 18px; height: 18px;
+            background: var(--blue);
+            box-shadow: 0 0 0 4px var(--blue-light), 0 0 0 7px rgba(58,116,212,0.12);
+            animation: pulse-dot 2.4s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 4px var(--blue-light), 0 0 0 7px rgba(58,116,212,0.12); }
+            50%       { box-shadow: 0 0 0 6px var(--blue-light), 0 0 0 11px rgba(58,116,212,0.06); }
+        }
         .term-connector {
-            height: 2px; width: 36px;
+            height: 2px;
+            flex: 1;
+            min-width: 28px;
+            max-width: 72px;
             background: var(--border);
-            align-self: center; margin-bottom: 18px;
+            align-self: center;
+            margin-bottom: 24px;
         }
         .term-connector.done { background: var(--blue-border); }
         .term-label {
-            font-size: 0.6rem; font-weight: 600;
+            font-size: 0.65rem; font-weight: 600;
             text-align: center; white-space: nowrap; line-height: 1;
+        }
+
+        /* ── WALKING CHARACTERS ── */
+        .walker-stage {
+            position: absolute;
+            left: 2.5rem;
+            right: 2.5rem;
+            top: 2.05rem;
+            height: 4.1rem;
+            margin-top: 0;
+            z-index: 3;
+        }
+        .walker-scene {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .walker {
+            position: absolute;
+            bottom: 1.9rem;
+            left: 0;
+            opacity: 1;
+        }
+        .walker.walking {
+            animation-name: walker-move;
+            animation-duration: var(--walk-dur, 28s);
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            animation-delay: var(--walk-delay, 0s);
+        }
+        @keyframes walker-move {
+            0%   { transform: translateX(var(--walk-start, 0px)); }
+            100% { transform: translateX(var(--walk-dist, 700px)); }
+        }
+        .humanoid-robot {
+            --walk-start: 0px;
+            --walk-delay: -5s;
+            z-index: 2;
+        }
+        .spot-robot-dog {
+            --walk-start: 0px;
+            --walk-delay: -14s;
+            bottom: 1.95rem;
+        }
+        .walker svg {
+            display: block;
+            overflow: visible;
+            filter: drop-shadow(0 6px 7px rgba(15, 23, 42, 0.15));
+        }
+        .obstacle-hop {
+            transform-origin: 50% 100%;
+            animation-duration: var(--walk-dur, 28s);
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            animation-delay: var(--walk-delay, 0s);
+        }
+        .human-obstacle-hop {
+            animation-name: human-obstacle-hop;
+        }
+        .dog-obstacle-hop {
+            animation-name: dog-obstacle-hop;
+        }
+        .dog-direction {
+            transform-origin: 50% 50%;
+        }
+        .spot-robot-dog.walking .dog-direction {
+            animation-name: dog-turn-around;
+            animation-duration: calc(var(--walk-dur, 28s) * 2);
+            animation-timing-function: steps(1, end);
+            animation-iteration-count: infinite;
+            animation-delay: var(--walk-delay, 0s);
+        }
+        .humanoid-robot svg {
+            width: 24px;
+            height: 35px;
+        }
+        .spot-robot-dog svg {
+            width: 54px;
+            height: 26px;
+        }
+        .robot-bob {
+            transform-origin: 50% 100%;
+            animation: robot-bob-anim 0.78s ease-in-out infinite alternate;
+        }
+        .humanoid-robot .robot-bob {
+            animation-name: human-hop-anim;
+            animation-duration: 1.35s;
+        }
+        .dog-bob {
+            animation-name: dog-prance-anim;
+            animation-duration: 0.74s;
+        }
+        .human-arm-front,
+        .human-arm-back,
+        .human-leg-front,
+        .human-leg-back,
+        .dog-leg-front-a,
+        .dog-leg-front-b,
+        .dog-leg-back-a,
+        .dog-leg-back-b {
+            transform-box: fill-box;
+            transform-origin: 50% 8%;
+        }
+        .human-arm-front { animation: human-swing-a 0.72s ease-in-out infinite alternate; }
+        .human-arm-back  { animation: human-swing-b 0.72s ease-in-out infinite alternate; }
+        .human-leg-front { animation: human-step-a 0.72s ease-in-out infinite alternate; }
+        .human-leg-back  { animation: human-step-b 0.72s ease-in-out infinite alternate; }
+        .dog-leg-front-a,
+        .dog-leg-back-b  { animation: dog-step-a 0.62s ease-in-out infinite alternate; }
+        .dog-leg-front-b,
+        .dog-leg-back-a  { animation: dog-step-b 0.62s ease-in-out infinite alternate; }
+        .dog-core {
+            transform-box: fill-box;
+            transform-origin: 50% 80%;
+            animation: dog-core-rock 1.2s ease-in-out infinite alternate;
+        }
+        .dog-handle {
+            transform-box: fill-box;
+            transform-origin: 50% 100%;
+            animation: dog-handle-flex 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes robot-bob-anim {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-2px); }
+        }
+        @keyframes human-hop-anim {
+            0%, 100% { transform: translateY(0) rotate(-0.4deg); }
+            45%      { transform: translateY(-6px) rotate(0.6deg); }
+            70%      { transform: translateY(-2px) rotate(0.2deg); }
+        }
+        @keyframes dog-prance-anim {
+            from { transform: translateY(0) rotate(-0.3deg); }
+            to   { transform: translateY(-3px) rotate(0.3deg); }
+        }
+        @keyframes human-swing-a { from { transform: rotate(20deg);  } to { transform: rotate(-24deg); } }
+        @keyframes human-swing-b { from { transform: rotate(-24deg); } to { transform: rotate(20deg);  } }
+        @keyframes human-step-a  { from { transform: rotate(-18deg); } to { transform: rotate(22deg);  } }
+        @keyframes human-step-b  { from { transform: rotate(22deg);  } to { transform: rotate(-18deg); } }
+        @keyframes dog-step-a    { from { transform: rotate(-17deg); } to { transform: rotate(18deg);  } }
+        @keyframes dog-step-b    { from { transform: rotate(18deg);  } to { transform: rotate(-17deg); } }
+        @keyframes dog-core-rock { from { transform: rotate(-0.7deg); } to { transform: rotate(0.7deg); } }
+        @keyframes dog-handle-flex {
+            from { transform: scaleY(0.96); }
+            to   { transform: scaleY(1.04); }
+        }
+        @keyframes human-obstacle-hop {
+            0%, 13%, 27%, 33%, 47%, 53%, 67%, 73%, 87%, 100% { transform: translateY(0) rotate(0deg); }
+            20%, 40%, 60%, 80% { transform: translateY(-9px) rotate(-2deg); }
+            22%, 42%, 62%, 82% { transform: translateY(-3px) rotate(2deg); }
+        }
+        @keyframes dog-obstacle-hop {
+            0%, 14%, 27%, 34%, 47%, 54%, 67%, 74%, 87%, 100% { transform: translateY(0) rotate(0deg); }
+            18%, 38%, 58%, 78% { transform: translateY(-3px) rotate(-5deg); }
+            20%, 40%, 60%, 80% { transform: translateY(-8px) rotate(5deg); }
+            23%, 43%, 63%, 83% { transform: translateY(-1px) rotate(0deg); }
+        }
+        @keyframes dog-turn-around {
+            0%, 49.99% { transform: scaleX(1); }
+            50%, 100%  { transform: scaleX(-1); }
+        }
+        @media (max-width: 640px) {
+            .walker-stage {
+                left: 1.25rem;
+                right: 1.25rem;
+                top: 2.25rem;
+                height: 3.8rem;
+            }
+            .humanoid-robot svg { width: 21px; height: 31px; }
+            .spot-robot-dog svg { width: 48px; height: 23px; }
         }
 
         /* ── STATUS BLOCKS (Completed / In Progress) ── */
@@ -736,19 +927,123 @@
 <div id="tab-coursework" class="tab-pane">
     <div class="cw-section">
 
-        <!-- GPA + Semester Track -->
-        <div class="gpa-row">
-            <div>
-                <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.13em;color:var(--text-soft);margin-bottom:0.3rem">Cumulative GPA</div>
-                <div style="display:flex;align-items:baseline;gap:0.35rem">
-                    <span class="gpa-num">3.96</span>
-                    <span class="gpa-denom">/ 4.0</span>
-                </div>
-            </div>
+        <!-- Semester Timeline -->
+        <div class="term-card">
+            <div class="term-card-label">Semester Timeline</div>
+            <div class="term-track" id="term-track"></div>
 
-            <div>
-                <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.13em;color:var(--text-soft);margin-bottom:0.75rem">Semester Timeline</div>
-                <div class="term-track" id="term-track"></div>
+            <!-- Walker stage -->
+            <div class="walker-stage">
+                <div class="walker-scene" id="walker-scene">
+
+                    <!-- Humanoid -->
+                    <div class="walker humanoid-robot" id="walker-human" style="--walk-dur:30s">
+                        <div class="obstacle-hop human-obstacle-hop">
+                        <svg viewBox="0 0 58 86" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="humanoidMetal" x1="10" y1="8" x2="48" y2="78" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#F8FAFC"/>
+                                    <stop offset="0.48" stop-color="#B9C2CF"/>
+                                    <stop offset="1" stop-color="#EEF4FB"/>
+                                </linearGradient>
+                                <linearGradient id="humanoidDark" x1="16" y1="7" x2="44" y2="72" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#223147"/>
+                                    <stop offset="1" stop-color="#070B14"/>
+                                </linearGradient>
+                                <linearGradient id="humanoidGlow" x1="19" y1="5" x2="41" y2="22" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#7DD3FC"/>
+                                    <stop offset="1" stop-color="#2563EB"/>
+                                </linearGradient>
+                            </defs>
+                            <g class="robot-bob">
+                                <g class="human-leg-back">
+                                    <rect x="32" y="49" width="9" height="20" rx="4.5" fill="url(#humanoidMetal)" stroke="#7B8798"/>
+                                    <rect x="34" y="66" width="7" height="15" rx="3.5" fill="#CAD4E1" stroke="#7B8798"/>
+                                    <path d="M31 80 C36 76 42 78 44 82 C39 85 34 85 29 84 C28 82 29 81 31 80Z" fill="url(#humanoidDark)"/>
+                                </g>
+                                <g class="human-leg-front">
+                                    <rect x="18" y="49" width="9" height="20" rx="4.5" fill="url(#humanoidMetal)" stroke="#7B8798"/>
+                                    <rect x="18" y="66" width="7" height="15" rx="3.5" fill="#DDE5EF" stroke="#7B8798"/>
+                                    <path d="M15 80 C20 76 27 78 29 82 C24 85 18 85 13 84 C12 82 13 81 15 80Z" fill="url(#humanoidDark)"/>
+                                </g>
+                                <path d="M23 29 H35 L41 48 C38 53 20 53 17 48 L23 29Z" fill="#111827"/>
+                                <path d="M17 23 C18 16 22 13 29 13 C36 13 41 16 42 23 L39 47 C37 51 21 51 19 47 L17 23Z" fill="url(#humanoidMetal)" stroke="#7B8798"/>
+                                <path d="M20 23 C22 20 36 20 39 23 L37 37 C33 39 24 39 21 37 L20 23Z" fill="#EFF6FF" opacity="0.78"/>
+                                <path d="M24 23 H35" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+                                <g class="human-arm-back">
+                                    <rect x="39" y="25" width="7" height="18" rx="3.5" fill="#C8D2DE" stroke="#7B8798"/>
+                                    <rect x="41" y="40" width="6" height="15" rx="3" fill="#AEB8C6" stroke="#7B8798"/>
+                                    <path d="M41 54 C45 55 48 57 47 60 C43 61 39 59 38 56 C38 55 39 54 41 54Z" fill="#0B1220"/>
+                                </g>
+                                <g class="human-arm-front">
+                                    <rect x="12" y="25" width="7" height="18" rx="3.5" fill="#DDE5EF" stroke="#7B8798"/>
+                                    <rect x="11" y="40" width="6" height="15" rx="3" fill="#C8D2DE" stroke="#7B8798"/>
+                                    <path d="M9 54 C13 55 17 57 16 60 C12 61 8 59 7 56 C7 55 8 54 9 54Z" fill="#0B1220"/>
+                                </g>
+                                <rect x="25" y="10" width="8" height="7" rx="3" fill="#8EA0B5"/>
+                                <path d="M21 4 C24 1 34 1 38 4 C41 8 40 17 36 20 C32 22 25 22 22 19 C19 15 18 8 21 4Z" fill="url(#humanoidDark)" stroke="#75859A"/>
+                                <path d="M23 6 C26 4 35 4 37 6 C37 10 36 12 34 14 H24 C22 12 22 9 23 6Z" fill="url(#humanoidGlow)"/>
+                                <path d="M24 7 C27 5 34 5 36 7" stroke="#BAE6FD" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+                            </g>
+                        </svg>
+                        </div>
+                    </div>
+
+                    <!-- Robot dog -->
+                    <div class="walker spot-robot-dog" id="walker-dog" style="--walk-dur:34s">
+                        <div class="dog-direction">
+                        <div class="obstacle-hop dog-obstacle-hop">
+                        <svg viewBox="0 0 126 60" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="spotYellow" x1="8" y1="8" x2="114" y2="38" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#FDE047"/>
+                                    <stop offset="0.42" stop-color="#FACC15"/>
+                                    <stop offset="1" stop-color="#EAB308"/>
+                                </linearGradient>
+                                <linearGradient id="spotBlack" x1="14" y1="18" x2="110" y2="58" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#0F172A"/>
+                                    <stop offset="1" stop-color="#020617"/>
+                                </linearGradient>
+                            </defs>
+                            <g class="robot-bob dog-bob">
+                                <g class="dog-leg-back-a">
+                                    <path d="M27 27 L16 43" stroke="#EAB308" stroke-width="11" stroke-linecap="round"/>
+                                    <path d="M17 43 L30 55" stroke="url(#spotBlack)" stroke-width="5" stroke-linecap="round"/>
+                                    <ellipse cx="32" cy="55" rx="7" ry="4" fill="#020617"/>
+                                </g>
+                                <g class="dog-leg-back-b">
+                                    <path d="M40 28 L32 43" stroke="#FACC15" stroke-width="9" stroke-linecap="round"/>
+                                    <path d="M33 43 L43 55" stroke="url(#spotBlack)" stroke-width="4.5" stroke-linecap="round"/>
+                                    <ellipse cx="45" cy="55" rx="6" ry="3.5" fill="#020617"/>
+                                </g>
+                                <g class="dog-leg-front-a">
+                                    <path d="M94 27 L82 43" stroke="#EAB308" stroke-width="11" stroke-linecap="round"/>
+                                    <path d="M83 43 L94 55" stroke="url(#spotBlack)" stroke-width="5" stroke-linecap="round"/>
+                                    <ellipse cx="96" cy="55" rx="7" ry="4" fill="#020617"/>
+                                </g>
+                                <g class="dog-leg-front-b">
+                                    <path d="M108 27 L99 43" stroke="#FACC15" stroke-width="9" stroke-linecap="round"/>
+                                    <path d="M100 43 L111 55" stroke="url(#spotBlack)" stroke-width="4.5" stroke-linecap="round"/>
+                                    <ellipse cx="113" cy="55" rx="6" ry="3.5" fill="#020617"/>
+                                </g>
+                                <g class="dog-core">
+                                    <path d="M19 16 C23 10 34 9 43 10 H88 C99 10 111 13 115 18 L110 33 H20 L13 24 C13 20 15 18 19 16Z" fill="url(#spotYellow)" stroke="#B7791F" stroke-width="1.2"/>
+                                    <path d="M31 30 H96 C97 33 96 36 92 37 H34 C30 36 29 33 31 30Z" fill="#111827"/>
+                                    <path d="M22 14 C18 9 18 7 23 6 C27 7 30 10 32 13" class="dog-handle" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+                                    <path d="M92 13 C95 6 104 6 108 13" class="dog-handle" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+                                    <rect x="49" y="15" width="24" height="9" rx="2" fill="#1F2937"/>
+                                    <circle cx="55" cy="19.5" r="2.1" fill="#60A5FA"/>
+                                    <circle cx="62" cy="19.5" r="2.1" fill="#22C55E"/>
+                                    <rect x="67" y="17" width="4" height="5" rx="1" fill="#020617"/>
+                                    <path d="M78 13 H91" stroke="#A16207" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                                </g>
+                            </g>
+                        </svg>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -880,6 +1175,7 @@ function showTab(btn, name) {
     document.getElementById('tab-' + name).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (name === 'experiences') setTimeout(drawTimeline, 50);
+    if (name === 'coursework') setTimeout(launchWalkers, 50);
 }
 
 
@@ -985,6 +1281,34 @@ function renderTermTrack() {
     el.innerHTML = html;
 }
 
+// ── WALKING CHARACTERS ───────────────────────────────────
+function launchWalkers() {
+    const scene = document.getElementById('walker-scene');
+    const human = document.getElementById('walker-human');
+    const dog   = document.getElementById('walker-dog');
+    if (!scene || !human || !dog) return;
+
+    const width = scene.offsetWidth;
+    if (width < 80) return;
+    const walkers = [
+        { el: human, dist: Math.max(80, width - 34) },
+        { el: dog, dist: Math.max(90, width - 62) },
+    ];
+
+    walkers.forEach(({ el, dist }) => {
+        el.classList.remove('walking');
+        el.style.setProperty('--walk-start', '0px');
+        el.style.removeProperty('--walk-dist');
+        el.style.transform = '';
+        el.style.setProperty('--walk-dist', dist + 'px');
+    });
+    void scene.offsetWidth; // reflow so animation restarts
+
+    walkers.forEach(({ el }) => {
+        el.classList.add('walking');
+    });
+}
+
 window.onload = function() {
     renderTermTrack();
     drawTimeline();
@@ -994,8 +1318,13 @@ window.onload = function() {
     const count = ipBlock ? ipBlock.querySelectorAll('.course-status.active').length : 0;
     const badge = document.getElementById('ip-badge');
     if (badge) badge.textContent = `Spring 2026 · ${count} course${count !== 1 ? 's' : ''}`;
+
+    setTimeout(launchWalkers, 500);
 };
-window.addEventListener('resize', drawTimeline);
+window.addEventListener('resize', () => {
+    drawTimeline();
+    launchWalkers();
+});
 
 // ── INLINE IDENTITY: show when name-bar scrolls out of view ──
 const nameBar = document.querySelector('.name-bar');
