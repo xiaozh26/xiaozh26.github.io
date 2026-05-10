@@ -386,6 +386,7 @@
             }
             .exp-center { grid-column: 1; grid-row: 1; padding-top: 0.4rem; }
             .exp-left .exp-logo { margin-left: 0; }
+            .exp-left .exp-desc { text-align: left; }
             .exp-left .exp-bullets li::before { content: "·  "; display: inline; }
             .exp-left .exp-bullets li::after  { display: none; }
             .exp-left .exp-tags { justify-content: flex-start; }
@@ -651,6 +652,9 @@
             .tab-nav {
                 padding: 0 1rem;
                 scroll-padding-inline: 1rem;
+                overscroll-behavior-x: contain;
+                overscroll-behavior-y: none;
+                touch-action: pan-x;
             }
             .tab-btn {
                 padding: 0.75rem 0.9rem;
