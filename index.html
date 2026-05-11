@@ -99,9 +99,11 @@
         .banner-img {
             position: absolute;
             width: 100%;
+            max-width: none;
             height: auto;
-            top: 50%;
-            transform: translateY(-50%);
+            left: 50%;
+            top: 44%;
+            transform: translate(-50%, -50%);
             display: block;
         }
         .banner-scrim {
@@ -119,6 +121,7 @@
         @media (max-width: 640px) {
             .banner { height: 380px; }
             .banner-img {
+                width: auto;
                 height: 100%;
                 object-fit: cover;
                 object-position: center;
@@ -741,7 +744,7 @@
 <!-- ══ BANNER + PFP ═════════════════════════════════════ -->
 <div class="banner">
     <div class="banner-inner">
-        <img src="background.jpg" class="banner-img" alt="">
+        <img src="sather.jpg" class="banner-img" alt="Sather Gate">
         <div class="banner-scrim"></div>
         <div class="banner-fade"></div>
     </div>
