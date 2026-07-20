@@ -201,7 +201,6 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.6rem;
-            margin-top: 1rem;
         }
         .aff-chip {
             display: inline-flex;
@@ -211,7 +210,18 @@
             background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 999px;
+            text-decoration: none;
+            color: inherit;
             transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .aff-label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: var(--text-soft);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
         }
         .aff-chip:hover {
             border-color: var(--blue-border);
@@ -411,6 +421,52 @@
         }
         @media (max-width: 640px) { .cw-section { padding: 2rem 1.25rem 3rem; } }
 
+        /* Institution header cards */
+        .edu-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 640px) { .edu-cards { grid-template-columns: 1fr; gap: 1rem; } }
+
+        .edu-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(15,30,70,0.04);
+            padding: 1.5rem 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .edu-card-icon {
+            width: 60px; height: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .edu-card-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .edu-card-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.3;
+        }
+        .edu-card-degree {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-mid);
+            margin-top: 0.25rem;
+            line-height: 1.35;
+        }
+        .edu-card-dates {
+            font-size: 0.72rem;
+            color: var(--text-soft);
+            margin-top: 0.2rem;
+        }
+
         /* Semester tracker card */
         .term-card {
             background: white;
@@ -440,65 +496,41 @@
             z-index: 2;
         }
         .term-node  { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .term-node.gap-term {
-            transform-origin: center;
-            animation: grow-term 0.35s ease-out both;
-        }
-        .term-icon {
-            width: 22px; height: 22px;
-            border-radius: 50%;
-            color: var(--border);
+        .term-icon-wrap {
+            height: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative; z-index: 2;
-            transition: transform 0.2s, color 0.2s;
-            cursor: pointer;
         }
-        .term-icon:hover { transform: translateY(-1px) scale(1.06); }
-        .term-icon svg { width: 100%; height: 100%; display: block; }
+        .term-icon {
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            border: 2px solid #dfe5f0;
+            background: transparent;
+            transition: all 0.2s;
+        }
         .term-icon.done {
-            color: var(--blue-border);
-            opacity: 0.75;
+            background: var(--blue-border);
+            border-color: var(--blue-border);
         }
         .term-icon.current {
+            width: 20px; height: 20px;
+            background: var(--blue);
+            border-color: var(--blue);
             --term-ring-inner: var(--blue-light);
             --term-ring-outer: rgba(58,116,212,0.12);
             --term-ring-outer-soft: rgba(58,116,212,0.06);
-            color: var(--blue);
             box-shadow: 0 0 0 4px var(--term-ring-inner), 0 0 0 7px var(--term-ring-outer);
             animation: pulse-dot 2.4s ease-in-out infinite;
         }
         .term-icon.future {
-            color: #dfe5f0;
-        }
-        .term-icon.spring.current {
-            color: #f4728b;
-        }
-        .term-icon.summer.current {
-            --term-ring-inner: rgba(250,204,21,0.18);
-            --term-ring-outer: rgba(229,169,39,0.10);
-            --term-ring-outer-soft: rgba(229,169,39,0.06);
-            color: #e5a927;
-        }
-        .term-icon.fall.current {
-            --term-ring-inner: rgba(201,130,58,0.16);
-            --term-ring-outer: rgba(201,130,58,0.09);
-            --term-ring-outer-soft: rgba(201,130,58,0.05);
-            color: #c9823a;
-        }
-        .term-icon.winter.current {
-            --term-ring-inner: rgba(187,247,208,0.24);
-            --term-ring-outer: rgba(34,197,94,0.13);
-            --term-ring-outer-soft: rgba(34,197,94,0.07);
+            background: transparent;
+            border-color: #dfe5f0;
         }
         @keyframes pulse-dot {
             0%, 100% { box-shadow: 0 0 0 4px var(--term-ring-inner), 0 0 0 7px var(--term-ring-outer); }
             50%       { box-shadow: 0 0 0 6px var(--term-ring-inner), 0 0 0 11px var(--term-ring-outer-soft); }
-        }
-        @keyframes grow-term {
-            from { opacity: 0; transform: scaleX(0.55); }
-            to   { opacity: 1; transform: scaleX(1); }
         }
         .term-connector {
             height: 2px;
@@ -513,213 +545,6 @@
         .term-label {
             font-size: 0.65rem; font-weight: 600;
             text-align: center; white-space: nowrap; line-height: 1;
-        }
-
-        .season-effect-layer {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 9999;
-        }
-        .season-particle {
-            position: absolute;
-            pointer-events: none;
-            will-change: transform, opacity;
-        }
-        .fall-leaf {
-            width: 18px;
-            height: 11px;
-            border-radius: 90% 0 90% 0;
-            background: linear-gradient(135deg, #d98f3f, #b76428);
-            animation: leaf-fall var(--dur, 4s) ease-in forwards;
-        }
-        .fall-leaf::after {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 1px;
-            left: 3px;
-            top: 5px;
-            background: rgba(255,255,255,0.45);
-            transform: rotate(-28deg);
-        }
-        @keyframes leaf-fall {
-            from { opacity: 0; transform: translate3d(0, -8vh, 0) rotate(0deg); }
-            12%  { opacity: 0.95; }
-            to   { opacity: 0; transform: translate3d(var(--drift, 90px), 108vh, 0) rotate(620deg); }
-        }
-        .spring-ground {
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 150px;
-            background:
-                radial-gradient(ellipse at 20% 100%, rgba(134,239,172,0.24), transparent 42%),
-                radial-gradient(ellipse at 78% 100%, rgba(187,247,208,0.22), transparent 44%),
-                linear-gradient(to top, rgba(220,252,231,0.24), transparent 74%);
-            animation: spring-ground-fade 2.8s ease-out forwards;
-        }
-        .spring-grass {
-            bottom: 0;
-            width: 2px;
-            height: var(--h, 42px);
-            border-radius: 999px 999px 0 0;
-            background: linear-gradient(to top, rgba(21,128,61,0.9), rgba(134,239,172,0.78));
-            transform-origin: bottom;
-            transform: rotate(var(--lean, 0deg));
-            opacity: 0.85;
-            animation: grow-grass 1.35s cubic-bezier(.2,.8,.2,1) forwards;
-        }
-        .spring-grass::after {
-            content: '';
-            position: absolute;
-            left: -2px;
-            bottom: 18%;
-            width: 6px;
-            height: 45%;
-            border-radius: 999px;
-            border-left: 1px solid rgba(22,101,52,0.35);
-            transform: rotate(22deg);
-        }
-        .spring-botanical {
-            bottom: 0;
-            width: var(--w, 46px);
-            height: var(--h, 88px);
-            transform-origin: bottom center;
-            animation: bloom-flower 3s cubic-bezier(.2,.8,.2,1) forwards;
-            filter: drop-shadow(0 8px 10px rgba(15,81,50,0.10));
-        }
-        .spring-botanical svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
-        @keyframes spring-ground-fade {
-            from { opacity: 0; }
-            20%  { opacity: 1; }
-            to   { opacity: 0; }
-        }
-        @keyframes grow-grass {
-            from { opacity: 0; transform: rotate(var(--lean, 0deg)) scaleY(0); }
-            to   { opacity: 1; transform: rotate(var(--lean, 0deg)) scaleY(1); }
-        }
-        @keyframes bloom-flower {
-            from { opacity: 0; transform: translateY(34px) scaleY(0.18) rotate(var(--tilt, 0deg)); }
-            34%  { opacity: 1; transform: translateY(0) scaleY(1.02) rotate(var(--tilt, 0deg)); }
-            78%  { opacity: 1; transform: translateY(0) scaleY(1) rotate(var(--tilt, 0deg)); }
-            to   { opacity: 0; transform: translateY(10px) scale(0.98) rotate(var(--tilt, 0deg)); }
-        }
-        .summer-sky {
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(191,219,254,0.34), rgba(255,255,255,0) 55%);
-            animation: sunshine-fade 3s ease-out forwards;
-        }
-        .summer-sun {
-            right: 8vw;
-            top: 8vh;
-            width: 86px;
-            height: 86px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 38% 34%, #fff7ad 0 18%, #fde047 19% 58%, rgba(250,204,21,0.28) 59% 100%);
-            box-shadow: 0 0 60px rgba(250,204,21,0.34), 0 0 120px rgba(251,191,36,0.14);
-            animation: summer-sun-pop 3s ease-out forwards;
-        }
-        .summer-sun::before {
-            content: '';
-            position: absolute;
-            inset: -22px;
-            border-radius: 50%;
-            background: repeating-conic-gradient(from 0deg, rgba(250,204,21,0.18) 0 7deg, transparent 7deg 18deg);
-            animation: sun-spin 8s linear infinite;
-        }
-        .summer-ocean {
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 132px;
-            background:
-                linear-gradient(175deg, rgba(186,230,253,0.68) 0 16%, rgba(56,189,248,0.62) 17% 44%, rgba(14,116,144,0.70) 100%);
-            animation: beach-rise 3.2s ease-out forwards;
-        }
-        .summer-ocean::before,
-        .summer-ocean::after {
-            content: '';
-            position: absolute;
-            left: -6%;
-            width: 112%;
-            height: 38px;
-            border-radius: 50%;
-            background:
-                radial-gradient(ellipse at 12% 52%, rgba(255,255,255,0.72) 0 10%, transparent 11%),
-                radial-gradient(ellipse at 32% 45%, rgba(255,255,255,0.46) 0 8%, transparent 9%),
-                radial-gradient(ellipse at 55% 50%, rgba(255,255,255,0.62) 0 10%, transparent 11%),
-                radial-gradient(ellipse at 83% 45%, rgba(255,255,255,0.52) 0 8%, transparent 9%);
-        }
-        .summer-ocean::before { top: -12px; opacity: 0.72; }
-        .summer-ocean::after { top: 26px; opacity: 0.32; transform: translateX(5%); }
-        .summer-palm {
-            bottom: 46px;
-            width: 104px;
-            height: 160px;
-            animation: palm-rise 3.2s ease-out forwards;
-            transform-origin: bottom center;
-        }
-        .summer-palm svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-            filter: drop-shadow(0 10px 12px rgba(20,83,45,0.14));
-        }
-        @keyframes sunshine-fade {
-            from { opacity: 0; transform: scale(0.96); }
-            25%  { opacity: 1; }
-            to   { opacity: 0; transform: scale(1.08); }
-        }
-        @keyframes summer-sun-pop {
-            from { opacity: 0; transform: scale(0.6) rotate(-8deg); }
-            22%  { opacity: 1; transform: scale(1.04) rotate(0deg); }
-            78%  { opacity: 1; transform: scale(1) rotate(0deg); }
-            to   { opacity: 0; transform: scale(1.08) rotate(6deg); }
-        }
-        @keyframes sun-spin {
-            to { transform: rotate(360deg); }
-        }
-        @keyframes beach-rise {
-            from { opacity: 0; transform: translateY(70px); }
-            22%  { opacity: 1; transform: translateY(0); }
-            78%  { opacity: 1; transform: translateY(0); }
-            to   { opacity: 0; transform: translateY(18px); }
-        }
-        @keyframes palm-rise {
-            from { opacity: 0; transform: translateY(90px) scale(0.8) rotate(var(--tilt, 0deg)); }
-            25%  { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt, 0deg)); }
-            78%  { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt, 0deg)); }
-            to   { opacity: 0; transform: translateY(20px) scale(0.98) rotate(var(--tilt, 0deg)); }
-        }
-        .winter-sky {
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(51,65,85,0.30), rgba(148,163,184,0.12) 42%, transparent 72%);
-            animation: winter-sky-fade 5s ease-out forwards;
-        }
-        .winter-snow {
-            width: var(--size, 7px);
-            height: var(--size, 7px);
-            border-radius: 50%;
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 0 0 1px rgba(195,217,245,0.45), 0 0 12px rgba(195,217,245,0.6);
-            animation: snow-fall var(--dur, 3s) linear forwards;
-        }
-        @keyframes snow-fall {
-            from { opacity: 0; transform: translate3d(0, -8vh, 0); }
-            12%  { opacity: 1; }
-            to   { opacity: 0; transform: translate3d(var(--drift, 40px), 108vh, 0); }
-        }
-        @keyframes winter-sky-fade {
-            from { opacity: 0; }
-            12%  { opacity: 1; }
-            82%  { opacity: 1; }
-            to   { opacity: 0; }
         }
 
         /* ── STATUS BLOCKS (Completed / In Progress) ── */
@@ -1030,7 +855,7 @@
     </div>
 
     <p>
-        I'm an Electrical Engineering & Computer Sciences and Economics undergraduate at UC Berkeley. My research interests lie in embodied AI, robot learning and diffusion-based generative modeling. I'm advised by
+        I'm an Electrical Engineering & Computer Sciences and Economics undergraduate at UC Berkeley, and a member of the EECS Honors Program. My research interests lie in embodied AI, robot learning and diffusion-based generative modeling. I'm advised by
         <a href="https://me.berkeley.edu/people/masayoshi-tomizuka/" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Prof. Masayoshi Tomizuka</a>
         and
         <a href="https://people.eecs.berkeley.edu/~sastry/" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Prof. Shankar Sastry</a>, and I'm affiliated with the <a href="https://bair.berkeley.edu" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Berkeley Artificial Intelligence Research (BAIR) Lab</a>.
@@ -1039,32 +864,37 @@
         Away from the keyboard: lifelong Warriors and 49ers fan. Faithful to the Bay!
     </p>
     <!-- Affiliations as inline chips under bio -->
+    <div class="aff-label">Member Affiliations</div>
     <div class="aff-chips">
-        <div class="aff-chip">
+        <a class="aff-chip" href="https://www.tbp.org/home.cfm" target="_blank" rel="noopener">
             <img src="tbp.png" alt="TBP">
             <span class="aff-chip-name">Tau Beta Pi</span>
             <span class="aff-chip-dot">·</span>
-            <span style="font-size:0.68rem;color:var(--text-soft)">Engineering Honor Society</span>
-        </div>
-        <div class="aff-chip">
+            <span style="font-size:0.68rem;color:var(--text-soft)">California Alpha Chapter</span>
+        </a>
+        <a class="aff-chip" href="https://hkn.ieee.org" target="_blank" rel="noopener">
             <img src="hkn.png" alt="HKN">
             <span class="aff-chip-name">Eta Kappa Nu</span>
             <span class="aff-chip-dot">·</span>
-            <span style="font-size:0.68rem;color:var(--text-soft)">ECE Honor Society</span>
-        </div>
-        <div class="aff-chip">
+            <span style="font-size:0.68rem;color:var(--text-soft)">Mu Chapter</span>
+        </a>
+        <a class="aff-chip" href="https://www.ieee.org" target="_blank" rel="noopener">
             <img src="ieee.png" alt="IEEE">
             <span class="aff-chip-name">IEEE</span>
             <span class="aff-chip-dot">·</span>
             <span style="font-size:0.68rem;color:var(--text-soft)">Student Member</span>
-        </div>
+        </a>
+        <a class="aff-chip" href="https://eecs.berkeley.edu" target="_blank" rel="noopener">
+            <img src="eecs.png" alt="EECS">
+            <span class="aff-chip-name">EECS Honors Program</span>
+        </a>
     </div>
 </div>
 
 <!-- ══ TABS ══════════════════════════════════════════════ -->
 <div class="tab-nav">
     <button class="tab-btn active" onclick="showTab(this,'experiences')">Experiences</button>
-    <button class="tab-btn"        onclick="showTab(this,'coursework')">Relevant Coursework</button>
+    <button class="tab-btn"        onclick="showTab(this,'coursework')">Education</button>
     <button class="tab-btn"        onclick="showTab(this,'publications')">Publications</button>
     <button class="tab-btn"        onclick="showTab(this,'resume')">Resume</button>
 </div>
@@ -1136,6 +966,26 @@
 <div id="tab-coursework" class="tab-pane">
     <div class="cw-section">
 
+        <!-- Institution Header Cards -->
+        <div class="edu-cards">
+            <div class="edu-card">
+                <div class="edu-card-icon"><img src="uc_berkeley_square.png" alt="UC Berkeley"></div>
+                <div>
+                    <div class="edu-card-name">University of California, Berkeley</div>
+                    <div class="edu-card-degree">B.S. Electrical Engineering and Computer Sciences (Honors)</div>
+                    <div class="edu-card-dates">2025 &ndash; 2028</div>
+                </div>
+            </div>
+            <div class="edu-card">
+                <div class="edu-card-icon"><img src="uc_berkeley_square.png" alt="UC Berkeley"></div>
+                <div>
+                    <div class="edu-card-name">University of California, Berkeley</div>
+                    <div class="edu-card-degree">B.A. Economics</div>
+                    <div class="edu-card-dates">2025 &ndash; 2028</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Semester Timeline -->
         <div class="term-card">
             <div class="term-card-label">Semester Timeline</div>
@@ -1158,6 +1008,7 @@
                     <div class="cw-div-label">Lower Division</div>
                     <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 61A</div><div class="course-name">Structure and Interpretation of Computer Programs</div></div>
                     <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 61B</div><div class="course-name">Data Structures</div></div>
+                    <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 61C</div><div class="course-name">Great Ideas in Computer Architecture (Machine Structures)</div></div>
                     <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 70</div><div class="course-name">Discrete Mathematics and Probability Theory</div></div>
                     <div class="course-line"><div class="course-status done"></div><div class="course-code">EECS 16A</div><div class="course-name">Foundations of Signals, Dynamical Systems &amp; Information Processing</div></div>
                     <div class="course-line"><div class="course-status done"></div><div class="course-code">EECS 16B</div><div class="course-name">Introduction to Circuits and Devices</div></div>
@@ -1177,6 +1028,7 @@
                     <div class="cw-div-label">Upper Division</div>
                     <div class="course-line"><div class="course-status done"></div><div class="course-code">ECON 101B</div><div class="course-name">Macroeconomics (Quantitative)</div></div>
                     <div class="course-line"><div class="course-status done"></div><div class="course-code">PUBPOL 141</div><div class="course-name">Behavioral Economics for Public Policy</div></div>
+                    <div class="course-line"><div class="course-status done"></div><div class="course-code">UGBA 107</div><div class="course-name">The Social, Political, and Ethical Environment of Business</div></div>
                 </div>
             </div>
         </div>
@@ -1195,16 +1047,17 @@
                 <!-- EECS in-progress -->
                 <div>
                     <div class="cw-col-head" style="color:var(--blue);border-color:var(--blue)">EECS</div>
-                    <div class="cw-div-label">Lower Division</div>
-                    <div class="course-line"><div class="course-status active"></div><div class="course-code">CS 61C</div><div class="course-name">Great Ideas in Computer Architecture (Machine Structures)</div></div>
                     <div class="cw-div-label">Upper Division</div>
+                    <div class="course-line"><div class="course-status active"></div><div class="course-code">EECS C106A</div><div class="course-name">Introduction to Robotics</div></div>
+                    <div class="course-line"><div class="course-status active"></div><div class="course-code">EECS 149</div><div class="course-name">Introduction to Embedded and Cyber Physical Systems</div></div>
+                    <div class="course-line"><div class="course-status active"></div><div class="course-code">CS 189</div><div class="course-name">Introduction to Machine Learning</div></div>
                 </div>
                 <!-- Economics in-progress -->
                 <div>
                     <div class="cw-col-head" style="color:var(--navy);border-color:var(--navy)">Economics</div>
-                    <div class="cw-div-label">Lower Division</div>
                     <div class="cw-div-label">Upper Division</div>
-                    <div class="course-line"><div class="course-status active"></div><div class="course-code">UGBA 107</div><div class="course-name">The Social, Political, and Ethical Environment of Business</div></div>
+                    <div class="course-line"><div class="course-status active"></div><div class="course-code">ECON 101A</div><div class="course-name">Microeconomics (Quantitative)</div></div>
+                    <div class="course-line"><div class="course-status active"></div><div class="course-code">ECON 134</div><div class="course-name">Macroeconomic Policy from the Great Depression to Today</div></div>
                 </div>
             </div>
         </div>
@@ -1338,17 +1191,12 @@ function drawTimeline() {
 
 // ── SEMESTER TRACKER ───────────────────────────────────
 const TERMS = [
-    { name: "Fall 2025",   start: new Date("2025-08-01"), end: new Date("2025-12-19") },
-    { name: "Winter Break", start: new Date("2025-12-20"), end: new Date("2026-01-15"), gapOnly: true },
-    { name: "Spring 2026", start: new Date("2026-01-16"), end: new Date("2026-05-17") },
-    { name: "Summer 2026", start: new Date("2026-05-18"), end: new Date("2026-07-31"), gapOnly: true },
-    { name: "Fall 2026",   start: new Date("2026-08-01"), end: new Date("2026-12-19") },
-    { name: "Winter Break", start: new Date("2026-12-20"), end: new Date("2027-01-15"), gapOnly: true },
-    { name: "Spring 2027", start: new Date("2027-01-16"), end: new Date("2027-05-31") },
-    { name: "Summer 2027", start: new Date("2027-06-01"), end: new Date("2027-07-31"), gapOnly: true },
-    { name: "Fall 2027",   start: new Date("2027-08-01"), end: new Date("2027-12-19") },
-    { name: "Winter Break", start: new Date("2027-12-20"), end: new Date("2028-01-15"), gapOnly: true },
-    { name: "Spring 2028", start: new Date("2028-01-16"), end: new Date("2028-05-31") },
+    { name: "Fall 2025",   start: new Date("2025-06-01"), end: new Date("2025-12-31") },
+    { name: "Spring 2026", start: new Date("2026-01-01"), end: new Date("2026-05-31") },
+    { name: "Fall 2026",   start: new Date("2026-06-01"), end: new Date("2026-12-31") },
+    { name: "Spring 2027", start: new Date("2027-01-01"), end: new Date("2027-05-31") },
+    { name: "Fall 2027",   start: new Date("2027-06-01"), end: new Date("2027-12-31") },
+    { name: "Spring 2028", start: new Date("2028-01-01"), end: new Date("2028-05-31") },
 ];
 
 function getTrackerDate() {
@@ -1360,63 +1208,15 @@ function getActiveTerm(now) {
     return TERMS.find(t => now >= t.start && now <= t.end);
 }
 
-function getTermSeason(termName) {
-    return termName.split(' ')[0].toLowerCase();
-}
-
-function getTermIcon(season) {
-    const icons = {
-        fall: `
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M19.5 4.5C11 4.8 5.4 9.2 5.2 16.4c3.3.3 8.5-.4 12.2-4.1 2.1-2.1 2.5-5 2.1-7.8Z" fill="currentColor" opacity="0.9"/>
-                <path d="M5.2 16.4c3.2-2.7 6.9-4.8 11.2-6.1" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
-                <path d="M5.2 16.4 3.6 19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>`,
-        spring: `
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <g fill="currentColor" opacity="0.86">
-                    <circle cx="12" cy="6.6" r="3.1"/>
-                    <circle cx="17.1" cy="10.5" r="3.1"/>
-                    <circle cx="15.2" cy="16.6" r="3.1"/>
-                    <circle cx="8.8" cy="16.6" r="3.1"/>
-                    <circle cx="6.9" cy="10.5" r="3.1"/>
-                </g>
-                <circle cx="12" cy="12" r="2.5" fill="white" opacity="0.95"/>
-            </svg>`,
-        summer: `
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" opacity="0.8">
-                    <path d="M12 2.8v2.1M12 19.1v2.1M21.2 12h-2.1M4.9 12H2.8M18.5 5.5 17 7M7 17l-1.5 1.5M18.5 18.5 17 17M7 7 5.5 5.5"/>
-                </g>
-                <circle cx="12" cy="12" r="5" fill="currentColor" opacity="0.88"/>
-                <circle cx="12" cy="12" r="2" fill="white" opacity="0.5"/>
-            </svg>`,
-        winter: `
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 3.2 7.7 8.5h2.1L6.3 13h2.3l-3 4.1h12.8l-3-4.1h2.3l-3.5-4.5h2.1L12 3.2Z" fill="#22c55e"/>
-                <path d="M12 3.2 9.5 8.5h1.7L9 13h1.6l-2.1 4.1h3.5V3.2Z" fill="#16a34a" opacity="0.95"/>
-                <path d="M10.3 17.1h3.4v3.1h-3.4z" fill="#a16207"/>
-                <circle cx="9.2" cy="10.2" r="0.85" fill="#ef4444"/>
-                <circle cx="14.7" cy="12.6" r="0.85" fill="#facc15"/>
-                <circle cx="11.1" cy="15.1" r="0.75" fill="#f87171"/>
-                <path d="M12 3.2 12.6 4.4l1.3.2-.9.9.2 1.3-1.2-.6-1.2.6.2-1.3-.9-.9 1.3-.2L12 3.2Z" fill="#facc15"/>
-            </svg>`
-    };
-
-    return icons[season] || icons.spring;
-}
-
 function renderTermTrack() {
     const now  = getTrackerDate();
     const el   = document.getElementById('term-track');
     if (!el) return;
 
     let html = '';
-    const visibleTerms = TERMS.filter(t => !t.gapOnly || (now >= t.start && now <= t.end));
 
-    visibleTerms.forEach((t, i) => {
+    TERMS.forEach((t, i) => {
         let dotClass, labelStyle;
-        const season = getTermSeason(t.name);
         if (now > t.end) {
             dotClass   = 'done';
             labelStyle = 'color:var(--blue-border);text-decoration:line-through';
@@ -1429,169 +1229,17 @@ function renderTermTrack() {
         }
 
         if (i > 0) {
-            const connClass = now > visibleTerms[i-1].end ? 'done' : '';
+            const connClass = now > TERMS[i-1].end ? 'done' : '';
             html += `<div class="term-connector ${connClass}"></div>`;
         }
 
         html += `
-            <div class="term-node ${t.gapOnly ? 'gap-term' : ''}">
-                <div class="term-icon ${season} ${dotClass}" data-season="${season}" role="button" tabindex="0" aria-label="Play ${t.name} animation">${getTermIcon(season)}</div>
+            <div class="term-node">
+                <div class="term-icon-wrap"><div class="term-icon ${dotClass}"></div></div>
                 <div class="term-label" style="${labelStyle}">${t.name.replace(' ', '\u00A0')}</div>
             </div>`;
     });
     el.innerHTML = html;
-}
-
-function getSeasonLayer() {
-    let layer = document.getElementById('season-effect-layer');
-    if (!layer) {
-        layer = document.createElement('div');
-        layer.id = 'season-effect-layer';
-        layer.className = 'season-effect-layer';
-        document.body.appendChild(layer);
-    }
-    return layer;
-}
-
-function clearSeasonLayer(delay = 4200) {
-    const layer = getSeasonLayer();
-    window.clearTimeout(layer.cleanupTimer);
-    layer.cleanupTimer = window.setTimeout(() => {
-        layer.innerHTML = '';
-    }, delay);
-}
-
-function addParticle(layer, className, styles = {}) {
-    const el = document.createElement('div');
-    el.className = `season-particle ${className}`;
-    Object.entries(styles).forEach(([key, value]) => {
-        el.style.setProperty(key, value);
-    });
-    layer.appendChild(el);
-    return el;
-}
-
-function addSvgParticle(layer, className, svg, styles = {}) {
-    const el = addParticle(layer, className, styles);
-    el.innerHTML = svg;
-    return el;
-}
-
-function getSpringFlowerSvg() {
-    return `
-        <svg viewBox="0 0 48 96" aria-hidden="true">
-            <path d="M25 92 C23 72 23 55 26 31" fill="none" stroke="#23884d" stroke-width="3" stroke-linecap="round"/>
-            <path d="M24 67 C13 64 10 54 8 47 C17 47 23 52 25 63Z" fill="#5ecf7d" opacity="0.86"/>
-            <path d="M25 73 C35 68 39 59 41 52 C32 53 27 59 25 69Z" fill="#74d98d" opacity="0.82"/>
-            <g transform="translate(25 27)">
-                <ellipse cx="0" cy="-11" rx="5.5" ry="11" fill="#fecdd3"/>
-                <ellipse cx="10" cy="-4" rx="5.5" ry="11" fill="#fb7185" transform="rotate(72 10 -4)"/>
-                <ellipse cx="6" cy="9" rx="5.5" ry="11" fill="#fda4af" transform="rotate(144 6 9)"/>
-                <ellipse cx="-6" cy="9" rx="5.5" ry="11" fill="#fb7185" transform="rotate(216 -6 9)"/>
-                <ellipse cx="-10" cy="-4" rx="5.5" ry="11" fill="#fecdd3" transform="rotate(288 -10 -4)"/>
-                <circle cx="0" cy="0" r="5.2" fill="#facc15"/>
-                <circle cx="-1.5" cy="-1.4" r="1.4" fill="#fff7ad" opacity="0.8"/>
-            </g>
-        </svg>`;
-}
-
-function getPalmSvg(flip = false) {
-    const scale = flip ? '-1 1' : '1 1';
-    const translate = flip ? 'translate(104 0)' : '';
-    return `
-        <svg viewBox="0 0 104 160" aria-hidden="true">
-            <g transform="${translate} scale(${scale})">
-                <path d="M54 154 C47 117 50 82 62 45" fill="none" stroke="#9a5a22" stroke-width="10" stroke-linecap="round"/>
-                <path d="M58 152 C53 117 56 82 66 48" fill="none" stroke="#d08a3b" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-                <path d="M62 48 C43 37 24 36 8 44 C29 48 45 52 61 58Z" fill="#157a3e"/>
-                <path d="M63 48 C47 25 29 16 11 14 C30 31 43 43 61 55Z" fill="#1f9b55"/>
-                <path d="M65 47 C61 22 69 8 80 0 C76 22 72 36 67 55Z" fill="#22a866"/>
-                <path d="M66 50 C86 34 99 32 104 34 C91 47 80 55 65 60Z" fill="#168847"/>
-                <path d="M63 52 C83 51 95 61 101 73 C82 68 71 63 60 58Z" fill="#1f9b55"/>
-                <circle cx="59" cy="54" r="3.2" fill="#7c3f16"/>
-                <circle cx="65" cy="56" r="3.1" fill="#7c3f16"/>
-            </g>
-        </svg>`;
-}
-
-function playSeasonEffect(season) {
-    const layer = getSeasonLayer();
-    layer.innerHTML = '';
-
-    if (season === 'fall') {
-        for (let i = 0; i < 36; i++) {
-            addParticle(layer, 'fall-leaf', {
-                left: `${Math.random() * 100}vw`,
-                top: `${-12 - Math.random() * 26}vh`,
-                '--drift': `${(Math.random() - 0.5) * 220}px`,
-                '--dur': `${3.1 + Math.random() * 1.8}s`,
-                transform: `rotate(${Math.random() * 180}deg)`
-            });
-        }
-        clearSeasonLayer(5200);
-        return;
-    }
-
-    if (season === 'spring') {
-        addParticle(layer, 'spring-ground');
-        for (let i = 0; i < 96; i++) {
-            addParticle(layer, 'spring-grass', {
-                left: `${Math.random() * 100}vw`,
-                '--h': `${18 + Math.random() * 66}px`,
-                '--lean': `${(Math.random() - 0.5) * 28}deg`,
-                animationDelay: `${Math.random() * 0.35}s`
-            });
-        }
-        for (let i = 0; i < 14; i++) {
-            const left = `${Math.random() * 100}vw`;
-            const delay = `${0.12 + Math.random() * 0.45}s`;
-            addSvgParticle(layer, 'spring-botanical', getSpringFlowerSvg(), {
-                '--w': `${34 + Math.random() * 22}px`,
-                '--h': `${74 + Math.random() * 38}px`,
-                left,
-                '--tilt': `${(Math.random() - 0.5) * 14}deg`,
-                animationDelay: delay
-            });
-        }
-        clearSeasonLayer(3200);
-        return;
-    }
-
-    if (season === 'summer') {
-        addParticle(layer, 'summer-sky');
-        addParticle(layer, 'summer-sun');
-        addParticle(layer, 'summer-ocean');
-        addSvgParticle(layer, 'summer-palm', getPalmSvg(false), {
-            left: '7vw',
-            '--tilt': '-7deg'
-        });
-        addSvgParticle(layer, 'summer-palm', getPalmSvg(true), {
-            right: '8vw',
-            '--tilt': '6deg'
-        });
-        clearSeasonLayer(3600);
-        return;
-    }
-
-    if (season === 'winter') {
-        addParticle(layer, 'winter-sky');
-        for (let i = 0; i < 58; i++) {
-            addParticle(layer, 'winter-snow', {
-                left: `${Math.random() * 100}vw`,
-                top: `${-10 - Math.random() * 40}vh`,
-                '--size': `${4 + Math.random() * 7}px`,
-                '--drift': `${(Math.random() - 0.5) * 120}px`,
-                '--dur': `${2.6 + Math.random() * 2.2}s`
-            });
-        }
-        clearSeasonLayer(5200);
-    }
-}
-
-function handleTermIconAction(event) {
-    const icon = event.target.closest('.term-icon');
-    if (!icon) return;
-    playSeasonEffect(icon.dataset.season);
 }
 
 function updateInProgressBadge() {
@@ -1610,17 +1258,6 @@ window.onload = function() {
     renderTermTrack();
     drawTimeline();
     updateInProgressBadge();
-
-    const termTrack = document.getElementById('term-track');
-    if (termTrack) {
-        termTrack.addEventListener('click', handleTermIconAction);
-        termTrack.addEventListener('keydown', event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                handleTermIconAction(event);
-            }
-        });
-    }
 };
 window.addEventListener('resize', () => {
     drawTimeline();
