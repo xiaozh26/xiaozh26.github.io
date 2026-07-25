@@ -479,7 +479,7 @@
             background: white;
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 1.65rem 2.5rem 1.55rem;
+            padding: 1.2rem 2.5rem 1rem;
             margin-bottom: 2rem;
             text-align: center;
             position: relative;
@@ -491,7 +491,7 @@
             text-transform: uppercase;
             letter-spacing: 0.13em;
             color: var(--text-soft);
-            margin-bottom: 1.15rem;
+            margin-bottom: 0.7rem;
             position: relative;
             z-index: 4;
         }
@@ -501,7 +501,12 @@
             justify-content: center;
             position: relative;
             z-index: 2;
+            overflow-x: auto;
+            padding-top: 14px;
+            scrollbar-width: none;
         }
+        .term-track::-webkit-scrollbar { display: none; }
+        .term-track.is-scrollable { justify-content: flex-start; }
         .term-node  { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .term-icon-wrap {
             height: 22px;
@@ -750,16 +755,12 @@
             .exp-section { padding: 2.25rem 1rem 1.5rem; }
 
             .term-card {
-                padding: 1.35rem 1rem 1.25rem;
+                padding: 1rem 1rem 0.75rem;
                 border-radius: 12px;
             }
             .term-track {
-                justify-content: flex-start;
-                overflow-x: auto;
-                padding: 0.95rem 0.85rem 0.1rem;
-                scrollbar-width: none;
+                padding: 14px 0.85rem 0.1rem;
             }
-            .term-track::-webkit-scrollbar { display: none; }
             .term-node { min-width: 66px; }
             .term-icon.current {
                 box-shadow: 0 0 0 4px var(--term-ring-inner), 0 0 0 8px var(--term-ring-outer);
@@ -1249,6 +1250,28 @@ function renderTermTrack() {
             </div>`;
     });
     el.innerHTML = html;
+    centerCurrentTerm();
+}
+
+function centerCurrentTerm() {
+    const track   = document.getElementById('term-track');
+    const current = track && track.querySelector('.term-icon.current');
+    if (!track || !current) return;
+
+    // Measure natural (unscrolled) content width in flex-start mode first,
+    // so we can tell whether the track can actually be slid at all.
+    track.classList.add('is-scrollable');
+    const scrollable = track.scrollWidth > track.clientWidth + 1;
+    track.classList.toggle('is-scrollable', scrollable);
+
+    if (!scrollable) {
+        track.scrollLeft = 0; // fits fully — CSS centers the group, nothing to slide
+        return;
+    }
+
+    const node = current.closest('.term-node');
+    const target = node.offsetLeft + node.offsetWidth / 2 - track.clientWidth / 2;
+    track.scrollLeft = Math.max(0, Math.min(target, track.scrollWidth - track.clientWidth));
 }
 
 function updateInProgressBadge() {
@@ -1270,6 +1293,7 @@ window.onload = function() {
 };
 window.addEventListener('resize', () => {
     drawTimeline();
+    centerCurrentTerm();
 });
 
 // ── INLINE IDENTITY: show when name-bar scrolls out of view ──
