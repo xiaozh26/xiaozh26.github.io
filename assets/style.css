@@ -343,7 +343,7 @@ a { color: inherit; }
   width: 100%;
   max-width: 320px;
   padding: 18px 16px;
-  border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+  border: none;
   border-radius: 14px;
   text-align: center;
 }
