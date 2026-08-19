@@ -1,1309 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xiao Zhang</title>
-    <meta name="google-site-verification" content="7e9iGmbvbqiZAfrHf-r3aPqrWygYWnH2RTNfM8Ur-Ko">
-    <meta name="description" content="Xiao Zhang – EECS & Economics student at UC Berkeley, researcher at BAIR and CITRIS.">
-    <meta name="author" content="Xiao Zhang">
-    <meta name="keywords" content="Xiao Zhang, UC Berkeley, BAIR, CITRIS, robotics, machine learning, Research, Berkeley, Computer Science, Electircal Engineering, EECS">
-    <meta property="og:title" content="Xiao Zhang">
-    <meta property="og:description" content="EECS & Economics student at UC Berkeley, researcher at BAIR and CITRIS.">
-    <meta property="og:url" content="https://xiaozh26.github.io">
-    <link rel="canonical" href="https://xiaozh26.github.io">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xiao Zhang</title>
+<meta name="google-site-verification" content="7e9iGmbvbqiZAfrHf-r3aPqrWygYWnH2RTNfM8Ur-Ko">
+<meta name="description" content="Xiao Zhang - EECS &amp; Economics student at UC Berkeley, researcher at BAIR and CITRIS.">
+<meta name="author" content="Xiao Zhang">
+<meta name="keywords" content="Xiao Zhang, UC Berkeley, BAIR, CITRIS, robotics, machine learning, Research, Berkeley, Computer Science, Electrical Engineering, EECS">
+<meta property="og:title" content="Xiao Zhang">
+<meta property="og:description" content="Xiao Zhang - EECS &amp; Economics student at UC Berkeley, researcher at BAIR and CITRIS.">
+<meta property="og:url" content="https://xiaozh26.github.io">
+<meta property="og:image" content="https://xiaozh26.github.io/pfp.jpg">
+<link rel="canonical" href="https://xiaozh26.github.io">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XSNCG33J0H"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XSNCG33J0H');
-    </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XSNCG33J0H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XSNCG33J0H');
+</script>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-        :root {
-            --blue:        #3A74D4;
-            --blue-mid:    #6B9FE4;
-            --blue-light:  #EBF2FC;
-            --blue-border: #C3D9F5;
-            --navy:        #1D4ED8;
-            --navy-light:  #EEF2FE;
-            --navy-border: #C7D2F8;
-            --bg:          #F8F7F3;
-            --card:        #FFFFFF;
-            --text-dark:   #1C2340;
-            --text-mid:    #5C6880;
-            --text-soft:   #94A3B8;
-            --border:      #E3E9F3;
-        }
-
-        *, *::before, *::after { box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text-dark);
-            margin: 0;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-
-        /* ── NAME BAR ────────────────────────────────── */
-        .name-bar {
-            width: 100%;
-            background: white;
-            border-bottom: 1px solid var(--border);
-            padding: 0.85rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-        }
-        .name-bar h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin: 0; line-height: 1;
-        }
-        .icon-btn {
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-soft);
-            text-decoration: none;
-            transition: color 0.15s, transform 0.15s;
-        }
-        .icon-btn:hover { color: var(--blue); transform: translateY(-1px); }
-        .email-text {
-            color: var(--text-soft);
-            font-size: 0.82rem;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        /* ── BANNER ──────────────────────────────────── */
-        .banner {
-            width: 100%;
-            height: 580px;
-            position: relative;
-            overflow: visible;          /* let pfp hang below */
-            flex-shrink: 0;
-        }
-        .banner-inner {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;           /* clip the image itself */
-        }
-        .banner-img {
-            position: absolute;
-            width: 100%;
-            max-width: none;
-            height: auto;
-            left: 50%;
-            top: 44%;
-            transform: translate(-50%, -50%);
-            display: block;
-        }
-        .banner-scrim {
-            position: absolute; inset: 0;
-            background: rgba(15,30,70,0.25);
-        }
-        /* smooth photo → white fade — works with any background image */
-        .banner-fade {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 160px;
-            background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.85) 70%, #ffffff 100%);
-            pointer-events: none;
-        }
-        @media (max-width: 640px) {
-            .banner { height: 380px; }
-            .banner-img {
-                width: auto;
-                height: 100%;
-                object-fit: cover;
-                object-position: center;
-            }
-        }
-
-        /* ── PFP: LEFT, floating on banner ───────────── */
-        .pfp-wrap {
-            position: absolute;
-            left: 2.5rem;
-            bottom: -70px;
-            z-index: 20;
-        }
-        .pfp-circle {
-            width: 140px; height: 140px;
-            border-radius: 50%;
-            border: 4px solid white;
-            box-shadow: 0 8px 32px rgba(15,30,70,0.28);
-            overflow: hidden;
-            cursor: pointer;
-            background: #dde4f0;
-            transform: translateZ(0); /* ← forces GPU layer, fixes Firefox clipping */
-        }
-        .pfp-circle img {
-            width: 100%; height: 100%;
-            object-fit: cover; display: block;
-        }
-        @media (max-width: 640px) {
-            .pfp-wrap { left: 1rem; bottom: -55px; }
-            .pfp-circle { width: 110px; height: 110px; }
-        }
-
-        /* ── BIO SECTION ─────────────────────────────── */
-        .bio-section {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            padding: 90px 1.5rem 1.5rem 11rem;
-            position: relative;
-        }
-        @media (max-width: 640px) {
-            .bio-section { padding: 72px 1.25rem 1.25rem 1.25rem; }
-        }
-
-        /* ── INLINE IDENTITY (shows when name-bar scrolled away) ── */
-        #bio-identity {
-            position: absolute;
-            top: 0.55rem;
-            left: 13rem;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-        }
-        #bio-identity.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #bio-identity .bio-id-name {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            white-space: nowrap;
-        }
-        @media (max-width: 640px) {
-            #bio-identity { left: calc(1rem + 110px + 0.75rem); top: 0.4rem; }
-        }
-        .bio-section p {
-            font-size: 0.94rem;
-            line-height: 1.72;
-            color: var(--text-mid);
-        }
-
-        /* ── AFFILIATIONS (in bio, horizontal chips) ──── */
-        .aff-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-        }
-        .aff-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            padding: 0.3rem 0.75rem 0.3rem 0.4rem;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            text-decoration: none;
-            color: inherit;
-            transition: border-color 0.15s, box-shadow 0.15s;
-        }
-        .aff-label {
-            font-size: 0.62rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.09em;
-            color: var(--text-soft);
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .aff-chip:hover {
-            border-color: var(--blue-border);
-            box-shadow: 0 2px 10px rgba(58,116,212,0.1);
-        }
-        .aff-chip img { width: 20px; height: 20px; object-fit: contain; border-radius: 3px; }
-        .aff-chip-name { font-size: 0.72rem; font-weight: 600; color: var(--text-dark); }
-        .aff-chip-dot  { font-size: 0.65rem; color: var(--text-soft); }
-
-        /* ── TABS ────────────────────────────────────── */
-        .tab-nav {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            padding: 0 1.5rem;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .tab-nav::-webkit-scrollbar { display: none; }
-        .tab-btn {
-            padding: 0.75rem 1.2rem;
-            font-size: 0.88rem;
-            font-weight: 500;
-            color: var(--text-mid);
-            background: none;
-            border: none;
-            border-bottom: 2.5px solid transparent;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.15s;
-            margin-bottom: -1px;
-        }
-        .tab-btn:hover { color: var(--blue); }
-        .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
-
-        /* ── TAB PANES ───────────────────────────────── */
-        .tab-pane { display: none; animation: fadeUp 0.25s ease; }
-        .tab-pane.active { display: block; }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(6px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ── EXPERIENCE TIMELINE ─────────────────────── */
-        .exp-section {
-            padding: 3rem 1.5rem 2rem;
-            position: relative;
-        }
-
-        /* SVG timeline behind content */
-        #timeline-svg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            overflow: visible;
-        }
-
-        /* Each experience row alternates */
-        .exp-row {
-            display: grid;
-            grid-template-columns: 1fr 60px 1fr;
-            align-items: start;
-            margin-bottom: 3.5rem;
-            position: relative;
-        }
-
-        .exp-left  { grid-column: 1; padding-right: 2.5rem; text-align: right; }
-        .exp-right { grid-column: 3; padding-left: 2.5rem; text-align: left; }
-        .exp-center {
-            grid-column: 2;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 0.5rem;
-        }
-
-        /* dot on timeline */
-        .exp-dot {
-            width: 14px; height: 14px;
-            border-radius: 50%;
-            background: var(--blue);
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px var(--blue-border);
-            flex-shrink: 0;
-            position: relative;
-            z-index: 5;
-        }
-
-        .exp-logo {
-            width: 52px; height: 52px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            background: white;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.75rem;
-        }
-        .exp-logo img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
-
-        .exp-left .exp-logo { margin-left: auto; }
-
-        .exp-role {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            line-height: 1.25;
-        }
-        .exp-org {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: var(--blue);
-            margin-top: 0.15rem;
-        }
-        .exp-meta {
-            font-size: 0.75rem;
-            color: var(--text-soft);
-            margin-top: 0.1rem;
-            margin-bottom: 0.65rem;
-        }
-        .exp-desc {
-            font-size: 0.82rem;
-            color: var(--text-mid);
-            line-height: 1.65;
-            margin: 0;
-        }
-        .exp-left .exp-desc { text-align: right; }
-        .exp-desc a { color: var(--blue); text-decoration: none; }
-        .exp-desc a:hover { text-decoration: underline; }
-
-        .exp-bullets {
-            font-size: 0.82rem;
-            color: var(--text-mid);
-            line-height: 1.65;
-            list-style: none;
-            padding: 0;
-        }
-        .exp-bullets li::before { content: "·  "; color: var(--blue-mid); font-weight: 700; }
-        .exp-left .exp-bullets li::before { display: none; }
-        .exp-left .exp-bullets li::after { content: "  ·"; color: var(--blue-mid); font-weight: 700; }
-
-        .exp-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.35rem;
-            margin-top: 0.75rem;
-        }
-        .exp-left .exp-tags { justify-content: flex-end; }
-
-        .tag {
-            font-size: 0.67rem; padding: 0.15rem 0.5rem;
-            border-radius: 20px;
-            background: var(--blue-light); color: var(--blue);
-            border: 1px solid var(--blue-border); font-weight: 500;
-        }
-
-        /* Mobile: stack timeline vertically */
-        @media (max-width: 700px) {
-            .exp-row {
-                grid-template-columns: 24px 1fr;
-                margin-bottom: 2.5rem;
-            }
-            .exp-left {
-                grid-column: 2;
-                grid-row: 1;
-                text-align: left;
-                padding-right: 0;
-                padding-left: 1rem;
-            }
-            .exp-right {
-                grid-column: 2;
-                grid-row: 1;
-                padding-left: 1rem;
-            }
-            .exp-center { grid-column: 1; grid-row: 1; padding-top: 0.4rem; }
-            .exp-left .exp-logo { margin-left: 0; }
-            .exp-left .exp-desc { text-align: left; }
-            .exp-left .exp-bullets li::before { content: "·  "; display: inline; }
-            .exp-left .exp-bullets li::after  { display: none; }
-            .exp-left .exp-tags { justify-content: flex-start; }
-            #timeline-svg { display: none; }
-            .mobile-line {
-                position: absolute;
-                left: 11px; top: 0; bottom: 0;
-                width: 2px;
-                background: linear-gradient(to bottom, transparent, var(--blue-border) 8%, var(--blue-border) 92%, transparent);
-            }
-        }
-
-
-        /* ── COURSEWORK ──────────────────────────────── */
-        .cw-section {
-            width: 100%;
-            padding: 2.5rem 3rem 4rem;
-        }
-        @media (max-width: 640px) { .cw-section { padding: 2rem 1.25rem 3rem; } }
-
-        /* Institution header cards */
-        .edu-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
-            margin-bottom: 2rem;
-        }
-        @media (max-width: 640px) { .edu-cards { grid-template-columns: 1fr; gap: 1rem; } }
-
-        .edu-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(15,30,70,0.04);
-            padding: 1.5rem 1.75rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .edu-card-icon {
-            width: 60px; height: 60px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-        .edu-card-icon img { width: 100%; height: 100%; object-fit: cover; }
-        .edu-card-name {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            line-height: 1.3;
-        }
-        .edu-card-degree {
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: var(--text-mid);
-            margin-top: 0.25rem;
-            line-height: 1.35;
-        }
-        .edu-card-dates {
-            font-size: 0.72rem;
-            color: var(--text-soft);
-            margin-top: 0.2rem;
-        }
-
-        .cw-section-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 0 0 1rem;
-        }
-
-        /* Semester tracker card */
-        .term-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.2rem 2.5rem 1rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .term-card-label {
-            font-size: 0.62rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.13em;
-            color: var(--text-soft);
-            margin-bottom: 0.7rem;
-            position: relative;
-            z-index: 4;
-        }
-        .term-track {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 2;
-            overflow-x: auto;
-            padding-top: 14px;
-            scrollbar-width: none;
-        }
-        .term-track::-webkit-scrollbar { display: none; }
-        .term-track.is-scrollable { justify-content: flex-start; }
-        .term-node  { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .term-icon-wrap {
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative; z-index: 2;
-        }
-        .term-icon {
-            width: 14px; height: 14px;
-            border-radius: 50%;
-            border: 2px solid #dfe5f0;
-            background: transparent;
-            transition: all 0.2s;
-        }
-        .term-icon.done {
-            background: var(--blue-border);
-            border-color: var(--blue-border);
-        }
-        .term-icon.current {
-            width: 20px; height: 20px;
-            background: var(--blue);
-            border-color: var(--blue);
-            --term-ring-inner: var(--blue-light);
-            --term-ring-outer: rgba(58,116,212,0.12);
-            --term-ring-outer-soft: rgba(58,116,212,0.06);
-            box-shadow: 0 0 0 4px var(--term-ring-inner), 0 0 0 7px var(--term-ring-outer);
-            animation: pulse-dot 2.4s ease-in-out infinite;
-        }
-        .term-icon.future {
-            background: transparent;
-            border-color: #dfe5f0;
-        }
-        @keyframes pulse-dot {
-            0%, 100% { box-shadow: 0 0 0 4px var(--term-ring-inner), 0 0 0 7px var(--term-ring-outer); }
-            50%       { box-shadow: 0 0 0 6px var(--term-ring-inner), 0 0 0 11px var(--term-ring-outer-soft); }
-        }
-        .term-connector {
-            height: 2px;
-            flex: 1;
-            min-width: 28px;
-            max-width: 72px;
-            background: var(--border);
-            align-self: center;
-            margin-bottom: 24px;
-        }
-        .term-connector.done { background: var(--blue-border); }
-        .term-label {
-            font-size: 0.65rem; font-weight: 600;
-            text-align: center; white-space: nowrap; line-height: 1;
-        }
-
-        /* ── STATUS BLOCKS (Completed / In Progress) ── */
-        .cw-block {
-            border-radius: 16px;
-            padding: 1.75rem 2rem;
-            margin-bottom: 1.75rem;
-        }
-        .cw-block.completed {
-            background: white;
-            border: 1px solid var(--border);
-        }
-        .cw-block.in-progress {
-            background: var(--blue-light);
-            border: 1px solid var(--blue-border);
-        }
-
-        .cw-block-header {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-            margin-bottom: 1.5rem;
-        }
-        .cw-block-icon {
-            width: 30px; height: 30px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .cw-block-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-        .cw-block-badge {
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 0.18rem 0.55rem;
-            border-radius: 999px;
-            margin-left: auto;
-        }
-
-        /* Two-column inside each block */
-        .cw-cols {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        @media (max-width: 640px) { .cw-cols { grid-template-columns: 1fr; gap: 1.5rem; } }
-
-        .cw-col-head {
-            font-size: 0.72rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.13em;
-            padding-bottom: 0.6rem;
-            border-bottom: 2px solid;
-            margin-bottom: 1rem;
-        }
-
-        .cw-div-label {
-            font-size: 0.58rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.13em;
-            color: var(--text-soft);
-            margin: 0.9rem 0 0.4rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        .cw-div-label::after {
-            content: ''; flex: 1; height: 1px; background: var(--border);
-        }
-        .cw-block.in-progress .cw-div-label::after { background: var(--blue-border); }
-
-        .course-line {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.45rem 0.5rem;
-            border-radius: 8px;
-            transition: background 0.15s;
-        }
-        .course-line:hover { background: rgba(58,116,212,0.06); }
-
-        .course-status {
-            flex-shrink: 0;
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            margin-top: 1px;
-        }
-        .course-status.done   { background: var(--blue-border); }
-        .course-status.active { background: var(--blue); animation: pulse 2s ease-in-out infinite; }
-
-        .course-code {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            flex-shrink: 0;
-            min-width: 72px;
-        }
-        .course-name {
-            font-size: 0.77rem;
-            color: var(--text-mid);
-            line-height: 1.3;
-        }
-
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-        /* ── MISC ─────────────────────────────────────── */
-        .sec-label {
-            font-size: 0.62rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.14em;
-            color: var(--text-soft);
-        }
-        .term-pill {
-            font-size: 0.63rem; padding: 0.2rem 0.6rem;
-            border-radius: 20px; white-space: nowrap; font-weight: 500;
-        }
-        hr.div { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
-
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--blue-border); border-radius: 10px; }
-
-        /* ── RESUME / PUBLICATIONS ───────────────────── */
-        .centered-pane {
-            width: 100%;
-            padding: 4rem 3rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 50vh;
-        }
-        @media (max-width: 640px) { .centered-pane { padding: 3rem 1.25rem; } }
-        .plain-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem 1.5rem;
-        }
-
-        @media (max-width: 640px) {
-            .name-bar {
-                padding: 0.75rem 1rem;
-                gap: 0.7rem;
-                flex-wrap: wrap;
-            }
-            .name-bar h1 { font-size: 1.35rem; }
-            .name-bar > a:last-child {
-                margin-left: 0 !important;
-                order: 2;
-            }
-            .name-bar > a:last-child img { height: 34px !important; }
-            .name-bar .email-text {
-                order: 3;
-                flex-basis: 100%;
-                font-size: 0.76rem;
-                white-space: normal;
-            }
-
-            #bio-identity {
-                right: 1rem;
-                min-width: 0;
-                flex-wrap: wrap;
-                row-gap: 0.25rem;
-            }
-            #bio-identity .bio-id-name { font-size: 1.2rem; }
-            #bio-identity .email-text {
-                flex-basis: 100%;
-                font-size: 0.7rem;
-                white-space: normal;
-            }
-
-            .aff-chip {
-                width: 100%;
-                min-width: 0;
-                border-radius: 12px;
-            }
-            .aff-chip span { min-width: 0; }
-
-            .tab-nav {
-                padding: 0 1rem;
-                scroll-padding-inline: 1rem;
-                overscroll-behavior-x: contain;
-                overscroll-behavior-y: none;
-                touch-action: pan-x;
-            }
-            .tab-btn {
-                padding: 0.75rem 0.9rem;
-                font-size: 0.82rem;
-            }
-
-            .exp-section { padding: 2.25rem 1rem 1.5rem; }
-
-            .term-card {
-                padding: 1rem 1rem 0.75rem;
-                border-radius: 12px;
-            }
-            .term-track {
-                padding: 14px 0.85rem 0.1rem;
-            }
-            .term-node { min-width: 66px; }
-            .term-icon.current {
-                box-shadow: 0 0 0 4px var(--term-ring-inner), 0 0 0 8px var(--term-ring-outer);
-            }
-            @keyframes pulse-dot {
-                0%, 100% { box-shadow: 0 0 0 4px var(--term-ring-inner), 0 0 0 8px var(--term-ring-outer); }
-                50%       { box-shadow: 0 0 0 5px var(--term-ring-inner), 0 0 0 9px var(--term-ring-outer-soft); }
-            }
-            .term-connector {
-                min-width: 20px;
-                max-width: 28px;
-                flex: 0 0 24px;
-            }
-
-            .cw-block {
-                padding: 1.25rem 1rem;
-                border-radius: 12px;
-            }
-            .cw-block-header {
-                align-items: flex-start;
-                flex-wrap: wrap;
-                gap: 0.55rem;
-            }
-            .cw-block-badge {
-                margin-left: 0;
-                max-width: 100%;
-            }
-            .course-line {
-                align-items: flex-start;
-                gap: 0.5rem;
-                padding-inline: 0.25rem;
-            }
-            .course-status { margin-top: 0.4rem; }
-            .course-code {
-                min-width: 5.7rem;
-                max-width: 5.7rem;
-                white-space: normal;
-                overflow-wrap: anywhere;
-            }
-            .course-name {
-                min-width: 0;
-                overflow-wrap: anywhere;
-            }
-
-            .centered-pane { min-height: 42vh; }
-            .plain-card,
-            #tab-publications .centered-pane > div {
-                width: 100%;
-                padding-left: 1.25rem !important;
-                padding-right: 1.25rem !important;
-            }
-        }
-    </style>
+<script>
+  // Apply the saved theme before first paint so there is no flash.
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
-<!-- ══ NAME BAR ════════════════════════════════════════ -->
-<div class="name-bar">
-    <h1>Xiao Zhang</h1>
-    <a href="https://linkedin.com/in/xiaozhang07" target="_blank" class="icon-btn" title="LinkedIn">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Xiao Zhang</a>
+
+    <div class="nav-desktop">
+      <div class="nav-links" id="nav-links">
+        <div class="nav-indicator" id="nav-indicator"></div>
+        <a href="index.html" class="nav-link">About</a>
+        <a href="experience.html" class="nav-link">Experience</a>
+        <a href="publications.html" class="nav-link">Publications</a>
+        <a href="education.html" class="nav-link">Education</a>
+        <a href="honors.html" class="nav-link">Honors</a>
+        <a href="cv.html" class="nav-link">CV</a>
+      </div>
+      <button class="icon-button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+        <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+
+    <div class="nav-mobile-controls">
+      <button class="icon-button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+        <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="icon-button" id="menu-toggle" aria-label="Open main menu" aria-expanded="false">
+        <svg id="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <a href="https://www.berkeley.edu" target="_blank" rel="noopener" class="nav-logo" title="UC Berkeley" aria-label="UC Berkeley">
+      <img src="University-of-California-logo.png" alt="UC Berkeley">
     </a>
-    <a href="https://github.com/xiaozh26" target="_blank" class="icon-btn" title="GitHub">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-    </a>
-    <span class="email-text">xiao_zhang [at] berkeley [dot] edu</span>
-    <a href="https://www.berkeley.edu" target="_blank" rel="noopener" style="margin-left:auto;display:flex;align-items:center;">
-        <img src="University-of-California-logo.png" alt="UC Berkeley" style="height:48px;width:auto;opacity:0.85;">
-    </a>
+  </div>
+
+  <div class="nav-panel" id="nav-panel">
+    <a href="index.html">About</a>
+    <a href="experience.html">Experience</a>
+    <a href="publications.html">Publications</a>
+    <a href="education.html">Education</a>
+    <a href="honors.html">Honors</a>
+    <a href="cv.html">CV</a>
+  </div>
+</nav>
+
+<!-- ══ HERO — Sather Gate ═══════════════════════════════ -->
+<div class="hero">
+  <img src="sather.jpg" alt="Sather Gate, UC Berkeley" class="hero-img">
+  <div class="hero-scrim"></div>
+  <div class="hero-fade"></div>
 </div>
 
-<!-- ══ BANNER + PFP ═════════════════════════════════════ -->
-<div class="banner">
-    <div class="banner-inner">
-        <img src="sather.jpg" class="banner-img" alt="Sather Gate">
-        <div class="banner-scrim"></div>
-        <div class="banner-fade"></div>
+<div class="page home">
+  <div class="layout">
+
+    <!-- ══ PROFILE SIDEBAR ══════════════════════════════ -->
+    <div class="col-side">
+      <div class="profile reveal">
+
+        <div class="avatar">
+          <img src="pfp.jpg" alt="Xiao Zhang">
+        </div>
+
+        <div class="profile-head">
+          <h1 class="profile-name">Xiao Zhang</h1>
+          <p class="profile-inst">UC Berkeley</p>
+        </div>
+
+        <div class="profile-links">
+          <a href="#" data-email-link title="Email" aria-label="Email Xiao Zhang">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </a>
+          <a href="https://github.com/xiaozh26" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/xiaozhang07" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+
+        <div class="interests">
+          <h3>Research Interests</h3>
+          <div>Robot Learning</div>
+          <div>Generative Modeling</div>
+          <div>Scalable, Generalizable Policies</div>
+        </div>
+
+        <!-- Visitor map — Luka position (sidebar, under the profile) &amp; look -->
+        <div class="visitor-card">
+          <div class="visitor-card-title">Visitor Map</div>
+          <div class="visitor-card-body">
+            <script type="text/javascript" id="mapmyvisitors" src="https://mapmyvisitors.com/map.js?cl=ffffff&amp;w=300&amp;t=tt&amp;d=lFpR2qedkclht1UMbWZIWO5tfB0SK0SP-noRBjg56Ww"></script>
+          </div>
+        </div>
+
+      </div>
     </div>
-    <!-- PFP: left side, floats on banner -->
-    <div class="pfp-wrap">
-        <div class="pfp-circle">
-            <img id="pfp-img" src="pfp.jpg" alt="Xiao Zhang">
-        </div>
-    </div>
-</div>
 
-<!-- ══ BIO ══════════════════════════════════════════════ -->
-<div class="bio-section">
+    <!-- ══ MAIN COLUMN ══════════════════════════════════ -->
+    <div class="col-main">
 
-    <!-- Inline identity: visible only when name-bar is scrolled out of view -->
-    <div id="bio-identity">
-        <span class="bio-id-name">Xiao Zhang</span>
-        <a href="https://linkedin.com/in/xiaozhang07" target="_blank" class="icon-btn" title="LinkedIn">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        </a>
-        <a href="https://github.com/xiaozh26" target="_blank" class="icon-btn" title="GitHub">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-        </a>
-        <span class="email-text">xiao_zhang [at] berkeley [dot] edu</span>
-    </div>
-
-    <p>
-        I'm an Electrical Engineering & Computer Sciences and Economics undergraduate at UC Berkeley, and a member of the EECS Honors Degree Program. My research interests lie in <strong>robotics, embodied AI, and diffusion-based generative modeling</strong>. I'm currently conducting research in
-        <a href="https://me.berkeley.edu/people/masayoshi-tomizuka/" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Prof. Masayoshi Tomizuka</a>'s Mechanical Systems Control Lab,
-        and
-        <a href="https://people.eecs.berkeley.edu/~sastry/" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Prof. Shankar Sastry</a>'s Embodied Intelligence & Robotics Center. I'm affiliated with the <a href="https://bair.berkeley.edu" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:500" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Berkeley Artificial Intelligence Research (BAIR) Lab</a>.
-    </p>
-    <p style="margin-top:0.65rem">
-        Away from the keyboard: lifelong Warriors and 49ers fan. Faithful to the Bay!
-    </p>
-    <!-- Affiliations as inline chips under bio -->
-    <div class="aff-label">Member Affiliations</div>
-    <div class="aff-chips">
-        <a class="aff-chip" href="https://www.tbp.org/home.cfm" target="_blank" rel="noopener">
-            <img src="tbp.png" alt="TBP">
-            <span class="aff-chip-name">Tau Beta Pi</span>
-            <span class="aff-chip-dot">·</span>
-            <span style="font-size:0.68rem;color:var(--text-soft)">California Alpha Chapter</span>
-        </a>
-        <a class="aff-chip" href="https://hkn.ieee.org" target="_blank" rel="noopener">
-            <img src="hkn.png" alt="HKN">
-            <span class="aff-chip-name">Eta Kappa Nu</span>
-            <span class="aff-chip-dot">·</span>
-            <span style="font-size:0.68rem;color:var(--text-soft)">Mu Chapter</span>
-        </a>
-        <a class="aff-chip" href="https://www.ieee.org" target="_blank" rel="noopener">
-            <img src="ieee.png" alt="IEEE">
-            <span class="aff-chip-name">IEEE</span>
-            <span class="aff-chip-dot">·</span>
-            <span style="font-size:0.68rem;color:var(--text-soft)">Student Member</span>
-        </a>
-        <a class="aff-chip" href="https://eecs.berkeley.edu" target="_blank" rel="noopener">
-            <img src="eecs.png" alt="EECS">
-            <span class="aff-chip-name">EECS Honors Degree Program</span>
-        </a>
-    </div>
-</div>
-
-<!-- ══ TABS ══════════════════════════════════════════════ -->
-<div class="tab-nav">
-    <button class="tab-btn active" onclick="showTab(this,'experiences')">Experiences</button>
-    <button class="tab-btn"        onclick="showTab(this,'coursework')">Education</button>
-    <button class="tab-btn"        onclick="showTab(this,'publications')">Publications</button>
-    <button class="tab-btn"        onclick="showTab(this,'resume')">Resume</button>
-</div>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!--  EXPERIENCES                                          -->
-<!-- ══════════════════════════════════════════════════════ -->
-<div id="tab-experiences" class="tab-pane active">
-    <div class="exp-section" id="exp-timeline-wrap">
-
-        <!-- Mobile left-edge line -->
-        <div class="mobile-line hidden" id="mobile-line"></div>
-
-        <!-- SVG timeline (desktop) -->
-        <svg id="timeline-svg" aria-hidden="true">
-            <path id="timeline-path" fill="none" stroke="var(--blue-border)" stroke-width="2" stroke-dasharray="5 4"/>
-        </svg>
-
-        <!-- ── BAIR (LEFT) · Jan 2026 ── -->
-        <div class="exp-row" id="exp-0">
-            <div class="exp-left exp-content">
-                <div class="exp-logo"><img src="bair1.png" alt="BAIR"></div>
-                <div class="exp-role">Undergraduate Researcher</div>
-                <div class="exp-org">Berkeley AI Research (BAIR) Lab</div>
-                <div class="exp-meta">UC Berkeley · Jan 2026 – Present</div>
-                <p class="exp-desc">Working on diffusion based policies for robotic action planning and learning, advised by <a href="https://me.berkeley.edu/people/masayoshi-tomizuka/" target="_blank" rel="noopener">Prof. Masayoshi Tomizuka</a>.</p>
-            </div>
-            <div class="exp-center"><div class="exp-dot" id="dot-0"></div></div>
-            <div style="grid-column:3"></div>
+      <!-- ── ABOUT ─────────────────────────────────────── -->
+      <section class="section reveal" id="about">
+        <h2 class="section-title">About</h2>
+        <div class="prose">
+          <p>
+            I'm an Electrical Engineering &amp; Computer Sciences and Economics undergraduate at UC Berkeley,
+            and a member of the EECS Honors Degree Program.
+          </p>
+          <p>
+            I'm broadly interested in <strong>robotics</strong> and how we can build learning systems that
+            scale to more diverse and complex real-world behaviors. In particular, I care about
+            <strong>imitation learning, embodied AI, generative modeling, and reinforcement learning</strong>, especially policies
+            that generalize across tasks, environments, and embodiments.
+          </p>
+          <p>
+            I'm currently conducting research in
+            <a href="https://me.berkeley.edu/people/masayoshi-tomizuka/" target="_blank" rel="noopener">Prof. Masayoshi Tomizuka</a>'s
+            Mechanical Systems Control Lab, and
+            <a href="https://people.eecs.berkeley.edu/~sastry/" target="_blank" rel="noopener">Prof. Shankar Sastry</a>'s
+            Embodied Intelligence &amp; Robotics Center. I'm affiliated with the
+            <a href="https://bair.berkeley.edu" target="_blank" rel="noopener">Berkeley Artificial Intelligence Research (BAIR)</a>.
+          </p>
+          <p>Away from the keyboard: lifelong Warriors and 49ers fan. Faithful to the Bay!</p>
         </div>
 
-        <!-- ── CITRIS (RIGHT) · Jan 2026 ── -->
-        <div class="exp-row" id="exp-1">
-            <div style="grid-column:1"></div>
-            <div class="exp-center"><div class="exp-dot" id="dot-1"></div></div>
-            <div class="exp-right exp-content">
-                <div class="exp-logo"><img src="citris.svg" alt="CITRIS"></div>
-                <div class="exp-role">Undergraduate Researcher</div>
-                <div class="exp-org">CITRIS and the Banatao Institute</div>
-                <div class="exp-meta">UC Berkeley · Jan 2026 – Present</div>
-                <p class="exp-desc">Researching on robotic manipulation, advised by <a href="https://people.eecs.berkeley.edu/~sastry/" target="_blank" rel="noopener">Prof. Shankar Sastry</a>.</p>
-            </div>
+      </section>
+
+      <!-- ── SELECTED PUBLICATIONS ─────────────────────── -->
+      <section class="section reveal" id="publications">
+        <div class="section-head">
+          <h2 class="section-title">Selected Publications</h2>
+          <a class="section-link" href="publications.html">View all &rarr;</a>
         </div>
-
-        <!-- ── HKN (LEFT) · Sep 2025 ── -->
-        <div class="exp-row" id="exp-2">
-            <div class="exp-left exp-content">
-                <div class="exp-logo"><img src="hkn.png" alt="HKN"></div>
-                <div class="exp-role">Service Officer</div>
-                <div class="exp-org">Eta Kappa Nu (HKN) · UC Berkeley</div>
-                <div class="exp-meta">UC Berkeley · Sep 2025 – Present</div>
-                <ul class="exp-bullets">
-                    <li>Organize community outreach events promoting EECS education within Berkeley</li>
-                    <li>Develop and coordinate EE/CS workshops for local high school students</li>
-                    <li>Lead weekly tutoring sessions supporting undergraduates in core CS and EE courses</li>
-                </ul>
-            </div>
-            <div class="exp-center"><div class="exp-dot" id="dot-2"></div></div>
-            <div style="grid-column:3"></div>
+        <div class="empty-card">
+          <div class="empty-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+            </svg>
+          </div>
+          <h3>Publications Coming Soon</h3>
+          <p>Currently conducting research at BAIR, papers in progress.</p>
         </div>
+      </section>
 
-    </div><!-- /exp-section -->
-</div><!-- /experiences -->
+    </div><!-- /col-main -->
+  </div><!-- /layout -->
+</div><!-- /page -->
 
+<footer class="footer">
+  <div class="footer-inner">
+    <p>Last updated: August 2026</p>
+    <p>&copy; 2026 Xiao Zhang &middot; UC Berkeley</p>
+  </div>
+</footer>
 
-<!-- ══════════════════════════════════════════════════════ -->
-<!--  COURSEWORK                                           -->
-<!-- ══════════════════════════════════════════════════════ -->
-<div id="tab-coursework" class="tab-pane">
-    <div class="cw-section">
-
-        <!-- Institution Header Cards -->
-        <div class="edu-cards">
-            <div class="edu-card">
-                <div class="edu-card-icon"><img src="uc_berkeley_square.png" alt="UC Berkeley"></div>
-                <div>
-                    <div class="edu-card-name">University of California, Berkeley</div>
-                    <div class="edu-card-degree">B.S. Electrical Engineering and Computer Sciences (Honors)</div>
-                    <div class="edu-card-dates">2025 &ndash; 2028</div>
-                </div>
-            </div>
-            <div class="edu-card">
-                <div class="edu-card-icon"><img src="uc_berkeley_square.png" alt="UC Berkeley"></div>
-                <div>
-                    <div class="edu-card-name">University of California, Berkeley</div>
-                    <div class="edu-card-degree">B.A. Economics</div>
-                    <div class="edu-card-dates">2025 &ndash; 2028</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Semester Timeline -->
-        <div class="term-card">
-            <div class="term-card-label">Semester Timeline</div>
-            <div class="term-track" id="term-track"></div>
-        </div>
-
-        <h2 class="cw-section-title">Relevant Coursework</h2>
-
-        <!-- ── COMPLETED block ── -->
-        <div class="cw-block completed">
-            <div class="cw-block-header">
-                <div class="cw-block-icon" style="background:#DBEAFE">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <span class="cw-block-title">Completed</span>
-            </div>
-
-            <div class="cw-cols">
-                <!-- EECS completed -->
-                <div>
-                    <div class="cw-col-head" style="color:var(--blue);border-color:var(--blue)">EECS</div>
-                    <div class="cw-div-label">Lower Division</div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 61A</div><div class="course-name">Structure and Interpretation of Computer Programs</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 61B</div><div class="course-name">Data Structures</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 61C</div><div class="course-name">Great Ideas in Computer Architecture (Machine Structures)</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">CS 70</div><div class="course-name">Discrete Mathematics and Probability Theory</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">EECS 16A</div><div class="course-name">Foundations of Signals, Dynamical Systems &amp; Information Processing</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">EECS 16B</div><div class="course-name">Introduction to Circuits and Devices</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">ENGIN 29</div><div class="course-name">Manufacturing and Design Communication</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">ENGIN 26</div><div class="course-name">Three-Dimensional Modeling for Design</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">BIOENG 10</div><div class="course-name">Introduction to Biomedicine for Engineers</div></div>
-                    <div class="cw-div-label">Upper Division</div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">EE 120</div><div class="course-name">Signals and Systems</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">MECENG H194</div><div class="course-name">Honors Undergraduate Research</div></div>
-                </div>
-                <!-- Economics completed -->
-                <div>
-                    <div class="cw-col-head" style="color:var(--navy);border-color:var(--navy)">Economics</div>
-                    <div class="cw-div-label">Lower Division</div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">ECON 1</div><div class="course-name">Introduction to Economics</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">STAT 20</div><div class="course-name">Introduction to Probability and Statistics</div></div>
-                    <div class="cw-div-label">Upper Division</div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">ECON 101B</div><div class="course-name">Macroeconomics (Quantitative)</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">PUBPOL 141</div><div class="course-name">Behavioral Economics for Public Policy</div></div>
-                    <div class="course-line"><div class="course-status done"></div><div class="course-code">UGBA 107</div><div class="course-name">The Social, Political, and Ethical Environment of Business</div></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ── IN PROGRESS block ── -->
-        <div class="cw-block in-progress">
-            <div class="cw-block-header">
-                <div class="cw-block-icon" style="background:rgba(58,116,212,0.15)">
-                    <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);animation:pulse 2s ease-in-out infinite"></div>
-                </div>
-                <span class="cw-block-title">In Progress</span>
-                <span id="ip-badge" class="cw-block-badge" style="background:rgba(58,116,212,0.12);color:var(--blue);border:1px solid var(--blue-border)">Spring 2026 · 5 courses</span>
-            </div>
-
-            <div class="cw-cols">
-                <!-- EECS in-progress -->
-                <div>
-                    <div class="cw-col-head" style="color:var(--blue);border-color:var(--blue)">EECS</div>
-                    <div class="cw-div-label">Upper Division</div>
-                    <div class="course-line"><div class="course-status active"></div><div class="course-code">EECS C106A</div><div class="course-name">Introduction to Robotics</div></div>
-                    <div class="course-line"><div class="course-status active"></div><div class="course-code">EECS 149</div><div class="course-name">Introduction to Embedded and Cyber Physical Systems</div></div>
-                    <div class="course-line"><div class="course-status active"></div><div class="course-code">CS 189</div><div class="course-name">Introduction to Machine Learning</div></div>
-                </div>
-                <!-- Economics in-progress -->
-                <div>
-                    <div class="cw-col-head" style="color:var(--navy);border-color:var(--navy)">Economics</div>
-                    <div class="cw-div-label">Upper Division</div>
-                    <div class="course-line"><div class="course-status active"></div><div class="course-code">ECON 101A</div><div class="course-name">Microeconomics (Quantitative)</div></div>
-                    <div class="course-line"><div class="course-status active"></div><div class="course-code">ECON 134</div><div class="course-name">Macroeconomic Policy from the Great Depression to Today</div></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div><!-- /coursework -->
-
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!--  PUBLICATIONS                                         -->
-<!-- ══════════════════════════════════════════════════════ -->
-<div id="tab-publications" class="tab-pane">
-    <div class="centered-pane">
-        <div class="text-center py-16 px-8 rounded-xl border border-dashed" style="background:white;border-color:var(--border)">
-            <div style="width:64px;height:64px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
-                </svg>
-            </div>
-            <h3 style="font-size:1.1rem;font-weight:600;color:var(--text-dark);margin-bottom:0.5rem">Publications Coming Soon</h3>
-            <p style="font-size:0.88rem;color:var(--text-mid);line-height:1.65;max-width:22rem;margin:0 auto">
-                Currently conducting research at BAIR Lab, papers in progress.
-            </p>
-        </div>
-    </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!--  RESUME                                               -->
-<!-- ══════════════════════════════════════════════════════ -->
-<div id="tab-resume" class="tab-pane">
-    <div class="centered-pane">
-        <div class="plain-card text-center py-16 px-8" style="display:flex;flex-direction:column;align-items:center">
-            <div style="width:64px;height:64px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/>
-                </svg>
-            </div>
-            <h3 style="font-size:1.1rem;font-weight:600;color:var(--text-dark);margin-bottom:0.4rem">Resume</h3>
-            <p style="font-size:0.88rem;color:var(--text-mid);margin-bottom:1.5rem">Download my resume to learn more about my background and experiences.</p>
-            <a href="#" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.5rem;border-radius:8px;font-weight:600;font-size:0.875rem;color:white;background:var(--blue);text-decoration:none;transition:opacity 0.15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Download Resume
-            </a>
-        </div>
-    </div>
-</div>
-
-<!-- Visitor Map (hidden) -->
-<!-- ══ VISITOR MAP FOOTER ══════════════════════════════ -->
-<div style="background:white;border-top:1px solid var(--border);padding:2.5rem 1.5rem;text-align:center;">
-    <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.13em;color:var(--text-soft);margin-bottom:1.25rem;">Visitors Around the World</div>
-    <div style="display:inline-block;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(15,30,70,0.10);border:1px solid var(--border);max-width:100%;">
-        <script type='text/javascript' id='mapmyvisitors' src='https://mapmyvisitors.com/map.js?cl=ffffff&w=300&t=tt&d=lFpR2qedkclht1UMbWZIWO5tfB0SK0SP-noRBjg56Ww'></script>
-    </div>
-    <p style="font-size:0.72rem;color:var(--text-soft);margin-top:1rem;margin-bottom:0;">© 2026 Xiao Zhang · UC Berkeley</p>
-</div>
-
-<script>
-// ── TAB SWITCHING ──────────────────────────────────────
-function showTab(btn, name) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (name === 'experiences') setTimeout(drawTimeline, 50);
-}
-
-
-// ── CURVED TIMELINE SVG ────────────────────────────────
-function drawTimeline() {
-    const wrap = document.getElementById('exp-timeline-wrap');
-    const svg  = document.getElementById('timeline-svg');
-    const path = document.getElementById('timeline-path');
-    if (!wrap || !svg || !path) return;
-
-    // Only on desktop
-    if (window.innerWidth <= 700) {
-        document.getElementById('mobile-line').classList.remove('hidden');
-        svg.style.display = 'none';
-        return;
-    }
-    document.getElementById('mobile-line').classList.add('hidden');
-    svg.style.display = '';
-
-    const wrapRect = wrap.getBoundingClientRect();
-    const dots = [
-        document.getElementById('dot-0'),
-        document.getElementById('dot-1'),
-        document.getElementById('dot-2'),
-    ];
-
-    // Collect dot center positions relative to wrap
-    const pts = dots.map(dot => {
-        if (!dot) return null;
-        const r = dot.getBoundingClientRect();
-        return {
-            x: r.left + r.width  / 2 - wrapRect.left,
-            y: r.top  + r.height / 2 - wrapRect.top,
-        };
-    }).filter(Boolean);
-
-    if (pts.length < 2) return;
-
-    const W = wrapRect.width;
-    const H = wrapRect.height;
-
-    // Build smooth S-curve through dot centers, starting and ending exactly at the dots
-    const cx = W / 2; // horizontal center
-
-    let d = `M ${cx} ${pts[0].y}`;
-
-    for (let i = 0; i < pts.length - 1; i++) {
-        const p1 = pts[i];
-        const p2 = pts[i + 1];
-        const mid = (p1.y + p2.y) / 2;
-        // control points create the S-bend
-        d += ` C ${p1.x} ${mid}, ${p2.x} ${mid}, ${p2.x} ${p2.y}`;
-    }
-
-    d += ` L ${cx} ${pts[pts.length - 1].y}`;
-
-    svg.setAttribute('width',  W);
-    svg.setAttribute('height', H);
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    path.setAttribute('d', d);
-}
-
-// ── SEMESTER TRACKER ───────────────────────────────────
-const TERMS = [
-    { name: "Fall 2025",   start: new Date("2025-06-01"), end: new Date("2025-12-31") },
-    { name: "Spring 2026", start: new Date("2026-01-01"), end: new Date("2026-05-31") },
-    { name: "Fall 2026",   start: new Date("2026-06-01"), end: new Date("2026-12-31") },
-    { name: "Spring 2027", start: new Date("2027-01-01"), end: new Date("2027-05-31") },
-    { name: "Fall 2027",   start: new Date("2027-06-01"), end: new Date("2027-12-31") },
-    { name: "Spring 2028", start: new Date("2028-01-01"), end: new Date("2028-05-31") },
-];
-
-function getTrackerDate() {
-    const debugDate = new URLSearchParams(window.location.search).get('termDate');
-    return debugDate ? new Date(`${debugDate}T12:00:00`) : new Date();
-}
-
-function getActiveTerm(now) {
-    return TERMS.find(t => now >= t.start && now <= t.end);
-}
-
-function renderTermTrack() {
-    const now  = getTrackerDate();
-    const el   = document.getElementById('term-track');
-    if (!el) return;
-
-    let html = '';
-
-    TERMS.forEach((t, i) => {
-        let dotClass, labelStyle;
-        if (now > t.end) {
-            dotClass   = 'done';
-            labelStyle = 'color:var(--blue-border);text-decoration:line-through';
-        } else if (now >= t.start && now <= t.end) {
-            dotClass   = 'current';
-            labelStyle = 'color:var(--blue);font-weight:700';
-        } else {
-            dotClass   = 'future';
-            labelStyle = 'color:var(--text-soft)';
-        }
-
-        if (i > 0) {
-            const connClass = now > TERMS[i-1].end ? 'done' : '';
-            html += `<div class="term-connector ${connClass}"></div>`;
-        }
-
-        html += `
-            <div class="term-node">
-                <div class="term-icon-wrap"><div class="term-icon ${dotClass}"></div></div>
-                <div class="term-label" style="${labelStyle}">${t.name.replace(' ', '\u00A0')}</div>
-            </div>`;
-    });
-    el.innerHTML = html;
-    centerCurrentTerm();
-}
-
-function centerCurrentTerm() {
-    const track   = document.getElementById('term-track');
-    const current = track && track.querySelector('.term-icon.current');
-    if (!track || !current) return;
-
-    // Measure natural (unscrolled) content width in flex-start mode first,
-    // so we can tell whether the track can actually be slid at all.
-    track.classList.add('is-scrollable');
-    const scrollable = track.scrollWidth > track.clientWidth + 1;
-    track.classList.toggle('is-scrollable', scrollable);
-
-    if (!scrollable) {
-        track.scrollLeft = 0; // fits fully — CSS centers the group, nothing to slide
-        return;
-    }
-
-    const node = current.closest('.term-node');
-    const target = node.offsetLeft + node.offsetWidth / 2 - track.clientWidth / 2;
-    track.scrollLeft = Math.max(0, Math.min(target, track.scrollWidth - track.clientWidth));
-}
-
-function updateInProgressBadge() {
-    const now = getTrackerDate();
-    const activeTerm = getActiveTerm(now);
-    const ipBlock = document.querySelector('.cw-block.in-progress');
-    const count = ipBlock ? ipBlock.querySelectorAll('.course-status.active').length : 0;
-    const badge = document.getElementById('ip-badge');
-
-    if (badge && activeTerm) {
-        badge.textContent = `${activeTerm.name} · ${count} course${count !== 1 ? 's' : ''}`;
-    }
-}
-
-window.onload = function() {
-    renderTermTrack();
-    drawTimeline();
-    updateInProgressBadge();
-};
-window.addEventListener('resize', () => {
-    drawTimeline();
-    centerCurrentTerm();
-});
-
-// ── INLINE IDENTITY: show when name-bar scrolls out of view ──
-const nameBar = document.querySelector('.name-bar');
-const bioIdentity = document.getElementById('bio-identity');
-if (nameBar && bioIdentity) {
-    new IntersectionObserver(entries => {
-        bioIdentity.classList.toggle('visible', !entries[0].isIntersecting);
-    }, { threshold: 0 }).observe(nameBar);
-}
-</script>
+<script src="assets/site.js"></script>
 </body>
 </html>
