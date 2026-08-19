@@ -532,7 +532,7 @@ a { color: inherit; }
 
 .empty-card {
   background: var(--card-bg);
-  border: 1px dashed var(--neutral-300);
+  border: none;
   border-radius: .75rem;
   padding: 3rem 2rem;
   text-align: center;
