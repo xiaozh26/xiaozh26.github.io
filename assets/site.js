@@ -58,14 +58,17 @@
   var container = document.getElementById('nav-links');
   if (!links.length) return;
 
-  // Current file name; an empty path (or "/") means the homepage.
-  var file = window.location.pathname.split('/').pop() || 'index.html';
+  // Page slug, with or without the .html extension; "/" means the homepage.
+  function slug(path) {
+    return path.split('/').pop().replace(/\.html$/, '') || 'index';
+  }
+  var file = slug(window.location.pathname);
   var hovered = null;
 
   function isActive(a) {
     var href = a.getAttribute('href');
     if (!href || href.charAt(0) === '#') return false;
-    return href === file || (file === 'index.html' && href === 'index.html');
+    return slug(href) === file;
   }
 
   function moveIndicator(link) {
