@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avatar Crop Tool</title>
+<style>
+  :root {
+    --bg: #0f172a; --panel: #1e293b; --line: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #fdb515;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1.5rem 4rem;
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg); color: var(--text);
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 .25rem; }
+  .sub { color: var(--muted); margin: 0 0 2rem; font-size: .875rem; }
+  .wrap { display: grid; gap: 2rem; max-width: 1100px; margin: 0 auto;
+          grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 900px) { .wrap { grid-template-columns: minmax(0,1fr) 340px; } }
+
+  /* ── stage ─────────────────────────────────────────── */
+  .stage {
+    position: relative; display: grid; place-items: center;
+    min-height: 520px; padding: 3rem;
+    background:
+      repeating-conic-gradient(#1a2436 0% 25%, #16203040 0% 50%) 0 0 / 24px 24px;
+    border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  #frame { position: relative; touch-action: none; cursor: grab; }
+  #zoomcap { position: absolute; top: .75rem; left: .875rem;
+             font-size: .75rem; color: var(--muted); }
+  #frame.dragging { cursor: grabbing; }
+  /* ghost: the parts of the photo that fall OUTSIDE the circle */
+  #ghost { position: absolute; inset: 0; pointer-events: none; opacity: .22; }
+  #ghost img { filter: grayscale(1); }
+  /* the circle itself */
+  #circle {
+    position: absolute; inset: 0; border-radius: 50%; overflow: hidden;
+    background: #dde4f0; box-shadow: 0 0 0 4px #fff, 0 8px 32px #0008;
+  }
+  #circle::before {
+    content: ""; position: absolute; inset: 0;
+    background: var(--blur-src) center / cover no-repeat;
+    filter: blur(16px) brightness(.92); transform: scale(1.3);
+  }
+  .shot { position: absolute; left: 50%; top: 50%;
+          transform: translate(-50%, -50%); max-width: none; display: block; }
+  #ring { position: absolute; inset: -1px; border-radius: 50%;
+          border: 1px dashed #fdb51588; pointer-events: none; }
+
+  /* ── controls ──────────────────────────────────────── */
+  .panel { background: var(--panel); border: 1px solid var(--line);
+           border-radius: 14px; padding: 1.25rem; }
+  .row { margin-bottom: 1.1rem; }
+  .row:last-child { margin-bottom: 0; }
+  label { display: flex; justify-content: space-between; align-items: baseline;
+          font-size: .8125rem; color: var(--muted); margin-bottom: .4rem;
+          text-transform: uppercase; letter-spacing: .04em; }
+  label b { color: var(--text); font-variant-numeric: tabular-nums;
+            font-size: .9375rem; letter-spacing: 0; text-transform: none; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .btns { display: flex; gap: .5rem; flex-wrap: wrap; }
+  button {
+    flex: 1; min-width: 90px; padding: .5rem .75rem; font: inherit;
+    font-size: .8125rem; color: var(--text); background: #2b3a52;
+    border: 1px solid var(--line); border-radius: 8px; cursor: pointer;
+  }
+  button:hover { background: #35486a; }
+  button.primary { background: var(--accent); color: #1a1a1a; border-color: var(--accent);
+                   font-weight: 600; }
+  button.primary:hover { filter: brightness(1.08); }
+  .hint { color: var(--muted); font-size: .8125rem; margin: .75rem 0 0; }
+  pre {
+    background: #0b1220; border: 1px solid var(--line); border-radius: 10px;
+    padding: .875rem; overflow-x: auto; font-size: .75rem; line-height: 1.6;
+    margin: 0 0 .75rem; color: #cbd5e1;
+  }
+  .live { display: flex; align-items: center; gap: 1rem; margin-top: 1.25rem;
+          padding-top: 1.25rem; border-top: 1px solid var(--line); }
+  .live .cap { font-size: .75rem; color: var(--muted); }
+  #dropnote { position: absolute; bottom: .75rem; right: .875rem;
+              font-size: .75rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<h1>Avatar crop tool</h1>
+<p class="sub">Drag the photo to reposition · scroll or use the slider to zoom · the greyed-out area is what the circle cuts off.</p>
+
+<div class="wrap">
+  <div class="stage" id="stage">
+    <div id="frame">
+      <div id="ghost"><img class="shot" id="imgGhost" alt=""></div>
+      <div id="circle"><img class="shot" id="imgMain" alt="avatar"></div>
+      <div id="ring"></div>
+    </div>
+    <span id="zoomcap"></span>
+    <span id="dropnote">drop an image here to swap the photo</span>
+  </div>
+
+  <div class="panel">
+    <div class="row">
+      <label>Circle size <b><span id="vSize">196</span> px</b></label>
+      <input type="range" id="size" min="100" max="360" step="2" value="196">
+    </div>
+    <div class="row">
+      <label>Zoom <b><span id="vScale">0.95</span>×</b></label>
+      <input type="range" id="scale" min="0.3" max="3" step="0.01" value="0.95">
+    </div>
+    <div class="row">
+      <label>Horizontal <b><span id="vX">3.3</span>%</b></label>
+      <input type="range" id="x" min="-100" max="100" step="0.5" value="3.3">
+    </div>
+    <div class="row">
+      <label>Vertical <b><span id="vY">-8.1</span>%</b></label>
+      <input type="range" id="y" min="-100" max="100" step="0.5" value="-8.1">
+    </div>
+    <div class="row btns">
+      <button id="bFit">Fit whole photo</button>
+      <button id="bFill">Fill circle</button>
+      <button id="bReset">Reset</button>
+    </div>
+
+    <div class="row">
+      <label>CSS for assets/style.css</label>
+      <pre id="out"></pre>
+      <div class="btns"><button class="primary" id="bCopy">Copy CSS</button></div>
+      <p class="hint">Paste this over the <code>--img-*</code> lines and <code>width/height</code>
+        in <code>.avatar</code>. Mobile size follows automatically.</p>
+    </div>
+
+    <div class="live">
+      <div id="livePreview"></div>
+      <span class="cap">actual size<br>on the site</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const S = { size: 196, scale: 0.95, x: 3.3, y: -8.1 };
+const frame  = document.getElementById('frame');
+const circle = document.getElementById('circle');
+const imgs   = [document.getElementById('imgMain'), document.getElementById('imgGhost')];
+const out    = document.getElementById('out');
+const live   = document.getElementById('livePreview');
+const el = id => document.getElementById(id);
+
+let src = '../profile-photo.jpg';
+function setSrc(url) {
+  src = url;
+  imgs.forEach(i => i.src = url);
+  circle.style.setProperty('--blur-src', `url("${url}")`);
+}
+
+// The stage shows the circle enlarged so it is comfortable to drag;
+// every number stays in real site pixels.
+let k = 1;
+function render() {
+  k = Math.min(3, Math.max(1, 420 / S.size));
+  frame.style.width = frame.style.height = S.size + 'px';
+  frame.style.transform = `scale(${k})`;
+  el('zoomcap').textContent = `stage shown at ${k.toFixed(1)}\u00d7 \u2014 real size ${S.size}px`;
+  for (const i of imgs) {
+    i.style.height = (S.size * S.scale) + 'px';
+    i.style.width  = 'auto';
+    i.style.left   = `calc(50% + ${S.x}%)`;
+    i.style.top    = `calc(50% + ${S.y}%)`;
+  }
+  el('vSize').textContent  = S.size;
+  el('vScale').textContent = S.scale.toFixed(2);
+  el('vX').textContent     = S.x.toFixed(1);
+  el('vY').textContent     = S.y.toFixed(1);
+  el('size').value = S.size; el('scale').value = S.scale;
+  el('x').value = S.x;       el('y').value = S.y;
+
+  const mob = Math.round(S.size * 0.786);
+  out.textContent =
+`.avatar {
+  --img-scale: ${S.scale.toFixed(2)};
+  --img-x: ${S.x.toFixed(1)}%;
+  --img-y: ${S.y.toFixed(1)}%;
+  width: ${S.size}px; height: ${S.size}px;
+}
+@media (max-width: 640px) {
+  .avatar { width: ${mob}px; height: ${mob}px; }
+}`;
+
+  // true-to-site preview at the chosen size
+  live.style.cssText =
+    `width:${S.size}px;height:${S.size}px;border-radius:50%;overflow:hidden;` +
+    `position:relative;border:4px solid #fff;background:#dde4f0;flex:none;`;
+  live.innerHTML =
+    `<img src="${src}" style="position:absolute;height:${S.size*S.scale}px;width:auto;` +
+    `max-width:none;left:calc(50% + ${S.x}%);top:calc(50% + ${S.y}%);` +
+    `transform:translate(-50%,-50%)">`;
+}
+
+/* ── drag to reposition ─────────────────────────────── */
+let drag = null;
+frame.addEventListener('pointerdown', e => {
+  drag = { px: e.clientX, py: e.clientY, x: S.x, y: S.y };
+  frame.setPointerCapture(e.pointerId);
+  frame.classList.add('dragging');
+});
+frame.addEventListener('pointermove', e => {
+  if (!drag) return;
+  S.x = drag.x + (e.clientX - drag.px) / k / S.size * 100;
+  S.y = drag.y + (e.clientY - drag.py) / k / S.size * 100;
+  render();
+});
+frame.addEventListener('pointerup',     () => { drag = null; frame.classList.remove('dragging'); });
+frame.addEventListener('pointercancel', () => { drag = null; frame.classList.remove('dragging'); });
+
+/* ── wheel to zoom, anchored on the circle centre ───── */
+frame.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoomTo(S.scale * (e.deltaY < 0 ? 1.05 : 1 / 1.05));
+}, { passive: false });
+
+function zoomTo(next) {
+  next = Math.min(3, Math.max(0.3, next));
+  const k = next / S.scale;
+  S.x *= k; S.y *= k;          // keep whatever is under the centre put
+  S.scale = next;
+  render();
+}
+
+/* ── controls ───────────────────────────────────────── */
+el('size').oninput  = e => { S.size = +e.target.value; render(); };
+el('scale').oninput = e => zoomTo(+e.target.value);
+el('x').oninput     = e => { S.x = +e.target.value; render(); };
+el('y').oninput     = e => { S.y = +e.target.value; render(); };
+
+// largest scale at which the whole photo still fits inside the circle
+function fitScale() {
+  const im = imgs[0];
+  const r  = im.naturalWidth / im.naturalHeight;   // w/h
+  // half-diagonal of the image (height = 1) must equal the circle radius .5
+  return 1 / Math.hypot(r, 1);
+}
+el('bFit').onclick = () => { S.x = S.y = 0; S.scale = +fitScale().toFixed(2); render(); };
+el('bFill').onclick = () => {
+  const im = imgs[0];
+  const r = im.naturalWidth / im.naturalHeight;
+  S.x = S.y = 0; S.scale = +(r < 1 ? 1 / r : 1).toFixed(2); render();
+};
+el('bReset').onclick = () => { Object.assign(S, { size: 196, scale: .95, x: 3.3, y: -8.1 }); render(); };
+
+el('bCopy').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(out.textContent);
+    el('bCopy').textContent = 'Copied';
+    setTimeout(() => el('bCopy').textContent = 'Copy CSS', 1200);
+  } catch { el('bCopy').textContent = 'Select the text above'; }
+};
+
+/* ── drop a different photo in ──────────────────────── */
+const stage = document.getElementById('stage');
+stage.addEventListener('dragover', e => e.preventDefault());
+stage.addEventListener('drop', e => {
+  e.preventDefault();
+  const f = e.dataTransfer.files[0];
+  if (f) setSrc(URL.createObjectURL(f));
+});
+
+imgs[0].addEventListener('load', render);
+setSrc(src);
+render();
+</script>
+</body>
+</html>
