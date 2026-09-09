@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Teaching">
+<title>Teaching</title>
+<link rel="icon" href="61A.png">
+<link rel="apple-touch-icon" href="61A.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('teach_theme');
+      if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<script src="vendor/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.3/Sortable.min.js"></script>
+</head>
+<body>
+
+<!-- ===== Not configured ===== -->
+<section class="view" id="view-setup">
+  <div class="login-wrap">
+    <div class="card setup-card">
+      <h1>Teaching app not configured</h1>
+      <p>Firebase credentials are missing. Follow <code>teaching/SETUP.md</code> in the site repository, paste the config into <code>teaching/firebase-config.js</code>, and redeploy.</p>
+      <p id="setup-error" class="error"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Login ===== -->
+<section class="view" id="view-login">
+  <div class="login-wrap">
+    <form class="card" id="login-form" autocomplete="off">
+      <h1>Teaching</h1>
+      <p>Enter the password to continue.</p>
+      <div class="pw-wrap">
+        <input class="field" id="pw" type="password" inputmode="numeric" placeholder="Password" autocomplete="current-password" required>
+        <button type="button" class="eye" id="pw-eye" aria-label="Show password" title="Show password">
+          <svg class="eye-open" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-closed" viewBox="0 0 24 24" hidden><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>
+        </button>
+      </div>
+      <button class="btn primary" type="submit" id="login-btn" style="width:100%;justify-content:center">Enter</button>
+      <p class="error" id="login-error"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ===== Home: course list ===== -->
+<section class="view" id="view-home">
+  <header class="topbar">
+    <span class="brand">Teaching</span>
+    <span class="grow"></span>
+    <button class="icon-btn" data-action="theme" title="Dark mode (D)"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    <button class="btn sm" data-action="logout">Log out</button>
+  </header>
+  <main class="container">
+    <h1>Courses</h1>
+    <ul class="course-list" id="course-list"></ul>
+    <p style="margin-top:22px"><button class="btn sm" id="add-course">+ Add course</button></p>
+  </main>
+</section>
+
+<!-- ===== Course: blocks ===== -->
+<section class="view" id="view-course">
+  <header class="topbar">
+    <button class="btn sm" data-action="home">← Courses</button>
+    <span class="course-icon sm" id="course-hdr-icon"></span>
+    <span class="brand" id="course-hdr-name"></span>
+    <span class="grow"></span>
+    <button class="icon-btn" data-action="theme" title="Dark mode (D)"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    <button class="btn sm" data-action="logout">Log out</button>
+  </header>
+  <main class="container">
+    <div class="row" style="justify-content:space-between;margin-bottom:18px">
+      <div>
+        <h1 style="margin:0" id="course-title"></h1>
+        <a id="course-link" class="muted" target="_blank" rel="noopener" style="font-size:13px"></a>
+      </div>
+      <button class="btn primary" id="add-block">+ New block</button>
+    </div>
+    <p class="notice" id="cloud-notice" hidden></p>
+    <ul class="block-list" id="block-list"></ul>
+    <p class="muted" style="font-size:12px;margin-top:20px">Drag the handle to reorder. Click a title or label to rename. Slides are PDF files — export PowerPoint/Keynote decks with File → Export → PDF first. Slides only need to live online while you teach: afterwards, “Finish &amp; remove” downloads the annotated PDF and deletes the copy in the cloud.</p>
+  </main>
+</section>
+
+<!-- ===== Viewer ===== -->
+<section class="view" id="view-viewer">
+  <div class="viewer" id="viewer">
+    <header class="vtop" id="vtop">
+      <button class="icon-btn" data-action="back" title="Back to course"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="vtitle"><span class="t" id="v-title"></span><span class="l" id="v-label"></span></div>
+      <span class="grow"></span>
+      <div class="sync" id="sync" data-state="connecting"><span class="dot"></span><span class="txt">Connecting…</span></div>
+      <button class="icon-btn active" id="btn-follow" title="Sync navigation between devices"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+      <button class="icon-btn" id="btn-upload" title="Upload / replace slides (PDF)"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></button>
+      <button class="icon-btn" id="btn-thumbs" title="Thumbnails (S)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
+      <button class="icon-btn" id="btn-timer" title="Timer (T)"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6M12 2v3"/></svg></button>
+      <button class="icon-btn" data-action="theme" title="Dark mode (D)"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <button class="icon-btn" id="btn-export" title="Export"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></button>
+      <button class="icon-btn" id="btn-fullscreen" title="Fullscreen (F)"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+      <button class="icon-btn" id="btn-help" title="Keyboard shortcuts (?)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg></button>
+      <button class="btn sm" data-action="logout">Log out</button>
+    </header>
+    <button class="peek-btn" id="peek" title="Show controls">⋯</button>
+
+    <div class="vbody">
+      <aside class="thumbs" id="thumbs"></aside>
+      <main class="stage" id="stage" data-tool="pen">
+        <div class="page-wrap" id="pagewrap" hidden>
+          <canvas id="pdfc"></canvas>
+          <canvas id="annc" class="ann"></canvas>
+          <canvas id="livec"></canvas>
+        </div>
+        <div class="stage-empty" id="stage-empty" hidden>
+          <div>No slides in this block yet.</div>
+          <button class="btn primary" id="btn-upload-2">Upload PDF slides</button>
+          <div class="muted" style="font-size:12px">or insert a blank page from the toolbar</div>
+        </div>
+        <div class="stage-loading" id="stage-loading" hidden>Loading slides…</div>
+      </main>
+    </div>
+
+    <div class="toolbar" id="toolbar">
+      <button class="icon-btn tb-toggle" id="tb-toggle" title="Tools — click to expand or collapse, drag to move"><svg class="tb-ico-open" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg><svg class="tb-ico-closed" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></button>
+      <button class="icon-btn" data-tool="pointer" title="Pan / pointer (V)"><svg viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg></button>
+      <button class="icon-btn active" data-tool="pen" title="Pen (P)"><svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></button>
+      <button class="icon-btn" data-tool="hl" title="Highlighter (H)"><svg viewBox="0 0 24 24"><path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg></button>
+      <button class="icon-btn" data-tool="eraser" title="Eraser (E)"><svg viewBox="0 0 24 24"><path d="M20 20H7L3 16a2 2 0 0 1 0-2.8l9.2-9.2a2 2 0 0 1 2.8 0l6 6a2 2 0 0 1 0 2.8L14 20"/><path d="M6.5 11.5l6 6"/></svg></button>
+      <span class="sep"></span>
+      <span id="swatches"></span>
+      <span class="width-wrap"><span class="width-dot"><i id="width-preview" style="width:6px;height:6px"></i></span><input type="range" id="width" min="1" max="12" step="1" value="4" title="Stroke width ( [ / ] )"></span>
+      <span class="sep"></span>
+      <button class="icon-btn" id="btn-undo" title="Undo (⌘Z)"><svg viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></svg></button>
+      <button class="icon-btn" id="btn-redo" title="Redo (⇧⌘Z)"><svg viewBox="0 0 24 24"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 15-6.7L21 13"/></svg></button>
+      <button class="icon-btn" id="btn-annvis" title="Show / hide annotations (A)"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      <button class="icon-btn" id="btn-clear" title="Clear annotations on this page"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      <span class="sep"></span>
+      <button class="icon-btn" id="btn-zoom-out" title="Zoom out (−)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M8 11h6"/></svg></button>
+      <span class="zoom-label" id="zoom-label">100%</span>
+      <button class="icon-btn" id="btn-zoom-in" title="Zoom in (+)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg></button>
+      <span class="sep"></span>
+      <button class="icon-btn" id="btn-blank-before" title="Insert blank page before (⇧N)"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="12" height="18" rx="2"/><path d="M5 8v8M2 12h6"/></svg></button>
+      <button class="icon-btn" id="btn-blank-after" title="Insert blank page after (N)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="12" height="18" rx="2"/><path d="M19 8v8M16 12h6"/></svg></button>
+      <button class="icon-btn" id="btn-finger" title="Draw with finger (touch)"><svg viewBox="0 0 24 24"><path d="M8 13V5a2 2 0 1 1 4 0v7"/><path d="M12 12V9a2 2 0 1 1 4 0v3"/><path d="M16 12v-1a2 2 0 1 1 4 0v5a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6v-2a2 2 0 1 1 4 0"/></svg></button>
+    </div>
+
+    <div class="pager">
+      <button class="icon-btn" id="btn-prev" title="Previous (←)"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span class="cnt" id="pagecnt">0 / 0</span>
+      <button class="icon-btn" id="btn-next" title="Next (→)"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+
+    <div class="timer" id="timer" hidden>
+      <div class="thead" id="timer-head">
+        <span id="timer-mode-label">Countdown</span>
+        <span class="grow"></span>
+        <button class="icon-btn" id="timer-mode" title="Switch countdown / stopwatch" style="width:28px;height:28px"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+        <button class="icon-btn" id="timer-big" title="Enlarge" style="width:28px;height:28px"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+        <button class="icon-btn" id="timer-close" title="Close (T)" style="width:28px;height:28px"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="digits" id="timer-digits">05:00</div>
+      <div class="presets" id="timer-presets">
+        <button class="btn sm" data-min="1">1m</button><button class="btn sm" data-min="2">2m</button><button class="btn sm" data-min="3">3m</button>
+        <button class="btn sm" data-min="5">5m</button><button class="btn sm" data-min="10">10m</button><button class="btn sm" data-min="15">15m</button>
+      </div>
+      <div class="custom" id="timer-custom"><input class="field" id="timer-min" type="number" min="0" max="180" value="5">min<input class="field" id="timer-sec" type="number" min="0" max="59" value="0">sec</div>
+      <div class="tctrl">
+        <button class="btn primary sm" id="timer-start">Start</button>
+        <button class="btn sm" id="timer-reset">Reset</button>
+      </div>
+    </div>
+
+    <div class="help" id="help" hidden>
+      <div class="card">
+        <h1>Keyboard shortcuts</h1>
+        <table>
+          <tr><td><kbd>→</kbd><kbd>↓</kbd><kbd>Space</kbd><kbd>PgDn</kbd></td><td>Next slide</td></tr>
+          <tr><td><kbd>←</kbd><kbd>↑</kbd><kbd>PgUp</kbd></td><td>Previous slide</td></tr>
+          <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last slide</td></tr>
+          <tr><td><kbd>P</kbd> <kbd>H</kbd> <kbd>E</kbd> <kbd>V</kbd></td><td>Pen / Highlighter / Eraser / Pan</td></tr>
+          <tr><td><kbd>1</kbd>–<kbd>6</kbd></td><td>Pen colour</td></tr>
+          <tr><td><kbd>[</kbd> / <kbd>]</kbd></td><td>Thinner / thicker stroke</td></tr>
+          <tr><td><kbd>⌘Z</kbd> / <kbd>⇧⌘Z</kbd></td><td>Undo / redo annotation</td></tr>
+          <tr><td><kbd>A</kbd></td><td>Show / hide annotation layer</td></tr>
+          <tr><td><kbd>N</kbd> / <kbd>⇧N</kbd></td><td>Insert blank page after / before</td></tr>
+          <tr><td><kbd>+</kbd> <kbd>−</kbd> <kbd>0</kbd></td><td>Zoom in / out / reset (pinch or ⌘-scroll also zooms; double-click toggles 2×)</td></tr>
+          <tr><td><kbd>S</kbd></td><td>Toggle thumbnail sidebar</td></tr>
+          <tr><td><kbd>F</kbd></td><td>Fullscreen presentation mode</td></tr>
+          <tr><td><kbd>T</kbd></td><td>Timer</td></tr>
+          <tr><td><kbd>D</kbd></td><td>Dark mode</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Close panels / leave fullscreen</td></tr>
+          <tr><td><kbd>?</kbd></td><td>This help</td></tr>
+        </table>
+        <p class="muted" style="margin-top:14px;font-size:12px">The floating tool icon can be dragged anywhere; click it to open or close the toolbar. On iPad: Apple Pencil draws, fingers pan and pinch-zoom. Turn on the hand icon in the toolbar to draw with a finger.</p>
+        <p class="center" style="margin:12px 0 0"><button class="btn" id="help-close">Close</button></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toasts"></div>
+<input type="file" id="file-input" accept="application/pdf,.pdf" hidden>
+<script type="module" src="app.js"></script>
+</body>
+</html>

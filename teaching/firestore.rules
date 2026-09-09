@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Only the single teacher account (signed in through the /teaching login page)
+    // may read or write anything. Everyone else is denied.
+    match /{document=**} {
+      allow read, write: if request.auth != null
+        && request.auth.token.email == 'teacher@xiaozhang.org';
+    }
+  }
+}
