@@ -33,6 +33,21 @@ happens entirely in the browser.
    [`firestore.rules`](./firestore.rules) in this folder, and **Publish**.
    The rules allow access *only* to the signed-in teacher account.
 
+## 3b. Create the Realtime Database (live ink between devices)
+
+Realtime Database streams each pen stroke to the other device *while you draw it*, so the
+laptop shows ink with roughly 50–100 ms delay instead of waiting for the pen to lift.
+It is free on the Spark plan.
+
+1. **Build → Realtime Database → Create database** → pick a location → start in
+   **locked mode** → Enable.
+2. **Rules** tab → replace everything with the contents of
+   [`database.rules.json`](./database.rules.json) → **Publish**.
+3. Copy the database URL shown at the top of the Data tab (looks like
+   `https://<project>-default-rtdb.firebaseio.com` or `https://<project>.<region>.firebasedatabase.app`)
+   into `databaseURL` in `firebase-config.js`. If you skip this section the app still works;
+   strokes then appear on the other device only when the pen lifts.
+
 ## 4. Register a web app and copy its config
 
 1. Project overview (gear icon) → **Project settings** → *Your apps* → **</>** (Web).
@@ -42,7 +57,27 @@ happens entirely in the browser.
 4. Commit and push. GitHub Pages redeploys in a minute or two.
 
 Those config values are *not* secrets — they only identify the project. Access is
-enforced by the rules from step 3.
+enforced by the rules from step 3. GitHub's secret scanner still flags the `apiKey` as a
+"Google API Key"; see *About the API key* below for how to lock it down and close the alert.
+
+## About the API key (GitHub "exposed secret" alert)
+
+A Firebase **web** API key is public by design: every visitor's browser needs it, and it
+grants no data access on its own (that is what the Auth account and the rules are for).
+Anything a static site ships is visible, so it cannot be hidden. Do this instead:
+
+1. **Restrict the key** so it is useless anywhere but your site:
+   Google Cloud Console → *APIs & Services → Credentials* → the key named
+   *Browser key (auto created by Firebase)* →
+   - *Application restrictions*: **Websites**, add `https://xiaozhang.org/*` and
+     `https://xiaozh26.github.io/*` (add `http://localhost:8899/*` only while testing locally).
+   - *API restrictions*: **Restrict key** → tick *Identity Toolkit API*, *Token Service API*,
+     *Cloud Firestore API* and *Firebase Realtime Database API* → Save.
+2. In Firebase → Authentication → Settings, keep sign-up disabled and turn on
+   *Email enumeration protection*.
+3. Close the GitHub alert: repository → *Security → Secret scanning* → open the alert →
+   **Close as → Used in tests / False positive** (a Firebase web key is the textbook false
+   positive here). No rotation is needed.
 
 ## 5. First run
 
@@ -68,9 +103,21 @@ use **Share → Add to Home Screen** for a chrome-free, app-like window.
   Fullscreen (F) is only needed on the laptop that is being projected.
 - **Palm rejection on iPad**: the lock icon in the toolbar (“Pencil only”) is on by default on
   the iPad. The slide then ignores fingers and your resting palm completely — only the Apple
-  Pencil draws or erases, so nothing gets selected or pinch-zoomed by accident. Zoom with the
-  toolbar buttons. Even with it off, touches are ignored while the pencil is on the screen and
-  for 1.5 s afterwards.
+  Pencil draws or erases, so nothing gets selected or pinch-zoomed by accident. Choose the hand
+  tool (V) to pan and pinch-zoom with fingers. Even with Pencil-only off, touches are ignored
+  while the pencil is on the screen and for 1.5 s afterwards.
+- **Fullscreen** is used only on the laptop. On the iPad, presentation mode hides the app's
+  own bars but does not ask Safari for fullscreen, because Safari exits fullscreen on some
+  swipes. For a completely bar-free iPad window use Safari's *Share → Add to Home Screen*.
+- **Live ink**: while you draw on the iPad, the partial stroke is streamed to the laptop 25
+  times a second through Realtime Database and shown on a separate layer; the finished stroke
+  is then saved to Firestore. Click the sync pill to see whether live ink is on.
+- **View sync**: page, zoom and pan are mirrored between devices (link icon at the top turns it
+  off for one device).
+- **Loading speed**: each device downloads a deck once (six parallel connections) and keeps it
+  in the browser's IndexedDB; after that, opening the block is instant. The course page
+  pre-downloads any online slides in the background, so open it on the iPad a minute before
+  class. "Finish & remove" also clears the local copies.
 - The login is remembered for 8 hours per device (`SESSION_HOURS`), then the password
   is required again. "Log out" ends it immediately.
 - Everything auto-saves. If the network drops, the sync pill at the top turns red and

@@ -93,6 +93,7 @@
       <button class="btn primary" id="add-block">+ New block</button>
     </div>
     <p class="notice" id="cloud-notice" hidden></p>
+    <p class="muted" id="prefetch-status" style="font-size:13px" hidden></p>
     <ul class="block-list" id="block-list"></ul>
     <p class="muted" style="font-size:12px;margin-top:20px">Drag the handle to reorder. Click a title or label to rename. Slides are PDF files — export PowerPoint/Keynote decks with File → Export → PDF first. Slides only need to live online while you teach: afterwards, “Finish &amp; remove” downloads the annotated PDF and deletes the copy in the cloud.</p>
   </main>
@@ -106,7 +107,7 @@
       <div class="vtitle"><span class="t" id="v-title"></span><span class="l" id="v-label"></span></div>
       <span class="grow"></span>
       <div class="sync" id="sync" data-state="connecting"><span class="dot"></span><span class="txt">Connecting…</span></div>
-      <button class="icon-btn active" id="btn-follow" title="Sync navigation between devices"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+      <button class="icon-btn active" id="btn-follow" title="Sync view (page, zoom, pan) between devices"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
       <button class="icon-btn" id="btn-upload" title="Upload / replace slides (PDF)"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></button>
       <button class="icon-btn" id="btn-thumbs" title="Thumbnails (S)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
       <button class="icon-btn" id="btn-timer" title="Timer (T)"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6M12 2v3"/></svg></button>
@@ -124,6 +125,7 @@
         <div class="page-wrap" id="pagewrap" hidden>
           <canvas id="pdfc"></canvas>
           <canvas id="annc" class="ann"></canvas>
+          <canvas id="remotec"></canvas>
           <canvas id="livec"></canvas>
         </div>
         <div class="stage-empty" id="stage-empty" hidden>
@@ -207,7 +209,7 @@
           <tr><td><kbd>Esc</kbd></td><td>Close panels / leave fullscreen</td></tr>
           <tr><td><kbd>?</kbd></td><td>This help</td></tr>
         </table>
-        <p class="muted" style="margin-top:14px;font-size:12px">The floating tool icon can be dragged anywhere; click it to open or close the toolbar. On iPad the lock icon (“Pencil only”, on by default) makes the slide ignore fingers and your resting palm entirely — only the Apple Pencil draws, and you zoom with the toolbar buttons. Turn it off to pan and pinch-zoom with fingers; the hand icon then lets a finger draw.</p>
+        <p class="muted" style="margin-top:14px;font-size:12px">The floating tool icon can be dragged anywhere; click it to open or close the toolbar. On iPad the lock icon (“Pencil only”, on by default) makes the slide ignore fingers and your resting palm entirely — only the Apple Pencil draws. Pick the hand tool (V) to pan and pinch-zoom with fingers; zoom and pan are mirrored on the laptop. Turn it off to pan and pinch-zoom with fingers; the hand icon then lets a finger draw.</p>
         <p class="center" style="margin:12px 0 0"><button class="btn" id="help-close">Close</button></p>
       </div>
     </div>

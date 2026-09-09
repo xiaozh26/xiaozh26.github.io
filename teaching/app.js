@@ -8,10 +8,11 @@ import {
   setPersistence, browserLocalPersistence
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
-  initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
-  collection, doc, getDoc, getDocs, getDocsFromCache, setDoc, updateDoc, deleteDoc,
+  initializeFirestore, memoryLocalCache,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
   onSnapshot, query, orderBy, serverTimestamp, writeBatch, deleteField, Bytes
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getDatabase, ref as rtRef, set as rtSet, remove as rtRemove, onValue, onDisconnect } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js';
 
 /* ------------------------------------------------------------------ */
 /* Small helpers                                                       */
@@ -61,7 +62,7 @@ const DEVICE_NAME = (() => {
 /* ------------------------------------------------------------------ */
 /* Firebase                                                            */
 /* ------------------------------------------------------------------ */
-let app, auth, db;
+let app, auth, db, rtdb = null;
 function firebaseReady() { return !!(firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId); }
 
 /* ------------------------------------------------------------------ */
@@ -85,6 +86,7 @@ const S = {
   sync: 'connecting', pending: false,
   lastNavAt: 0,
   present: false,
+  lastViewAt: 0, applyingRemoteView: false, lastWrittenView: null,
 };
 const COLORS = ['#e11d48', '#111827', '#2563eb', '#16a34a', '#f59e0b', '#ffffff'];
 const HL_COLORS = ['#fde047', '#86efac', '#93c5fd', '#f9a8d4', '#fdba74', '#c4b5fd'];
@@ -238,6 +240,7 @@ async function showCourse(courseId) {
   const unsub = onSnapshot(query(collection(db, 'courses', courseId, 'blocks'), orderBy('order')), (snap) => {
     S.blocks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     render();
+    prefetchSlides(S.blocks);
   }, (err) => toast('Could not load blocks: ' + err.message, 'err'));
   S.unsubs.push(unsub);
   if (sortable) sortable.destroy();
@@ -307,6 +310,7 @@ async function deleteBlock(courseId, b) {
 /* PDF storage: files/{id} + files/{id}/chunks/{00000..}               */
 /* ------------------------------------------------------------------ */
 async function deleteFile(fileId) {
+  FileCache.del(fileId);
   try {
     const chunks = await getDocs(collection(db, 'files', fileId, 'chunks'));
     const batch = writeBatch(db); chunks.forEach(d => batch.delete(d.ref)); batch.delete(doc(db, 'files', fileId)); await batch.commit();
@@ -350,6 +354,7 @@ async function uploadPdf(courseId, block, file) {
     const ref = doc(db, 'courses', courseId, 'blocks', block.id);
     const old = await getDocs(collection(ref, 'pages'));
     if (!old.empty) { const batch = writeBatch(db); old.forEach(d => batch.delete(d.ref)); await batch.commit(); }
+    await FileCache.put(fileId, bytes);
     await updateDoc(ref, { fileId, fileName: file.name, fileSize: bytes.length, pageCount, pageAspect, pages, currentPageId: pages[0].id, updatedAt: serverTimestamp() });
     if (block.fileId) deleteFile(block.fileId);
     pm.set(1, 'Done'); await sleep(300);
@@ -358,17 +363,78 @@ async function uploadPdf(courseId, block, file) {
     console.error(e); alert('Upload failed: ' + e.message);
   } finally { pm.close(); }
 }
-async function loadFileBytes(fileId, onProgress) {
-  const meta = (await getDoc(doc(db, 'files', fileId))).data();
-  if (!meta) throw new Error('File record missing');
-  const col = collection(db, 'files', fileId, 'chunks');
-  let snap = null;
-  try { snap = await getDocsFromCache(col); } catch (e) { snap = null; }
-  if (!snap || snap.size !== meta.chunkCount) { onProgress && onProgress('Downloading slides…'); snap = await getDocs(col); }
-  const docs = snap.docs.slice().sort((a, b) => a.id.localeCompare(b.id));
-  const out = new Uint8Array(meta.size); let off = 0;
-  for (const d of docs) { const arr = d.data().data.toUint8Array(); out.set(arr, off); off += arr.length; }
-  return { meta, bytes: out };
+/* Per-device cache of assembled PDFs (IndexedDB) so a deck is downloaded once per device. */
+const FileCache = {
+  dbp: null,
+  open() {
+    if (!this.dbp) this.dbp = new Promise((res, rej) => {
+      if (!window.indexedDB) return rej(new Error('no idb'));
+      const r = indexedDB.open('teach-files', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('files');
+      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+    });
+    return this.dbp;
+  },
+  async run(mode, fn) { try { const d = await this.open(); return await new Promise((res, rej) => { const req = fn(d.transaction('files', mode).objectStore('files')); req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error); }); } catch (e) { return undefined; } },
+  async get(id) { const buf = await this.run('readonly', st => st.get(id)); return buf ? new Uint8Array(buf) : null; },
+  async has(id) { return !!(await this.run('readonly', st => st.getKey(id))); },
+  async put(id, bytes) { return this.run('readwrite', st => st.put(bytes.slice().buffer, id)); },
+  async del(id) { return this.run('readwrite', st => st.delete(id)); }
+};
+async function fetchChunk(fileId, i, token) {
+  const id = String(i).padStart(5, '0');
+  if (token) {
+    // Firestore REST: plain HTTPS, parallelisable, and much faster than the SDK's single channel.
+    try {
+      const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/files/${fileId}/chunks/${id}`;
+      const r = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+      if (r.ok) {
+        const j = await r.json();
+        const b64 = j.fields.data.bytesValue.replace(/-/g, '+').replace(/_/g, '/');
+        return new Uint8Array(await (await fetch('data:application/octet-stream;base64,' + b64)).arrayBuffer());
+      }
+      console.warn('REST chunk fetch HTTP ' + r.status + ', falling back to SDK');
+    } catch (e) { console.warn('REST chunk fetch failed, falling back to SDK', e); }
+  }
+  const snap = await getDoc(doc(db, 'files', fileId, 'chunks', id));
+  if (!snap.exists()) throw new Error('Missing chunk ' + id);
+  return snap.data().data.toUint8Array();
+}
+const inflight = new Map();
+function loadFileBytes(fileId, onProgress) {
+  if (inflight.has(fileId)) return inflight.get(fileId);
+  const p = (async () => {
+    const cached = await FileCache.get(fileId);
+    if (cached) return { bytes: cached };
+    const meta = (await getDoc(doc(db, 'files', fileId))).data();
+    if (!meta) throw new Error('File record missing');
+    let token = null; try { token = auth.currentUser && auth.currentUser.getIdToken ? await auth.currentUser.getIdToken() : null; } catch (e) {}
+    const parts = new Array(meta.chunkCount); let done = 0, next = 0;
+    onProgress && onProgress('Downloading slides… 0%');
+    const worker = async () => { while (next < meta.chunkCount) { const i = next++; parts[i] = await fetchChunk(fileId, i, token); done++; onProgress && onProgress(`Downloading slides… ${Math.round(done / meta.chunkCount * 100)}%`); } };
+    await Promise.all(Array.from({ length: Math.min(6, meta.chunkCount) }, worker));
+    const out = new Uint8Array(meta.size); let off = 0;
+    for (const arr of parts) { out.set(arr, off); off += arr.length; }
+    FileCache.put(fileId, out);
+    return { meta, bytes: out };
+  })();
+  inflight.set(fileId, p); p.finally(() => inflight.delete(fileId));
+  return p;
+}
+/* Background prefetch so opening a block is instant on this device. */
+let prefetching = false;
+async function prefetchSlides(blocks) {
+  if (prefetching) return; prefetching = true;
+  const el = $('#prefetch-status');
+  try {
+    for (const b of blocks) {
+      if (!b.fileId || await FileCache.has(b.fileId)) continue;
+      if (el) { el.hidden = false; el.textContent = `Preparing “${b.title}” on this device…`; }
+      try { await loadFileBytes(b.fileId, (t) => { if (el) el.textContent = `Preparing “${b.title}” on this device — ${t}`; }); }
+      catch (e) { console.warn('prefetch', e); }
+    }
+    if (el) el.hidden = true;
+  } finally { prefetching = false; }
 }
 
 /* ------------------------------------------------------------------ */
@@ -381,7 +447,7 @@ let thumbQueue = [], thumbBusy = false;
 
 function initViewerDom() {
   Object.assign(V, {
-    viewer: $('#viewer'), vtop: $('#vtop'), stage: $('#stage'), wrap: $('#pagewrap'), pdfc: $('#pdfc'), annc: $('#annc'), livec: $('#livec'),
+    viewer: $('#viewer'), vtop: $('#vtop'), stage: $('#stage'), wrap: $('#pagewrap'), pdfc: $('#pdfc'), annc: $('#annc'), livec: $('#livec'), remotec: $('#remotec'),
     empty: $('#stage-empty'), loading: $('#stage-loading'), thumbs: $('#thumbs'), toolbar: $('#toolbar'), sync: $('#sync'),
     pagecnt: $('#pagecnt'), zoomLabel: $('#zoom-label'), width: $('#width'), widthPreview: $('#width-preview'), timer: $('#timer'), help: $('#help')
   });
@@ -403,7 +469,7 @@ function initViewerDom() {
   $('#btn-fullscreen').addEventListener('click', toggleFullscreen);
   $('#peek').addEventListener('click', () => { V.vtop.classList.toggle('peek'); });
   V.stage.addEventListener('pointerdown', () => { if (S.present) V.vtop.classList.remove('peek'); }, true);
-  $('#btn-follow').addEventListener('click', () => { S.followSync = !S.followSync; $('#btn-follow').classList.toggle('active', S.followSync); toast(S.followSync ? 'Navigation sync on' : 'Navigation sync off — this device navigates independently'); sendPresence(); });
+  $('#btn-follow').addEventListener('click', () => { S.followSync = !S.followSync; $('#btn-follow').classList.toggle('active', S.followSync); toast(S.followSync ? 'View sync on: page, zoom and pan follow the other device' : 'View sync off — this device navigates independently'); sendPresence(); if (S.followSync && S.block) { S.lastViewAt = 0; applyRemoteView(S.block.view); } });
   $('#btn-upload').addEventListener('click', () => S.block && pickAndUpload(S.route.courseId, S.block));
   $('#btn-upload-2').addEventListener('click', () => S.block && pickAndUpload(S.route.courseId, S.block));
   $('#btn-help').addEventListener('click', () => { V.help.hidden = !V.help.hidden; }); $('#help-close').addEventListener('click', () => { V.help.hidden = true; });
@@ -498,6 +564,7 @@ async function showViewer(courseId, blockId) {
   resetZoom(false);
   V.wrap.hidden = true; V.empty.hidden = true; V.thumbs.innerHTML = '';
   S.sync = 'connecting'; updateSyncUI();
+  liveInkStart(blockId);
   let firstLoad = true, chain = Promise.resolve();
   const handle = async (snap) => {
     if (blockRef !== myRef) return;
@@ -525,6 +592,7 @@ async function showViewer(courseId, blockId) {
     S.pageIndex = targetIdx;
     if (pagesChanged) renderThumbs();
     if (idxChanged || pagesChanged) { await onPageChanged(); }
+    applyRemoteView(b.view);
     updateThumbActive(); updatePager();
     if (firstLoad) { firstLoad = false; sendPresence(); }
     checkOutOfSync();
@@ -578,7 +646,7 @@ async function navigate(idx, opts = {}) {
   updateThumbActive(); updatePager();
   await onPageChanged();
   const p = currentPage();
-  if (S.followSync && p && blockRef) updateDoc(blockRef, { currentPageId: p.id, live: { at: Date.now(), by: DEVICE_ID } }).catch(() => {});
+  if (S.followSync && p && blockRef) { const at = Date.now(); S.lastViewAt = at; S.lastWrittenView = { z: 1, x: 0, y: 0 }; updateDoc(blockRef, { currentPageId: p.id, live: { at, by: DEVICE_ID }, view: { z: 1, x: 0, y: 0, by: DEVICE_ID, at } }).catch(() => {}); }
   sendPresence();
 }
 async function onPageChanged() {
@@ -600,13 +668,14 @@ async function renderPage() {
   const cssW = dims.w * fit, cssH = dims.h * fit;
   V.wrap.style.width = cssW + 'px'; V.wrap.style.height = cssH + 'px';
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const q = S.renderQuality;
-  const pxW = Math.round(cssW * dpr * q), pxH = Math.round(cssH * dpr * q);
-  [V.pdfc, V.annc, V.livec].forEach(c => { if (c.width !== pxW || c.height !== pxH) { c.width = pxW; c.height = pxH; } });
+  let scale = dpr * S.renderQuality;
+  const MAX_PX = 5e6; if (cssW * cssH * scale * scale > MAX_PX) scale = Math.sqrt(MAX_PX / (cssW * cssH));
+  const pxW = Math.round(cssW * scale), pxH = Math.round(cssH * scale);
+  [V.pdfc, V.annc, V.livec, V.remotec].forEach(c => { if (c.width !== pxW || c.height !== pxH) { c.width = pxW; c.height = pxH; } });
   const ctx = V.pdfc.getContext('2d');
   if (p.type === 'pdf' && S.pdf && dims.page) {
     if (renderTask) { try { renderTask.cancel(); } catch (e) {} }
-    const vp = dims.page.getViewport({ scale: fit * dpr * q });
+    const vp = dims.page.getViewport({ scale: fit * scale });
     renderTask = dims.page.render({ canvasContext: ctx, viewport: vp });
     try { await renderTask.promise; } catch (e) { if (e && e.name !== 'RenderingCancelledException') console.warn(e); }
     renderTask = null;
@@ -615,12 +684,14 @@ async function renderPage() {
   }
   if (seq !== renderSeq) return;
   drawAnnotations();
+  drawRemoteLive();
   applyTransform();
 }
 function drawAnnotations() {
   const c = V.annc, ctx = c.getContext('2d');
   ctx.clearRect(0, 0, c.width, c.height);
   drawStrokes(ctx, c.width, c.height, Object.values(S.strokes));
+  if (Object.keys(remoteLive).length || Object.keys(liveGhosts).length) drawRemoteLive();
 }
 function drawStrokes(ctx, W, H, strokes) {
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -642,6 +713,44 @@ function drawStroke(ctx, W, H, s) {
   ctx.stroke();
 }
 
+/* Live ink: stream the stroke being drawn to the other device via Realtime Database.
+   Entry: live/{blockId}/{deviceId} = { pageId, s: stroke, at, done }.
+   The receiver draws it on the remote canvas until the same stroke id arrives from Firestore. */
+let myLiveRef = null, remoteLive = {}, liveGhosts = {}, lastLiveSend = 0, liveSendTimer = null;
+function liveInkStart(blockId) {
+  remoteLive = {}; liveGhosts = {};
+  if (!rtdb) return;
+  const base = rtRef(rtdb, 'live/' + blockId);
+  myLiveRef = rtRef(rtdb, 'live/' + blockId + '/' + DEVICE_ID);
+  try { onDisconnect(myLiveRef).remove(); } catch (e) {}
+  const unsub = onValue(base, (snap) => {
+    const val = snap.val() || {}; const now = Date.now();
+    for (const [dev, entry] of Object.entries(remoteLive)) {
+      if (!val[dev] && entry.done && entry.s) liveGhosts[entry.s.id] = { ...entry, until: now + 4000 };
+    }
+    remoteLive = {}; for (const [dev, entry] of Object.entries(val)) if (dev !== DEVICE_ID && entry && entry.s) remoteLive[dev] = entry;
+    drawRemoteLive();
+  }, (err) => console.warn('live ink', err));
+  S.unsubs.push(() => { unsub(); if (myLiveRef) rtRemove(myLiveRef).catch(() => {}); myLiveRef = null; remoteLive = {}; liveGhosts = {}; });
+}
+function liveInkSend(stroke, done) {
+  if (!myLiveRef || !S.strokesPageId) return;
+  const now = Date.now();
+  const send = () => { lastLiveSend = Date.now(); const { ptr, ...clean } = stroke; rtSet(myLiveRef, { pageId: S.strokesPageId, s: clean, at: Date.now(), done: !!done }).catch(() => {}); };
+  clearTimeout(liveSendTimer);
+  if (done || now - lastLiveSend >= 40) send(); else liveSendTimer = setTimeout(send, 40 - (now - lastLiveSend));
+}
+function liveInkClear() { clearTimeout(liveSendTimer); if (myLiveRef) rtRemove(myLiveRef).catch(() => {}); }
+function drawRemoteLive() {
+  const c = V.remotec; if (!c) return; const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const now = Date.now(); const cur = S.strokesPageId; const list = [];
+  for (const e of Object.values(remoteLive)) if (e.pageId === cur && e.s && !S.strokes[e.s.id]) list.push(e.s);
+  for (const [id, g] of Object.entries(liveGhosts)) { if (g.until < now || S.strokes[id]) delete liveGhosts[id]; else if (g.pageId === cur) list.push(g.s); }
+  if (list.length) drawStrokes(ctx, c.width, c.height, list);
+  if (Object.keys(liveGhosts).length) setTimeout(drawRemoteLive, 1000);
+}
+
 /* Zoom / pan */
 function applyTransform() {
   if (S.zoom <= 1.001) { S.zoom = 1; S.panX = 0; S.panY = 0; }
@@ -651,8 +760,29 @@ function applyTransform() {
   }
   V.wrap.style.transform = `translate(${S.panX}px, ${S.panY}px) scale(${S.zoom})`;
   V.zoomLabel.textContent = Math.round(S.zoom * 100) + '%';
+  if (!S.applyingRemoteView) scheduleViewWrite();
   const q = S.zoom <= 1.05 ? 1 : S.zoom <= 2.2 ? 2 : 3;
   if (q !== S.renderQuality) { S.renderQuality = q; scheduleRender(); }
+}
+/* Share zoom/pan with the other device (normalised to page size so screen sizes may differ). */
+let viewWriteTimer = null;
+function currentView() { const w = V.wrap.clientWidth || 1, h = V.wrap.clientHeight || 1; return { z: Math.round(S.zoom * 1000) / 1000, x: Math.round(S.panX / w * 10000) / 10000, y: Math.round(S.panY / h * 10000) / 10000 }; }
+function scheduleViewWrite() {
+  if (!S.followSync || !blockRef || !S.block) return;
+  clearTimeout(viewWriteTimer);
+  viewWriteTimer = setTimeout(() => {
+    const v = currentView(); const lw = S.lastWrittenView;
+    if (lw && lw.z === v.z && lw.x === v.x && lw.y === v.y) return;
+    S.lastWrittenView = v; const at = Date.now(); S.lastViewAt = at;
+    updateDoc(blockRef, { view: { ...v, by: DEVICE_ID, at } }).catch(() => {});
+  }, 120);
+}
+function applyRemoteView(v) {
+  if (!v || v.by === DEVICE_ID || !S.followSync || !(v.at > S.lastViewAt)) return;
+  S.lastViewAt = v.at; S.lastWrittenView = { z: v.z, x: v.x, y: v.y };
+  const w = V.wrap.clientWidth || 1, h = V.wrap.clientHeight || 1;
+  S.zoom = clamp(v.z || 1, 1, 8); S.panX = (v.x || 0) * w; S.panY = (v.y || 0) * h;
+  S.applyingRemoteView = true; try { applyTransform(); } finally { S.applyingRemoteView = false; }
 }
 function zoomAt(cx, cy, factor) {
   const r = V.stage.getBoundingClientRect();
@@ -671,7 +801,7 @@ function initStageInput() {
   let stroke = null, erasing = null, pinch = null, pan = null, lastTap = 0, lastPenAt = 0;
   // A finger/palm touch is ignored when Pencil-only is on, while a pen stroke is in progress,
   // or shortly after the pen was last seen (the palm usually lands just before/after the tip).
-  const touchBlocked = (e) => e.pointerType === 'touch' && (S.pencilOnly || !!stroke || !!erasing || Date.now() - lastPenAt < 1500);
+  const touchBlocked = (e) => e.pointerType === 'touch' && (!!stroke || !!erasing || (S.tool !== 'pointer' && (S.pencilOnly || Date.now() - lastPenAt < 1500)));
   const dropTouches = () => { ptrs.clear(); pinch = null; pan = null; st.classList.remove('panning'); };
   const norm = (e) => { const r = V.annc.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; };
   const wantsDraw = (e) => {
@@ -690,7 +820,7 @@ function initStageInput() {
       const [x, y] = norm(e);
       if (S.tool === 'eraser') { erasing = { removed: {} }; eraseAt(x, y, erasing); return; }
       stroke = { id: uid(), t: S.tool, c: S.color, w: S.tool === 'hl' ? S.width * 4 : S.width, p: [r4(x), r4(y)], ptr: e.pointerId };
-      liveBegin(stroke); return;
+      liveBegin(stroke); liveInkSend(stroke); return;
     }
     // pan / pinch / double-tap zoom
     try { st.setPointerCapture(e.pointerId); } catch (ex) {}
@@ -712,7 +842,7 @@ function initStageInput() {
     if (stroke && e.pointerId === stroke.ptr) {
       let evs = e.getCoalescedEvents ? e.getCoalescedEvents() : []; if (!evs || !evs.length) evs = [e];
       for (const ev of evs) { const [x, y] = norm(ev); addPoint(stroke, x, y); }
-      liveDraw(stroke); return;
+      liveDraw(stroke); liveInkSend(stroke); return;
     }
     if (erasing) { const [x, y] = norm(e); eraseAt(x, y, erasing); return; }
     if (!ptrs.has(e.pointerId)) return;
@@ -733,7 +863,7 @@ function initStageInput() {
   });
   const end = (e) => {
     if (e.pointerType === 'pen') lastPenAt = Date.now();
-    if (stroke && e.pointerId === stroke.ptr) { const s = stroke; stroke = null; liveClear(); commitStroke(s); return; }
+    if (stroke && e.pointerId === stroke.ptr) { const s = stroke; stroke = null; liveClear(); liveInkSend(s, true); commitStroke(s); return; }
     if (erasing) { const ids = Object.keys(erasing.removed); if (ids.length) pushOp({ kind: 'remove', pageId: S.strokesPageId, strokes: erasing.removed }); erasing = null; return; }
     if (ptrs.has(e.pointerId)) {
       ptrs.delete(e.pointerId);
@@ -755,8 +885,10 @@ function initStageInput() {
   // while the viewer is open. Pointer events above still receive everything they need.
   const inViewer = () => S.route.view === 'viewer';
   document.addEventListener('touchmove', (e) => { if (inViewer() && (e.touches.length > 1 || e.target.closest('#stage'))) e.preventDefault(); }, { passive: false });
-  st.addEventListener('touchstart', (e) => { if (!e.target.closest('button, input')) e.preventDefault(); }, { passive: false });
-  st.addEventListener('touchend', (e) => { if (!e.target.closest('button, input')) e.preventDefault(); }, { passive: false });
+  const INTERACTIVE = 'button, input, select, textarea, a, label, .thumb, .swatch, .sync, .sync-pop, .zoom-label, .help, .menu, .modal';
+  const guard = (e) => { if (inViewer() && !e.target.closest(INTERACTIVE)) e.preventDefault(); };
+  document.addEventListener('touchstart', guard, { passive: false });
+  document.addEventListener('touchend', guard, { passive: false });
   document.addEventListener('selectstart', (e) => { if (inViewer() && !e.target.closest('input')) e.preventDefault(); });
 }
 const r4 = (v) => Math.round(v * 10000) / 10000;
@@ -765,16 +897,36 @@ function addPoint(s, x, y) {
   if (Math.hypot(x - lx, y - ly) < 0.0012) return;
   s.p.push(r4(x), r4(y));
 }
-let liveDrawn = 0;
-function liveBegin(s) { liveDrawn = 0; liveDraw(s); }
-function liveDraw(s) {
-  const c = V.livec, ctx = c.getContext('2d');
-  // redraw whole stroke each time (cheap enough; keeps curves smooth)
+/* Live stroke: drawn incrementally (only the newest segment each event) so long strokes stay
+   responsive. Highlighter transparency is applied to the canvas element, not per segment, so
+   overlapping segments do not darken. */
+let live = { drawn: 0, ctx: null };
+function liveCtx() { if (!live.ctx) live.ctx = V.livec.getContext('2d', { desynchronized: true }) || V.livec.getContext('2d'); return live.ctx; }
+function liveBegin(s) {
+  const c = V.livec, ctx = liveCtx();
   ctx.clearRect(0, 0, c.width, c.height);
-  drawStroke(ctx, c.width, c.height, s.p.length >= 4 ? s : { ...s, p: [s.p[0], s.p[1], s.p[0], s.p[1]] });
-  ctx.globalAlpha = 1;
+  c.style.opacity = s.t === 'hl' ? 0.4 : 1;
+  ctx.strokeStyle = s.c; ctx.fillStyle = s.c; ctx.lineWidth = Math.max(1, s.w / 1000 * c.width);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.globalAlpha = 1;
+  // starting dot
+  ctx.beginPath(); ctx.arc(s.p[0] * c.width, s.p[1] * c.height, ctx.lineWidth / 2, 0, Math.PI * 2); ctx.fill();
+  live.drawn = 1;
 }
-function liveClear() { const c = V.livec; c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+function liveDraw(s) {
+  const c = V.livec, ctx = liveCtx(), W = c.width, H = c.height, p = s.p, n = p.length / 2;
+  if (live.drawn < 1) return;
+  while (live.drawn < n) {
+    const i = live.drawn; // index of the newest point
+    const px = p[2 * i - 2] * W, py = p[2 * i - 1] * H, x = p[2 * i] * W, y = p[2 * i + 1] * H;
+    const mx = (px + x) / 2, my = (py + y) / 2;
+    ctx.beginPath();
+    if (i === 1) { ctx.moveTo(px, py); ctx.lineTo(mx, my); }
+    else { const qx = p[2 * i - 4] * W, qy = p[2 * i - 3] * H; ctx.moveTo((qx + px) / 2, (qy + py) / 2); ctx.quadraticCurveTo(px, py, mx, my); }
+    ctx.stroke();
+    live.drawn++;
+  }
+}
+function liveClear() { const c = V.livec; liveCtx().clearRect(0, 0, c.width, c.height); c.style.opacity = 1; live.drawn = 0; }
 function eraseAt(x, y, sess) {
   const p = currentPage(); if (!p) return;
   const asp = V.annc.height / V.annc.width; // y scale relative to x units
@@ -816,7 +968,7 @@ function commitStroke(s) {
   if (!S.strokesPageId) return;
   const { ptr, ...clean } = s;
   S.strokes[clean.id] = clean; drawAnnotations();
-  setDoc(pageRef(S.strokesPageId), { strokes: { [clean.id]: clean } }, { merge: true }).catch(e => toast('Save failed: ' + e.message, 'err'));
+  setDoc(pageRef(S.strokesPageId), { strokes: { [clean.id]: clean } }, { merge: true }).then(liveInkClear).catch(e => toast('Save failed: ' + e.message, 'err'));
   pushOp({ kind: 'add', pageId: S.strokesPageId, strokes: { [clean.id]: clean } });
 }
 function pushOp(op) { S.undo.push(op); if (S.undo.length > 200) S.undo.shift(); S.redo = []; updateUndoButtons(); }
@@ -961,6 +1113,7 @@ function fillSyncPop(pop) {
   const rows = [`<div><b>This device</b> (${DEVICE_NAME}) · page ${cur ? pages.indexOf(cur) + 1 : '–'} · ${S.followSync ? 'following' : 'independent'}</div>`];
   for (const d of otherDevices()) rows.push(`<div><b>${d.name}</b> · page ${pages.findIndex(p => p.id === d.pageId) + 1 || '–'} · ${d.follow === false ? 'independent' : 'following'} · seen ${Math.round((Date.now() - d.at) / 1000)}s ago</div>`);
   if (rows.length === 1) rows.push('<div class="muted">No other device connected.</div>');
+  rows.push(`<div class="muted" style="margin-top:6px">Live ink: ${rtdb ? 'on' : 'off (Realtime Database not configured — see SETUP.md)'}</div>`);
   rows.push(`<div class="muted" style="margin-top:6px">Status: ${S.sync}${navigator.onLine ? '' : ' (browser offline)'}. Changes made offline are queued and sent automatically when the connection returns.</div>`);
   pop.innerHTML = rows.join('');
 }
@@ -969,7 +1122,11 @@ function fillSyncPop(pop) {
 function toggleFullscreen() { if (S.present) exitPresent(); else enterPresent(); }
 async function enterPresent() {
   const el = document.documentElement;
-  try { if (el.requestFullscreen) await el.requestFullscreen(); else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen(); } catch (e) { /* fall back to CSS-only presentation mode */ }
+  // Touch devices (iPad) get the CSS-only presentation layout: Safari's element fullscreen is exited by
+  // some swipes, which interrupts page panning. Only the projected laptop needs true fullscreen.
+  if (navigator.maxTouchPoints <= 1) {
+    try { if (el.requestFullscreen) await el.requestFullscreen(); else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen(); } catch (e) { /* fall back to CSS-only presentation mode */ }
+  }
   S.present = true; V.viewer.classList.add('present'); V.vtop.classList.remove('peek'); $('#btn-fullscreen').classList.add('active');
   if (!V.thumbs.classList.contains('collapsed')) { V.thumbs.classList.add('collapsed'); S.thumbsWereOpen = true; } else S.thumbsWereOpen = false;
   scheduleRender();
@@ -1210,7 +1367,12 @@ function boot() {
   try {
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
-    db = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager(), cacheSizeBytes: 400 * 1024 * 1024 }) });
+    // Memory cache: keeps the 800 KB slide chunks out of Firestore's on-disk cache (slow on iPad).
+    // Offline edits are still queued while the page stays open; the PDF itself is cached in IndexedDB below.
+    db = initializeFirestore(app, { localCache: memoryLocalCache() });
+    // Realtime Database carries in-progress pen strokes ("live ink") between devices with ~50 ms latency.
+    if (firebaseConfig.databaseURL) { try { rtdb = getDatabase(app); } catch (e) { console.warn('Realtime Database unavailable — live ink off', e); } }
+    else console.warn('firebaseConfig.databaseURL not set — live ink between devices is off; strokes appear when the pen lifts.');
   } catch (e) { showView('setup'); $('#setup-error').textContent = e.message; return; }
   setupLogin();
   onAuthStateChanged(auth, async (user) => {

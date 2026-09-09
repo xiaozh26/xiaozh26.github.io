@@ -255,10 +255,11 @@ a { color: var(--accent); text-decoration: none; }
 .zoom-label { font-size: 12px; min-width: 42px; text-align: center; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 .pager {
-  position: absolute; right: 14px; bottom: 14px; z-index: 25; display: inline-flex; align-items: center; gap: 2px;
+  position: absolute; right: 14px; bottom: 14px; z-index: 25; display: inline-flex; align-items: center; gap: 2px; touch-action: none;
   background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 4px 6px; box-shadow: var(--shadow);
 }
-.pager .cnt { font-size: 13px; padding: 0 8px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.pager .cnt { font-size: 13px; padding: 0 8px; font-variant-numeric: tabular-nums; color: var(--muted); pointer-events: none; }
+.toolbar, .vtop, .thumb .num { touch-action: none; }
 
 /* Presentation (fullscreen) mode */
 .viewer.present .vtop { position: absolute; top: 0; left: 0; right: 0; transform: translateY(-100%); opacity: 0; pointer-events: none; }

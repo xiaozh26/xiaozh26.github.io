@@ -7,6 +7,7 @@ export const firebaseConfig = {
   apiKey: "AIzaSyBUruP1XIOPYdes3_Mh-tEbcmUzMeWVKEw",
   authDomain: "teaching-e01fb.firebaseapp.com",
   projectId: "teaching-e01fb",
+  databaseURL: "https://teaching-e01fb-default-rtdb.firebaseio.com/",   // fill in after creating Realtime Database (SETUP.md step 3b) — enables live ink
   storageBucket: "teaching-e01fb.firebasestorage.app",
   messagingSenderId: "998870626407",
   appId: "1:998870626407:web:763fde1e60ea040b1ba4c2"

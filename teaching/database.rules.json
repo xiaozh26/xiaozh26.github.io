@@ -1,0 +1,10 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "live": {
+      ".read": "auth != null && auth.token.email == 'teacher@xiaozhang.org'",
+      ".write": "auth != null && auth.token.email == 'teacher@xiaozhang.org'"
+    }
+  }
+}
