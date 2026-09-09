@@ -159,6 +159,9 @@ a { color: var(--accent); text-decoration: none; }
 
 /* ===== Viewer ===== */
 .viewer { position: fixed; inset: 0; display: flex; flex-direction: column; background: var(--stage); }
+/* No text selection, long-press callouts or magnifier anywhere in the viewer (palm touches on iPad). */
+.viewer, .viewer * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.viewer input { -webkit-user-select: text; user-select: text; }
 .viewer .vtop {
   display: flex; align-items: center; gap: 6px; padding: 6px 10px;
   background: var(--panel); border-bottom: 1px solid var(--border); z-index: 20; flex: 0 0 auto;

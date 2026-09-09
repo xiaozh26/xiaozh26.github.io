@@ -66,6 +66,11 @@ use **Share → Add to Home Screen** for a chrome-free, app-like window.
   is clean); click the icon to open it, click again to close. On the iPad it starts open.
   Drag the icon to move the toolbar anywhere on either device; the position is remembered.
   Fullscreen (F) is only needed on the laptop that is being projected.
+- **Palm rejection on iPad**: the lock icon in the toolbar (“Pencil only”) is on by default on
+  the iPad. The slide then ignores fingers and your resting palm completely — only the Apple
+  Pencil draws or erases, so nothing gets selected or pinch-zoomed by accident. Zoom with the
+  toolbar buttons. Even with it off, touches are ignored while the pencil is on the screen and
+  for 1.5 s afterwards.
 - The login is remembered for 8 hours per device (`SESSION_HOURS`), then the password
   is required again. "Log out" ends it immediately.
 - Everything auto-saves. If the network drops, the sync pill at the top turns red and

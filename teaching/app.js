@@ -79,7 +79,7 @@ const S = {
   pageIndex: 0,
   zoom: 1, panX: 0, panY: 0, renderQuality: 1,
   tool: 'pen', color: '#e11d48', width: 4,
-  annVisible: true, followSync: true, fingerDraws: false,
+  annVisible: true, followSync: true, fingerDraws: false, pencilOnly: navigator.maxTouchPoints > 1,
   strokes: {}, strokesPageId: null,
   undo: [], redo: [],
   sync: 'connecting', pending: false,
@@ -395,7 +395,8 @@ function initViewerDom() {
   $('#btn-zoom-in').addEventListener('click', () => zoomBy(1.25)); $('#btn-zoom-out').addEventListener('click', () => zoomBy(0.8));
   V.zoomLabel.addEventListener('click', resetZoom);
   $('#btn-blank-before').addEventListener('click', () => insertBlank(0)); $('#btn-blank-after').addEventListener('click', () => insertBlank(1));
-  $('#btn-finger').addEventListener('click', () => { S.fingerDraws = !S.fingerDraws; $('#btn-finger').classList.toggle('active', S.fingerDraws); try { localStorage.setItem('teach_finger', S.fingerDraws ? '1' : '0'); } catch (e) {} toast(S.fingerDraws ? 'Finger draws (two fingers to pan/zoom)' : 'Finger pans; pencil/mouse draws'); });
+  $('#btn-finger').addEventListener('click', () => { setFingerDraws(!S.fingerDraws); toast(S.fingerDraws ? 'Finger draws (two fingers to pan/zoom)' : 'Finger pans; pencil/mouse draws'); });
+  $('#btn-pencil').addEventListener('click', () => { setPencilOnly(!S.pencilOnly); toast(S.pencilOnly ? 'Pencil only: fingers and palm are ignored on the slide' : 'Fingers can pan and pinch-zoom again'); });
   initToolbarDrag();
   $('#btn-prev').addEventListener('click', () => navigate(S.pageIndex - 1)); $('#btn-next').addEventListener('click', () => navigate(S.pageIndex + 1));
   $('#btn-thumbs').addEventListener('click', toggleThumbs);
@@ -415,7 +416,18 @@ function initViewerDom() {
   window.addEventListener('resize', () => { if (S.route.view === 'viewer') scheduleRender(); });
   window.addEventListener('online', () => updateSyncUI()); window.addEventListener('offline', () => updateSyncUI());
   document.addEventListener('visibilitychange', () => { if (!document.hidden) sendPresence(); });
-  try { S.fingerDraws = localStorage.getItem('teach_finger') === '1'; $('#btn-finger').classList.toggle('active', S.fingerDraws); } catch (e) {}
+  try { const f = localStorage.getItem('teach_finger'), po = localStorage.getItem('teach_pencil_only'); if (f !== null) S.fingerDraws = f === '1'; if (po !== null) S.pencilOnly = po === '1'; } catch (e) {}
+  $('#btn-finger').classList.toggle('active', S.fingerDraws); $('#btn-pencil').classList.toggle('active', S.pencilOnly);
+}
+function setPencilOnly(v) {
+  S.pencilOnly = v; if (v) S.fingerDraws = false;
+  $('#btn-pencil').classList.toggle('active', S.pencilOnly); $('#btn-finger').classList.toggle('active', S.fingerDraws);
+  try { localStorage.setItem('teach_pencil_only', v ? '1' : '0'); localStorage.setItem('teach_finger', S.fingerDraws ? '1' : '0'); } catch (e) {}
+}
+function setFingerDraws(v) {
+  S.fingerDraws = v; if (v) S.pencilOnly = false;
+  $('#btn-pencil').classList.toggle('active', S.pencilOnly); $('#btn-finger').classList.toggle('active', S.fingerDraws);
+  try { localStorage.setItem('teach_pencil_only', S.pencilOnly ? '1' : '0'); localStorage.setItem('teach_finger', v ? '1' : '0'); } catch (e) {}
 }
 /* Floating toolbar: collapsed to one icon on laptops, open on touch devices; draggable anywhere. */
 const TB_KEY = 'teach_toolbar';
@@ -656,7 +668,11 @@ function resetZoom(apply = true) { S.zoom = 1; S.panX = 0; S.panY = 0; if (apply
 function initStageInput() {
   const st = V.stage;
   const ptrs = new Map(); // touch pointers for pan/pinch
-  let stroke = null, erasing = null, pinch = null, pan = null, lastTap = 0;
+  let stroke = null, erasing = null, pinch = null, pan = null, lastTap = 0, lastPenAt = 0;
+  // A finger/palm touch is ignored when Pencil-only is on, while a pen stroke is in progress,
+  // or shortly after the pen was last seen (the palm usually lands just before/after the tip).
+  const touchBlocked = (e) => e.pointerType === 'touch' && (S.pencilOnly || !!stroke || !!erasing || Date.now() - lastPenAt < 1500);
+  const dropTouches = () => { ptrs.clear(); pinch = null; pan = null; st.classList.remove('panning'); };
   const norm = (e) => { const r = V.annc.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; };
   const wantsDraw = (e) => {
     if (!currentPage() || S.tool === 'pointer') return false;
@@ -667,7 +683,8 @@ function initStageInput() {
   st.addEventListener('pointerdown', (e) => {
     if (e.target.closest('button')) return;
     V.help.hidden = true; closeMenus();
-    if (e.pointerType === 'touch' && stroke) return; // palm rejection while pencil is down
+    if (e.pointerType === 'pen') { lastPenAt = Date.now(); dropTouches(); }
+    if (touchBlocked(e)) return;
     if (wantsDraw(e)) {
       try { st.setPointerCapture(e.pointerId); } catch (ex) {}
       const [x, y] = norm(e);
@@ -691,6 +708,7 @@ function initStageInput() {
     }
   });
   st.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'pen') lastPenAt = Date.now();
     if (stroke && e.pointerId === stroke.ptr) {
       let evs = e.getCoalescedEvents ? e.getCoalescedEvents() : []; if (!evs || !evs.length) evs = [e];
       for (const ev of evs) { const [x, y] = norm(ev); addPoint(stroke, x, y); }
@@ -714,6 +732,7 @@ function initStageInput() {
     }
   });
   const end = (e) => {
+    if (e.pointerType === 'pen') lastPenAt = Date.now();
     if (stroke && e.pointerId === stroke.ptr) { const s = stroke; stroke = null; liveClear(); commitStroke(s); return; }
     if (erasing) { const ids = Object.keys(erasing.removed); if (ids.length) pushOp({ kind: 'remove', pageId: S.strokesPageId, strokes: erasing.removed }); erasing = null; return; }
     if (ptrs.has(e.pointerId)) {
@@ -732,6 +751,13 @@ function initStageInput() {
   st.addEventListener('dblclick', (e) => { if (S.zoom > 1) resetZoom(); else zoomAt(e.clientX, e.clientY, 2); });
   ['gesturestart', 'gesturechange', 'gestureend'].forEach(t => document.addEventListener(t, (e) => e.preventDefault(), { passive: false }));
   st.addEventListener('contextmenu', (e) => e.preventDefault());
+  // iOS Safari: block native pinch-zoom, double-tap zoom, text selection and the long-press callout
+  // while the viewer is open. Pointer events above still receive everything they need.
+  const inViewer = () => S.route.view === 'viewer';
+  document.addEventListener('touchmove', (e) => { if (inViewer() && (e.touches.length > 1 || e.target.closest('#stage'))) e.preventDefault(); }, { passive: false });
+  st.addEventListener('touchstart', (e) => { if (!e.target.closest('button, input')) e.preventDefault(); }, { passive: false });
+  st.addEventListener('touchend', (e) => { if (!e.target.closest('button, input')) e.preventDefault(); }, { passive: false });
+  document.addEventListener('selectstart', (e) => { if (inViewer() && !e.target.closest('input')) e.preventDefault(); });
 }
 const r4 = (v) => Math.round(v * 10000) / 10000;
 function addPoint(s, x, y) {
