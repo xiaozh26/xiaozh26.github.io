@@ -13,6 +13,7 @@ import {
   onSnapshot, query, orderBy, serverTimestamp, writeBatch, deleteField, Bytes
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { getDatabase, ref as rtRef, set as rtSet, remove as rtRemove, onValue, onDisconnect } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js';
+import { initPyConsole, togglePyConsole } from './pyconsole.js';
 
 /* ------------------------------------------------------------------ */
 /* Small helpers                                                       */
@@ -478,6 +479,7 @@ function initViewerDom() {
   V.sync.addEventListener('click', toggleSyncPop);
   initStageInput();
   initTimer();
+  initPyConsole(); $('#btn-python').addEventListener('click', togglePyConsole);
   document.addEventListener('fullscreenchange', onFsChange); document.addEventListener('webkitfullscreenchange', onFsChange);
   window.addEventListener('resize', () => { if (S.route.view === 'viewer') scheduleRender(); });
   window.addEventListener('online', () => updateSyncUI()); window.addEventListener('offline', () => updateSyncUI());
@@ -885,11 +887,11 @@ function initStageInput() {
   // while the viewer is open. Pointer events above still receive everything they need.
   const inViewer = () => S.route.view === 'viewer';
   document.addEventListener('touchmove', (e) => { if (inViewer() && (e.touches.length > 1 || e.target.closest('#stage'))) e.preventDefault(); }, { passive: false });
-  const INTERACTIVE = 'button, input, select, textarea, a, label, .thumb, .swatch, .sync, .sync-pop, .zoom-label, .help, .menu, .modal';
+  const INTERACTIVE = 'button, input, select, textarea, a, label, .thumb, .swatch, .sync, .sync-pop, .zoom-label, .help, .menu, .modal, .pyrepl';
   const guard = (e) => { if (inViewer() && !e.target.closest(INTERACTIVE)) e.preventDefault(); };
   document.addEventListener('touchstart', guard, { passive: false });
   document.addEventListener('touchend', guard, { passive: false });
-  document.addEventListener('selectstart', (e) => { if (inViewer() && !e.target.closest('input')) e.preventDefault(); });
+  document.addEventListener('selectstart', (e) => { const t = e.target.nodeType === 1 ? e.target : e.target.parentElement; if (inViewer() && !(t && t.closest('input, textarea, .pyrepl'))) e.preventDefault(); });
 }
 const r4 = (v) => Math.round(v * 10000) / 10000;
 function addPoint(s, x, y) {
@@ -1167,6 +1169,7 @@ document.addEventListener('keydown', (e) => {
     case 's': case 'S': toggleThumbs(); break;
     case 'f': case 'F': toggleFullscreen(); break;
     case 't': case 'T': toggleTimer(); break;
+    case '`': e.preventDefault(); togglePyConsole(); break;
     case 'd': case 'D': toggleTheme(); break;
     case '?': V.help.hidden = !V.help.hidden; break;
     case 'Escape':

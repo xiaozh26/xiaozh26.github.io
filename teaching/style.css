@@ -294,6 +294,28 @@ a { color: var(--accent); text-decoration: none; }
 .timer .custom { display: flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 8px; font-size: 13px; }
 .timer .custom input { width: 54px; text-align: center; padding: 4px; }
 
+/* Python console */
+.pyrepl {
+  position: absolute; top: 60px; left: 14px; z-index: 29; width: 520px; height: 340px; min-width: 280px; min-height: 160px;
+  max-width: calc(100% - 28px); max-height: calc(100% - 28px);
+  display: flex; flex-direction: column; overflow: hidden; resize: both;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow);
+  --py-font: 14px;
+}
+.pyrepl[hidden] { display: none; }
+.pyrepl .thead { display: flex; align-items: center; gap: 4px; padding: 6px 8px 6px 14px; cursor: move; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); touch-action: none; }
+.pyrepl .thead .grow { flex: 1; }
+.pyrepl .thead .icon-btn { width: 28px; height: 28px; }
+.pyrepl .thead .icon-btn svg { width: 15px; height: 15px; }
+.py-status { margin-left: 8px; }
+.py-body { flex: 1; overflow: auto; padding: 10px 14px 12px; cursor: text; font-family: ui-monospace, Menlo, monospace; font-size: var(--py-font); line-height: 1.45; }
+.py-log { margin: 0; font: inherit; white-space: pre-wrap; word-break: break-word; }
+.py-log .muted { color: var(--muted); }
+.py-log .err { color: var(--danger); }
+.py-line { display: flex; gap: 0.6em; }
+.py-prompt { color: var(--accent); flex: 0 0 auto; user-select: none; }
+#py-in { flex: 1; min-width: 0; border: 0; outline: 0; resize: none; padding: 0; margin: 0; background: transparent; color: var(--text); font: inherit; line-height: inherit; overflow: hidden; tab-size: 4; }
+
 /* Help overlay */
 .help { position: absolute; inset: 0; z-index: 40; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; }
 .help .card { max-width: 560px; max-height: 85vh; overflow: auto; }

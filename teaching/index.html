@@ -111,6 +111,7 @@
       <button class="icon-btn" id="btn-upload" title="Upload / replace slides (PDF)"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></button>
       <button class="icon-btn" id="btn-thumbs" title="Thumbnails (S)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
       <button class="icon-btn" id="btn-timer" title="Timer (T)"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6M12 2v3"/></svg></button>
+      <button class="icon-btn" id="btn-python" title="Python console (`)"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></button>
       <button class="icon-btn" data-action="theme" title="Dark mode (D)"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
       <button class="icon-btn" id="btn-export" title="Export"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></button>
       <button class="icon-btn" id="btn-fullscreen" title="Fullscreen (F)"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
@@ -188,6 +189,22 @@
       </div>
     </div>
 
+    <div class="pyrepl" id="pyrepl" hidden>
+      <div class="thead" id="py-head">
+        <span>Python</span><span class="py-status" id="py-status"></span>
+        <span class="grow"></span>
+        <button class="icon-btn" id="py-font-down" title="Smaller text"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+        <button class="icon-btn" id="py-font-up" title="Larger text"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="icon-btn" id="py-clear" title="Clear screen (Ctrl+L)"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+        <button class="icon-btn" id="py-restart" title="Restart Python (stops running code, clears variables)"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+        <button class="icon-btn" id="py-close" title="Close (`)"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="py-body" id="py-body">
+        <pre class="py-log" id="py-log"></pre>
+        <div class="py-line"><span class="py-prompt" id="py-prompt">&gt;&gt;&gt;</span><textarea id="py-in" rows="1" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Python input"></textarea></div>
+      </div>
+    </div>
+
     <div class="help" id="help" hidden>
       <div class="card">
         <h1>Keyboard shortcuts</h1>
@@ -205,6 +222,7 @@
           <tr><td><kbd>S</kbd></td><td>Toggle thumbnail sidebar</td></tr>
           <tr><td><kbd>F</kbd></td><td>Fullscreen presentation mode</td></tr>
           <tr><td><kbd>T</kbd></td><td>Timer</td></tr>
+          <tr><td><kbd>`</kbd></td><td>Python console (Enter runs, Shift+Enter new line, ↑/↓ history, Ctrl+C stops)</td></tr>
           <tr><td><kbd>D</kbd></td><td>Dark mode</td></tr>
           <tr><td><kbd>Esc</kbd></td><td>Close panels / leave fullscreen</td></tr>
           <tr><td><kbd>?</kbd></td><td>This help</td></tr>
