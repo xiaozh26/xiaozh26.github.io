@@ -520,6 +520,28 @@ a { color: inherit; }
 .experience-content p { margin: 0 0 3px; }
 .exp-title { font-size: 15px; font-weight: 600; color: var(--primary); }
 .exp-detail { font-size: 14px; color: var(--neutral-600); }
+/* several roles under one organization (LinkedIn-style) */
+.exp-roles { margin-top: 10px; }
+.exp-role { position: relative; padding-left: 20px; padding-bottom: 14px; }
+.exp-role:last-child { padding-bottom: 0; }
+.exp-role::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--neutral-500);
+  border: 2px solid var(--background);
+  box-shadow: 0 0 0 1px var(--neutral-500);
+}
+.exp-role:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 5px; top: 20px; bottom: 2px;
+  width: 2px;
+  background: var(--neutral-200);
+}
+.exp-role-title { font-size: 14px; font-weight: 600; color: var(--primary); }
 .exp-detail a {
   color: var(--accent);
   text-decoration: none;
@@ -537,25 +559,55 @@ a { color: inherit; }
 .exp-bullets li { margin-bottom: .2rem; }
 
 /* ══ PUBLICATIONS ═══════════════════════════════════════ */
-.pub-card {
-  background: var(--neutral-50);
-  padding: 1rem;
+.pub-note { margin: -.5rem 0 .25rem; font-size: 12px; color: var(--neutral-500); }
+.pub {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 1.25rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px dashed var(--neutral-200);
+  align-items: start;
+}
+.pub:last-child { border-bottom: none; }
+.pub-meta { min-width: 0; }
+.pub-thumb { display: flex; flex-direction: column; align-items: flex-start; gap: .4rem; text-decoration: none; }
+.pub-thumb img {
+  width: 170px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   border-radius: .5rem;
-  box-shadow: var(--shadow-sm);
   border: 1px solid var(--neutral-200);
-  transition: transform .2s, box-shadow .2s;
-  margin-bottom: 1rem;
+  display: block;
 }
-.pub-card:hover { transform: scale(1.02); box-shadow: var(--shadow-lg); }
-.pub-card h3 {
+.pub-badge {
+  font-size: 11px;
   font-weight: 600;
-  color: var(--primary);
-  margin: 0 0 .5rem;
-  font-size: 1rem;
-  line-height: 1.35;
+  letter-spacing: .02em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 1px 8px;
+  border-radius: 5px;
 }
-.pub-card p { margin: 0 0 .25rem; font-size: .875rem; color: var(--neutral-600); }
+.pub-title {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--primary);
+  text-decoration: none;
+}
+.pub-title:hover { color: var(--accent); }
+.pub-authors { margin: .35rem 0 0; font-size: 13px; line-height: 1.55; color: var(--neutral-600); }
 .pub-author-me { font-weight: 600; color: var(--accent); }
+.pub-links { margin-top: .45rem; font-size: 13px; }
+.pub-links a { color: var(--accent); text-decoration: none; margin-right: .5rem; }
+.pub-links a::before { content: "["; color: var(--neutral-500); }
+.pub-links a::after { content: "]"; color: var(--neutral-500); }
+.pub-links a:hover { text-decoration: underline; }
+@media (max-width: 600px) {
+  .pub { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+  .pub-thumb img { width: 100%; max-width: 280px; }
+}
 
 .empty-card {
   background: var(--card-bg);
