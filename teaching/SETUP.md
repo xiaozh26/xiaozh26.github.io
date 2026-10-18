@@ -19,7 +19,8 @@ happens entirely in the browser.
 3. **Users** tab → **Add user**:
    - Email: `teacher@xiaozhang.org` (must match `TEACHER_EMAIL` in `firebase-config.js`;
      it never has to receive mail)
-   - Password: `200704`
+   - Password: choose your own. Don't write it in this repo: everything here is public,
+     and the site serves this file too.
    
    This password is the one the /teaching login page asks for. Change it here any time.
 4. (Recommended) **Settings** tab → **User actions** → untick *Enable create (sign-up)* so

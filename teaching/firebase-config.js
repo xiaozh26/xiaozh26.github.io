@@ -14,7 +14,8 @@ export const firebaseConfig = {
 };
 
 // The single account that may sign in. Create it in Firebase Console →
-// Authentication → Users with the password you want (e.g. 200704).
+// Authentication → Users with the password you want. Never put the password in
+// this repo — it is public and served by the site.
 export const TEACHER_EMAIL = "teacher@xiaozhang.org";
 
 // How long a login stays valid on a device before the password is asked again.
