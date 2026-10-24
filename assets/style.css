@@ -542,6 +542,8 @@ a { color: inherit; }
   background: var(--neutral-200);
 }
 .exp-role-title { font-size: 14px; font-weight: 600; color: var(--primary); }
+.exp-role:only-child { padding-left: 0; }
+.exp-role:only-child::before { display: none; }
 .exp-detail a {
   color: var(--accent);
   text-decoration: none;
