@@ -7,7 +7,7 @@
   function currentTheme() {
     var explicit = document.documentElement.getAttribute('data-theme');
     if (explicit) return explicit;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'light';
   }
   function toggleTheme() {
     var next = currentTheme() === 'dark' ? 'light' : 'dark';
@@ -117,23 +117,6 @@
     });
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
   els.forEach(function (el) { io.observe(el); });
-})();
-
-// ── EMAIL: assemble only on interaction to reduce basic scraping ──
-(function () {
-  var links = document.querySelectorAll('[data-email-link]');
-  if (!links.length) return;
-
-  function address() {
-    return ['xiao', 'zhang'].join('_') + String.fromCharCode(64) + ['berkeley', 'edu'].join('.');
-  }
-
-  links.forEach(function (link) {
-    link.addEventListener('click', function (event) {
-      event.preventDefault();
-      window.location.href = 'mailto:' + address();
-    });
-  });
 })();
 
 // ── SEMESTER TRACKER (Education page) ──────────────────
